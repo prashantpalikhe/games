@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Geography Guru - World Map</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <style>
+        body, html { height: 100%; margin: 0; overflow: hidden; background: #f8fafc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        #map { height: 100%; width: 100%; background: #e2e8f0; }
+
+        /* --- Map Markers (The Dots) --- */
+        .map-marker-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none; /* Allow clicks to pass through to marker handler */
+        }
+
+        .capital-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #ef4444;
+            border: 2px solid white;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+
+        .country-label {
+            margin-top: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #334155;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+            background: rgba(255,255,255,0.6);
+            padding: 0 4px;
+            border-radius: 4px;
+            white-space: nowrap;
+            opacity: 0; /* Hidden by default at low zoom */
+            transition: opacity 0.3s;
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Zoom Levels Visibility */
+        .zoom-high .country-label { opacity: 1; }
+        .zoom-high .capital-dot { transform: scale(1.2); }
+
+        /* --- Popup Styling (The Card) --- */
+        .leaflet-popup-content-wrapper {
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            padding: 0;
+            overflow: hidden;
+        }
+        .leaflet-popup-content {
+            margin: 0 !important;
+            width: 280px !important;
+        }
+        .leaflet-popup-tip {
+            background: white;
+        }
+        
+        /* Loading Overlay */
+        #loading {
+            position: fixed; inset: 0; background: rgba(255,255,255,0.95);
+            z-index: 9999; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+        }
+        
+        /* UI Controls */
+        .leaflet-control-custom {
+            background: white; padding: 10px; border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div id="loading">
+        <div class="text-5xl mb-4 animate-bounce">🌏</div>
+        <h1 class="text-2xl font-bold text-slate-800 mb-2">Geography Guru</h1>
+        <p class="text-slate-500 mb-4">Preparing the atlas...</p>
+        <div class="w-64 h-2 bg-slate-200 rounded-full overflow-hidden">
+            <div id="progress-bar" class="h-full bg-blue-500 w-0 transition-all duration-500"></div>
+        </div>
+        <p id="status-text" class="text-xs text-slate-400 mt-2">Connecting...</p>
+    </div>
+
+    <!-- Map Container -->
+    <div id="map"></div>
+
+    <script>
+        // --- Configuration ---
+        const GEOJSON_URL = 'https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json';
+        const REST_COUNTRIES_URL = 'https://restcountries.com/v3.1/all?fields=name,capital,cca3,region,capitalInfo,population,currencies,languages,flags';
+
+        // --- State ---
+        let map;
+        let geoJsonLayer;
+        let markersLayer;
+        let countriesData = {}; 
+        let allMarkers = [];
+
+        // --- Initialization ---
+        async function init() {
+            updateStatus('Initializing map...');
+            
+            map = L.map('map', {
+                center: [20, 0],
+                zoom: 2,
+                minZoom: 2,
+                maxZoom: 10,
+                zoomControl: false
+            });
+
+            L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+            // Clean, muted base map so flags pop in the popups
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap &copy; CARTO',
+                subdomains: 'abcd',
+                maxZoom: 19
+            }).addTo(map);
+
+            map.on('zoomend', updateZoomClasses);
+            updateZoomClasses();
+
+            try {
+                updateStatus('Fetching shapes...', 30);
+                const geoResponse = await fetch(GEOJSON_URL);
+                const geoData = await geoResponse.json();
+
+                updateStatus('Fetching detailed data...', 60);
+                const dataResponse = await fetch(REST_COUNTRIES_URL);
+                const restData = await dataResponse.json();
+
+                updateStatus('Building atlas...', 80);
+                processData(restData);
+                renderMap(geoData);
+
+                updateStatus('Ready!', 100);
+                setTimeout(() => {
+                    document.getElementById('loading').style.opacity = '0';
+                    setTimeout(() => document.getElementById('loading').remove(), 500);
+                }, 500);
+
+            } catch (error) {
+                console.error(error);
+                document.getElementById('status-text').innerText = "Error loading data. Check connection.";
+                document.getElementById('status-text').className = "text-red-500 mt-2 font-bold";
+            }
+        }
+
+        // --- Logic ---
+
+        function updateStatus(text, percent) {
+            document.getElementById('status-text').innerText = text;
+            if (percent) document.getElementById('progress-bar').style.width = percent + '%';
+        }
+
+        function updateZoomClasses() {
+            const zoom = map.getZoom();
+            const container = document.getElementById('map');
+            
+            // Simple logic: Text labels only visible when zoomed in enough
+            if (zoom >= 4) {
+                container.classList.add('zoom-high');
+            } else {
+                container.classList.remove('zoom-high');
+            }
+        }
+
+        function processData(data) {
+            data.forEach(country => {
+                if (country.cca3) {
+                    countriesData[country.cca3] = country;
+                }
+            });
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + ' M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + ' k';
+            return num;
+        }
+
+        function getCurrency(currencies) {
+            if (!currencies) return 'N/A';
+            const key = Object.keys(currencies)[0];
+            return `${currencies[key]?.name} (${currencies[key]?.symbol || key})`;
+        }
+
+        function getLanguage(languages) {
+            if (!languages) return 'N/A';
+            return Object.values(languages).join(', ');
+        }
+
+        // HELPER: Safely determine lat/lng
+        function getMarkerPosition(layer, details) {
+            if (details.capitalInfo && Array.isArray(details.capitalInfo.latlng) && details.capitalInfo.latlng.length === 2) {
+                return details.capitalInfo.latlng;
+            }
+            if (typeof layer.getBounds === 'function') {
+                try { return layer.getBounds().getCenter(); } catch(e) { return null; }
+            } 
+            return null;
+        }
+
+        function createMarker(loc, details) {
+             if (!loc) return null;
+
+             const countryName = details.name.common;
+
+             // 1. Visual Marker on Map (Just a dot + label)
+             const iconHtml = `
+                <div class="map-marker-container">
+                    <div class="capital-dot"></div>
+                    <div class="country-label">${countryName}</div>
+                </div>
+             `;
+
+             const customIcon = L.divIcon({
+                className: 'bg-transparent',
+                html: iconHtml,
+                iconSize: [100, 40],
+                iconAnchor: [50, 6] // Anchor at the dot center
+             });
+
+             const marker = L.marker(loc, { icon: customIcon });
+
+             // 2. Rich Popup Content (Hidden until clicked)
+             const capitalName = details.capital ? details.capital[0] : 'N/A';
+             const flagUrl = details.flags.svg; // SVG is fine here as it's contained in a div
+             const pop = details.population ? formatNumber(details.population) : 'N/A';
+             const curr = getCurrency(details.currencies);
+             const lang = getLanguage(details.languages);
+
+             const popupHtml = `
+                <div class="flex flex-col font-sans">
+                    <!-- Header Image -->
+                    <div class="w-full h-32 bg-slate-100 flex items-center justify-center overflow-hidden relative border-b border-slate-200">
+                        <img src="${flagUrl}" class="w-full h-full object-cover opacity-90" alt="${countryName} Flag">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <h2 class="absolute bottom-3 left-4 text-white text-xl font-bold drop-shadow-md">${countryName}</h2>
+                    </div>
+                    
+                    <!-- Stats Grid -->
+                    <div class="p-4 grid grid-cols-1 gap-3 text-sm text-slate-600 bg-white">
+                        <div class="flex items-start space-x-3">
+                            <span class="text-xl">🏛️</span>
+                            <div>
+                                <div class="font-bold text-slate-800 text-xs uppercase tracking-wide">Capital</div>
+                                <div>${capitalName}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3">
+                            <span class="text-xl">👥</span>
+                            <div>
+                                <div class="font-bold text-slate-800 text-xs uppercase tracking-wide">Population</div>
+                                <div>${pop}</div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-3">
+                            <span class="text-xl">🗣️</span>
+                            <div>
+                                <div class="font-bold text-slate-800 text-xs uppercase tracking-wide">Languages</div>
+                                <div class="line-clamp-2">${lang}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3">
+                            <span class="text-xl">💰</span>
+                            <div>
+                                <div class="font-bold text-slate-800 text-xs uppercase tracking-wide">Currency</div>
+                                <div>${curr}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             `;
+
+             marker.bindPopup(popupHtml, {
+                 minWidth: 280,
+                 closeButton: false,
+                 autoPan: true
+             });
+
+             return marker;
+        }
+
+        function renderMap(geoData) {
+            markersLayer = L.layerGroup().addTo(map);
+
+            geoJsonLayer = L.geoJSON(geoData, {
+                style: {
+                    fillColor: '#94a3b8', 
+                    weight: 1,
+                    opacity: 1,
+                    color: '#ffffff', 
+                    dashArray: '',
+                    fillOpacity: 0.1
+                },
+                onEachFeature: (feature, layer) => {
+                    const iso3 = feature.id;
+                    const details = countriesData[iso3];
+
+                    if (details) {
+                        // Highlight on hover
+                        layer.on({
+                            mouseover: (e) => {
+                                const layer = e.target;
+                                layer.setStyle({
+                                    weight: 2,
+                                    color: '#64748b',
+                                    fillOpacity: 0.3,
+                                    fillColor: '#f59e0b' 
+                                });
+                                layer.bringToFront();
+                            },
+                            mouseout: (e) => {
+                                geoJsonLayer.resetStyle(e.target);
+                            },
+                            click: (e) => {
+                                // Pan to country and try to open its marker popup if accessible
+                                map.fitBounds(e.target.getBounds(), { padding: [50, 50] });
+                                // We can also just rely on the user clicking the capital dot
+                            }
+                        });
+
+                        // Create Marker
+                        const loc = getMarkerPosition(layer, details);
+                        if (loc) {
+                            const marker = createMarker(loc, details);
+                            if (marker) {
+                                markersLayer.addLayer(marker);
+                                
+                                // Link layer click to opening the marker popup
+                                layer.on('click', () => {
+                                    marker.openPopup();
+                                });
+                            }
+                        }
+                    }
+                }
+            }).addTo(map);
+
+            addControls();
+        }
+
+        function addControls() {
+            const LegendControl = L.Control.extend({
+                options: { position: 'topright' },
+                onAdd: function (map) {
+                    const div = L.DomUtil.create('div', 'leaflet-control-custom');
+                    div.innerHTML = `
+                        <h4 class="font-bold text-sm mb-2 text-slate-700">Region Filter</h4>
+                        <select id="region-filter" class="text-sm border border-slate-300 rounded p-1.5 w-full outline-none focus:ring-2 focus:ring-blue-500" onchange="filterMap(this.value)">
+                            <option value="all">All World</option>
+                            <option value="Africa">Africa</option>
+                            <option value="Americas">Americas</option>
+                            <option value="Asia">Asia</option>
+                            <option value="Europe">Europe</option>
+                            <option value="Oceania">Oceania</option>
+                        </select>
+                        <div class="mt-2 text-[10px] text-slate-400">Click a country or dot for details</div>
+                    `;
+                    return div;
+                }
+            });
+            map.addControl(new LegendControl());
+        }
+
+        window.filterMap = (region) => {
+            markersLayer.clearLayers();
+            geoJsonLayer.eachLayer(layer => {
+                const iso3 = layer.feature.id;
+                const data = countriesData[iso3];
+                const shouldShow = region === 'all' || (data && data.region && data.region.includes(region));
+
+                if (shouldShow) {
+                    if (!map.hasLayer(layer)) map.addLayer(layer);
+                } else {
+                    if (map.hasLayer(layer)) map.removeLayer(layer);
+                }
+            });
+            
+            // Rebuild visible markers
+            geoJsonLayer.eachLayer(layer => {
+                if (map.hasLayer(layer)) {
+                    const iso3 = layer.feature.id;
+                    const details = countriesData[iso3];
+                    if(details) {
+                        const loc = getMarkerPosition(layer, details);
+                        if (loc) {
+                             const marker = createMarker(loc, details);
+                             if (marker) {
+                                 markersLayer.addLayer(marker);
+                                 // Re-bind click listener for layer
+                                 layer.off('click'); // prevent duplicate listeners
+                                 layer.on('click', () => marker.openPopup());
+                             }
+                        }
+                    }
+                }
+            });
+        };
+
+        init();
+
+    </script>
+</body>
+</html>
