@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Flag Master</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom utilities for animations */
+        @keyframes bounce-custom {
+            0%, 100% { transform: translateY(-10%); animation-timing-function: cubic-bezier(0.8, 0, 1, 1); }
+            50% { transform: translateY(0); animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+        }
+        .animate-bounce-custom {
+            animation: bounce-custom 1s infinite;
+        }
+        
+        /* Smooth transitions for the bottom sheet */
+        .sheet-transition {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Prevent highlighting text on rapid clicks */
+        .no-select {
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans h-screen w-screen overflow-hidden flex justify-center items-center">
+
+    <!-- App Container -->
+    <div id="app-container" class="w-full max-w-md h-full max-h-[900px] bg-white shadow-2xl relative overflow-hidden flex flex-col md:rounded-xl md:h-[90vh]">
+        <!-- Content will be injected here by JavaScript -->
+    </div>
+
+    <!-- Inline SVG Icons map for easy usage -->
+    <div style="display: none;">
+        <!-- Icons will be inserted dynamically as SVG strings in JS -->
+    </div>
+
+    <script>
+        // --- DATA SOURCE ---
+        const COUNTRIES = [
+            { code: 'ad', name: 'Andorra' }, { code: 'ae', name: 'United Arab Emirates' }, { code: 'af', name: 'Afghanistan' }, 
+            { code: 'ag', name: 'Antigua and Barbuda' }, { code: 'al', name: 'Albania' }, { code: 'am', name: 'Armenia' }, 
+            { code: 'ao', name: 'Angola' }, { code: 'ar', name: 'Argentina' }, { code: 'at', name: 'Austria' }, 
+            { code: 'au', name: 'Australia' }, { code: 'az', name: 'Azerbaijan' }, { code: 'ba', name: 'Bosnia and Herzegovina' }, 
+            { code: 'bb', name: 'Barbados' }, { code: 'bd', name: 'Bangladesh' }, { code: 'be', name: 'Belgium' }, 
+            { code: 'bf', name: 'Burkina Faso' }, { code: 'bg', name: 'Bulgaria' }, { code: 'bh', name: 'Bahrain' }, 
+            { code: 'bi', name: 'Burundi' }, { code: 'bj', name: 'Benin' }, { code: 'bn', name: 'Brunei' }, 
+            { code: 'bo', name: 'Bolivia' }, { code: 'br', name: 'Brazil' }, { code: 'bs', name: 'Bahamas' }, 
+            { code: 'bt', name: 'Bhutan' }, { code: 'bw', name: 'Botswana' }, { code: 'by', name: 'Belarus' }, 
+            { code: 'bz', name: 'Belize' }, { code: 'ca', name: 'Canada' }, { code: 'cd', name: 'DR Congo' }, 
+            { code: 'cf', name: 'Central African Republic' }, { code: 'cg', name: 'Congo' }, { code: 'ch', name: 'Switzerland' }, 
+            { code: 'ci', name: 'Ivory Coast' }, { code: 'cl', name: 'Chile' }, { code: 'cm', name: 'Cameroon' }, 
+            { code: 'cn', name: 'China' }, { code: 'co', name: 'Colombia' }, { code: 'cr', name: 'Costa Rica' }, 
+            { code: 'cu', name: 'Cuba' }, { code: 'cv', name: 'Cape Verde' }, { code: 'cy', name: 'Cyprus' }, 
+            { code: 'cz', name: 'Czechia' }, { code: 'de', name: 'Germany' }, { code: 'dj', name: 'Djibouti' }, 
+            { code: 'dk', name: 'Denmark' }, { code: 'dm', name: 'Dominica' }, { code: 'do', name: 'Dominican Republic' }, 
+            { code: 'dz', name: 'Algeria' }, { code: 'ec', name: 'Ecuador' }, { code: 'ee', name: 'Estonia' }, 
+            { code: 'eg', name: 'Egypt' }, { code: 'er', name: 'Eritrea' }, { code: 'es', name: 'Spain' }, 
+            { code: 'et', name: 'Ethiopia' }, { code: 'fi', name: 'Finland' }, { code: 'fj', name: 'Fiji' }, 
+            { code: 'fm', name: 'Micronesia' }, { code: 'fr', name: 'France' }, { code: 'ga', name: 'Gabon' }, 
+            { code: 'gb', name: 'United Kingdom' }, { code: 'gd', name: 'Grenada' }, { code: 'ge', name: 'Georgia' }, 
+            { code: 'gh', name: 'Ghana' }, { code: 'gm', name: 'Gambia' }, { code: 'gn', name: 'Guinea' }, 
+            { code: 'gq', name: 'Equatorial Guinea' }, { code: 'gr', name: 'Greece' }, { code: 'gt', name: 'Guatemala' }, 
+            { code: 'gw', name: 'Guinea-Bissau' }, { code: 'gy', name: 'Guyana' }, { code: 'hn', name: 'Honduras' }, 
+            { code: 'hr', name: 'Croatia' }, { code: 'ht', name: 'Haiti' }, { code: 'hu', name: 'Hungary' }, 
+            { code: 'id', name: 'Indonesia' }, { code: 'ie', name: 'Ireland' }, { code: 'il', name: 'Israel' }, 
+            { code: 'in', name: 'India' }, { code: 'iq', name: 'Iraq' }, { code: 'ir', name: 'Iran' }, 
+            { code: 'is', name: 'Iceland' }, { code: 'it', name: 'Italy' }, { code: 'jm', name: 'Jamaica' }, 
+            { code: 'jo', name: 'Jordan' }, { code: 'jp', name: 'Japan' }, { code: 'ke', name: 'Kenya' }, 
+            { code: 'kg', name: 'Kyrgyzstan' }, { code: 'kh', name: 'Cambodia' }, { code: 'ki', name: 'Kiribati' }, 
+            { code: 'km', name: 'Comoros' }, { code: 'kn', name: 'Saint Kitts and Nevis' }, { code: 'kp', name: 'North Korea' }, 
+            { code: 'kr', name: 'South Korea' }, { code: 'kw', name: 'Kuwait' }, { code: 'kz', name: 'Kazakhstan' }, 
+            { code: 'la', name: 'Laos' }, { code: 'lb', name: 'Lebanon' }, { code: 'lc', name: 'Saint Lucia' }, 
+            { code: 'li', name: 'Liechtenstein' }, { code: 'lk', name: 'Sri Lanka' }, { code: 'lr', name: 'Liberia' }, 
+            { code: 'ls', name: 'Lesotho' }, { code: 'lt', name: 'Lithuania' }, { code: 'lu', name: 'Luxembourg' }, 
+            { code: 'lv', name: 'Latvia' }, { code: 'ly', name: 'Libya' }, { code: 'ma', name: 'Morocco' }, 
+            { code: 'mc', name: 'Monaco' }, { code: 'md', name: 'Moldova' }, { code: 'me', name: 'Montenegro' }, 
+            { code: 'mg', name: 'Madagascar' }, { code: 'mh', name: 'Marshall Islands' }, { code: 'mk', name: 'North Macedonia' }, 
+            { code: 'ml', name: 'Mali' }, { code: 'mm', name: 'Myanmar' }, { code: 'mn', name: 'Mongolia' }, 
+            { code: 'mr', name: 'Mauritania' }, { code: 'mt', name: 'Malta' }, { code: 'mu', name: 'Mauritius' }, 
+            { code: 'mv', name: 'Maldives' }, { code: 'mw', name: 'Malawi' }, { code: 'mx', name: 'Mexico' }, 
+            { code: 'my', name: 'Malaysia' }, { code: 'mz', name: 'Mozambique' }, { code: 'na', name: 'Namibia' }, 
+            { code: 'ne', name: 'Niger' }, { code: 'ng', name: 'Nigeria' }, { code: 'ni', name: 'Nicaragua' }, 
+            { code: 'nl', name: 'Netherlands' }, { code: 'no', name: 'Norway' }, { code: 'np', name: 'Nepal' }, 
+            { code: 'nr', name: 'Nauru' }, { code: 'nz', name: 'New Zealand' }, { code: 'om', name: 'Oman' }, 
+            { code: 'pa', name: 'Panama' }, { code: 'pe', name: 'Peru' }, { code: 'pg', name: 'Papua New Guinea' }, 
+            { code: 'ph', name: 'Philippines' }, { code: 'pk', name: 'Pakistan' }, { code: 'pl', name: 'Poland' }, 
+            { code: 'pt', name: 'Portugal' }, { code: 'pw', name: 'Palau' }, { code: 'py', name: 'Paraguay' }, 
+            { code: 'qa', name: 'Qatar' }, { code: 'ro', name: 'Romania' }, { code: 'rs', name: 'Serbia' }, 
+            { code: 'ru', name: 'Russia' }, { code: 'rw', name: 'Rwanda' }, { code: 'sa', name: 'Saudi Arabia' }, 
+            { code: 'sb', name: 'Solomon Islands' }, { code: 'sc', name: 'Seychelles' }, { code: 'sd', name: 'Sudan' }, 
+            { code: 'se', name: 'Sweden' }, { code: 'sg', name: 'Singapore' }, { code: 'si', name: 'Slovenia' }, 
+            { code: 'sk', name: 'Slovakia' }, { code: 'sl', name: 'Sierra Leone' }, { code: 'sm', name: 'San Marino' }, 
+            { code: 'sn', name: 'Senegal' }, { code: 'so', name: 'Somalia' }, { code: 'sr', name: 'Suriname' }, 
+            { code: 'ss', name: 'South Sudan' }, { code: 'st', name: 'Sao Tome and Principe' }, { code: 'sv', name: 'El Salvador' }, 
+            { code: 'sy', name: 'Syria' }, { code: 'sz', name: 'Eswatini' }, { code: 'td', name: 'Chad' }, 
+            { code: 'tg', name: 'Togo' }, { code: 'th', name: 'Thailand' }, { code: 'tj', name: 'Tajikistan' }, 
+            { code: 'tl', name: 'Timor-Leste' }, { code: 'tm', name: 'Turkmenistan' }, { code: 'tn', name: 'Tunisia' }, 
+            { code: 'to', name: 'Tonga' }, { code: 'tr', name: 'Turkey' }, { code: 'tt', name: 'Trinidad and Tobago' }, 
+            { code: 'tv', name: 'Tuvalu' }, { code: 'tw', name: 'Taiwan' }, { code: 'tz', name: 'Tanzania' }, 
+            { code: 'ua', name: 'Ukraine' }, { code: 'ug', name: 'Uganda' }, { code: 'us', name: 'United States' }, 
+            { code: 'uy', name: 'Uruguay' }, { code: 'uz', name: 'Uzbekistan' }, { code: 'va', name: 'Vatican City' }, 
+            { code: 'vc', name: 'Saint Vincent and the Grenadines' }, { code: 've', name: 'Venezuela' }, { code: 'vn', name: 'Vietnam' }, 
+            { code: 'vu', name: 'Vanuatu' }, { code: 'ws', name: 'Samoa' }, { code: 'ye', name: 'Yemen' }, { code: 'za', name: 'South Africa' }, 
+            { code: 'zm', name: 'Zambia' }, { code: 'zw', name: 'Zimbabwe' }
+        ];
+
+        // --- SVGs ---
+        const ICONS = {
+            heart: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>`,
+            heartFilled: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>`,
+            trophy: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-400"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>`,
+            x: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`,
+            check: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+            rotateCcw: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12"/><path d="M3 3v9h9"/></svg>`
+        };
+
+        // --- STATE ---
+        let state = {
+            screen: 'start', // start, playing, end
+            score: 0,
+            lives: 3,
+            streak: 0,
+            queue: [], // Shuffled list of countries
+            currentIndex: 0,
+            currentQuestion: null, // { correctOption: obj, options: [obj, obj, obj, obj] }
+            selectedOption: null,
+            feedback: null // 'correct', 'incorrect', null
+        };
+
+        // --- LOGIC ---
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function generateQuestion() {
+            const correctOption = state.queue[state.currentIndex];
+            
+            // Pick 3 distractors
+            const distractors = [];
+            const availableDistractors = COUNTRIES.filter(c => c.code !== correctOption.code);
+            
+            while (distractors.length < 3) {
+                const randomIndex = Math.floor(Math.random() * availableDistractors.length);
+                const randomDistractor = availableDistractors[randomIndex];
+                if (!distractors.includes(randomDistractor)) {
+                    distractors.push(randomDistractor);
+                }
+            }
+            
+            const options = shuffleArray([correctOption, ...distractors]);
+            
+            return {
+                correctOption,
+                options
+            };
+        }
+
+        function initGame() {
+            state.score = 0;
+            state.lives = 3;
+            state.streak = 0;
+            state.queue = shuffleArray(COUNTRIES);
+            state.currentIndex = 0;
+            state.selectedOption = null;
+            state.feedback = null;
+            state.currentQuestion = generateQuestion();
+            state.screen = 'playing';
+            render();
+        }
+
+        function handleAnswer(option) {
+            if (state.feedback !== null) return; // Already answered
+
+            state.selectedOption = option;
+            const isCorrect = option.code === state.currentQuestion.correctOption.code;
+
+            if (isCorrect) {
+                state.feedback = 'correct';
+                state.score += 10 + (state.streak * 2);
+                state.streak += 1;
+            } else {
+                state.feedback = 'incorrect';
+                state.lives -= 1;
+                state.streak = 0;
+            }
+
+            render();
+        }
+
+        function nextQuestion() {
+            // Check game over conditions
+            if (state.lives <= 0) {
+                state.screen = 'end';
+            } else if (state.currentIndex >= state.queue.length - 1) {
+                // Victory - went through all flags!
+                state.screen = 'end';
+            } else {
+                state.currentIndex += 1;
+                state.currentQuestion = generateQuestion();
+                state.selectedOption = null;
+                state.feedback = null;
+            }
+            render();
+        }
+
+        // --- RENDERING ---
+
+        const appEl = document.getElementById('app-container');
+
+        function render() {
+            appEl.innerHTML = '';
+
+            if (state.screen === 'start') {
+                renderStartScreen();
+            } else if (state.screen === 'playing') {
+                renderPlayingScreen();
+            } else if (state.screen === 'end') {
+                renderEndScreen();
+            }
+        }
+
+        function renderStartScreen() {
+            appEl.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-full p-6 text-center animate-fade-in">
+                    <div class="mb-8 animate-bounce-custom">
+                        <div class="w-32 h-24 bg-blue-500 rounded-lg shadow-lg flex items-center justify-center relative overflow-hidden border-4 border-blue-700 transform rotate-3">
+                            <div class="absolute inset-0 flex flex-col">
+                                <div class="h-1/3 bg-yellow-400"></div>
+                                <div class="h-1/3 bg-blue-500"></div>
+                                <div class="h-1/3 bg-red-500"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h1 class="text-4xl font-extrabold text-gray-800 mb-4">Flag Master</h1>
+                    <p class="text-gray-500 text-lg mb-8 max-w-md">
+                        Master all ${COUNTRIES.length} flags of the world in one endless run!
+                    </p>
+                    <button onclick="initGame()" class="w-full max-w-xs bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-2xl border-b-4 border-green-700 active:border-b-0 active:translate-y-1 transition-all shadow-lg text-xl uppercase tracking-wide no-select">
+                        Start Quiz
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderPlayingScreen() {
+            const progress = ((state.currentIndex) / COUNTRIES.length) * 100;
+            const isFeedbackMode = state.feedback !== null;
+            const isCorrect = state.feedback === 'correct';
+            
+            // Bottom Sheet Classes
+            let sheetClasses = "fixed bottom-0 left-0 right-0 max-w-md mx-auto sheet-transition p-4 border-t-2 flex flex-col z-50 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.3)] ";
+            if (!isFeedbackMode) {
+                sheetClasses += "translate-y-full bg-white border-gray-200";
+            } else {
+                sheetClasses += "translate-y-0 ";
+                sheetClasses += isCorrect ? "bg-green-100 border-green-200" : "bg-red-100 border-red-200";
+            }
+
+            let html = `
+                <!-- Header -->
+                <div class="pt-6 pb-2 px-4 flex items-center justify-between bg-white z-10">
+                    <button onclick="location.reload()" class="text-gray-400 hover:text-gray-600 no-select">
+                        ${ICONS.x}
+                    </button>
+                    <div class="flex-1 mx-4">
+                        <div class="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
+                            <div class="h-full bg-green-500 transition-all duration-500 ease-out rounded-full" style="width: ${progress}%"></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-1">
+                        ${state.lives > 0 ? ICONS.heartFilled : ICONS.heart}
+                        <span class="text-xl font-bold text-red-500">${state.lives}</span>
+                    </div>
+                </div>
+
+                <!-- Scrollable Content -->
+                <div class="flex-1 overflow-y-auto p-4 flex flex-col items-center w-full pb-32">
+                    <h2 class="text-2xl font-bold text-gray-700 mt-4 mb-6 text-left w-full">
+                        Which country is this?
+                    </h2>
+
+                    <div class="mb-6 p-4 bg-white rounded-2xl shadow-sm border-2 border-gray-100 w-full flex justify-center">
+                         <img 
+                           src="https://flagcdn.com/w640/${state.currentQuestion.correctOption.code}.png" 
+                           alt="Flag" 
+                           class="h-40 w-auto rounded-md shadow-md object-cover border border-gray-200"
+                           onerror="this.onerror=null; this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='"
+                         >
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-3 w-full">
+            `;
+
+            // Options
+            state.currentQuestion.options.forEach((option, idx) => {
+                let btnClass = "relative w-full p-4 rounded-2xl border-2 border-b-4 text-lg font-bold transition-all flex items-center justify-between group no-select ";
+                let numberClass = "flex items-center justify-center w-8 h-8 rounded-lg text-sm border mr-3 ";
+                
+                if (isFeedbackMode) {
+                    if (option.code === state.currentQuestion.correctOption.code) {
+                        btnClass += "bg-green-100 border-green-500 text-green-700";
+                        numberClass += "border-green-500 text-green-700 bg-green-200";
+                    } else if (state.selectedOption && state.selectedOption.code === option.code) {
+                        btnClass += "bg-red-100 border-red-500 text-red-700";
+                        numberClass += "border-red-500 text-red-700 bg-red-200";
+                    } else {
+                        btnClass += "bg-white border-gray-200 opacity-50 text-gray-400";
+                        numberClass += "border-gray-200 bg-white";
+                    }
+                } else {
+                    // Default State
+                    if (state.selectedOption === option) {
+                         btnClass += "bg-blue-100 border-blue-500 text-blue-700";
+                         numberClass += "border-blue-500 text-blue-700 bg-blue-200";
+                    } else {
+                         btnClass += "bg-white border-gray-200 hover:bg-gray-50 text-gray-700 active:border-b-2 active:translate-y-[2px]";
+                         numberClass += "border-gray-200 text-gray-400 bg-white";
+                    }
+                }
+
+                // Click handler logic needs to be passed via data attributes or simplified global hook
+                // We use inline onclick for simplicity in single file
+                const clickHandler = isFeedbackMode ? '' : `onclick='handleAnswer(${JSON.stringify(option)})'`;
+
+                html += `
+                    <button ${clickHandler} class="${btnClass}">
+                        <div class="flex items-center">
+                            <span class="${numberClass}">${idx + 1}</span>
+                            <span>${option.name}</span>
+                        </div>
+                    </button>
+                `;
+            });
+
+            html += `</div></div>`; // End grid, End scrollable
+
+            // Bottom Sheet
+            const sheetContent = `
+                <div class="flex items-center justify-between mb-4 px-2">
+                    <div class="flex items-center space-x-3">
+                        <div class="p-2 rounded-full ${isCorrect ? 'bg-green-500' : 'bg-red-500'} text-white">
+                            ${isCorrect ? ICONS.check : ICONS.x}
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-extrabold ${isCorrect ? 'text-green-600' : 'text-red-600'}">
+                                ${isCorrect ? 'Excellent!' : 'Incorrect'}
+                            </h3>
+                            ${!isCorrect ? `<p class="text-red-500 font-medium">Correct: ${state.currentQuestion.correctOption.name}</p>` : ''}
+                        </div>
+                    </div>
+                </div>
+                <button onclick="nextQuestion()" class="w-full py-3 px-6 rounded-xl font-bold text-white text-lg uppercase tracking-wider border-b-4 active:border-b-0 active:translate-y-1 transition-all shadow-md ${isCorrect ? 'bg-green-500 hover:bg-green-600 border-green-700' : 'bg-red-500 hover:bg-red-600 border-red-700'} no-select">
+                    Continue
+                </button>
+                <div class="h-4 md:h-0"></div>
+            `;
+
+            html += `<div class="${sheetClasses}">${sheetContent}</div>`;
+            
+            // Desktop Hint
+            html += `
+                <div class="hidden md:block fixed bottom-4 right-4 text-xs text-gray-400 bg-white p-2 rounded border shadow-sm">
+                    Press <strong>1-4</strong> to answer, <strong>Enter</strong> to continue
+                </div>
+            `;
+
+            appEl.innerHTML = html;
+            
+            // Auto scroll bottom sheet into view if on mobile? 
+            // Not needed as it's fixed position.
+        }
+
+        function renderEndScreen() {
+            const isWin = state.lives > 0;
+            appEl.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-full p-6 text-center">
+                    <div class="mb-6">
+                        <div class="w-32 h-32 mx-auto ${isWin ? 'text-yellow-400' : 'text-gray-300'}">
+                             ${isWin ? ICONS.trophy.replace('width="24"', 'width="128"').replace('height="24"', 'height="128"') : ICONS.heart.replace('width="24"', 'width="128"').replace('height="24"', 'height="128"')}
+                        </div>
+                    </div>
+                    
+                    <h2 class="text-3xl font-extrabold text-gray-800 mb-2">
+                        ${isWin ? 'World Master!' : 'Out of Hearts!'}
+                    </h2>
+                    
+                    <div class="bg-gray-100 p-6 rounded-2xl w-full max-w-sm mb-8 border-2 border-gray-200">
+                        <div class="flex justify-between items-center mb-4 border-b pb-4 border-gray-300">
+                            <span class="text-gray-600 font-bold">Total Score</span>
+                            <span class="text-2xl font-extrabold text-blue-500">${state.score}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600 font-bold">Flags Identified</span>
+                            <span class="text-xl font-extrabold text-green-500">${state.currentIndex}/${COUNTRIES.length}</span>
+                        </div>
+                    </div>
+
+                    <button onclick="initGame()" class="w-full max-w-xs bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-2xl border-b-4 border-blue-700 active:border-b-0 active:translate-y-1 transition-all shadow-lg text-lg uppercase tracking-wide flex items-center justify-center space-x-2 no-select">
+                        <span class="mr-2">${ICONS.rotateCcw}</span>
+                        <span>Try Again</span>
+                    </button>
+                </div>
+            `;
+        }
+
+        // --- KEYBOARD INPUT ---
+        window.addEventListener('keydown', (e) => {
+            if (state.screen === 'playing') {
+                // Number keys 1-4
+                if (['1', '2', '3', '4'].includes(e.key) && state.feedback === null) {
+                    const index = parseInt(e.key) - 1;
+                    if (state.currentQuestion && state.currentQuestion.options[index]) {
+                        handleAnswer(state.currentQuestion.options[index]);
+                    }
+                }
+                // Enter key to continue
+                if (e.key === 'Enter' && state.feedback !== null) {
+                    nextQuestion();
+                }
+            } else if (state.screen === 'start' || state.screen === 'end') {
+                if (e.key === 'Enter') {
+                    initGame();
+                }
+            }
+        });
+
+        // Initial Render
+        render();
+
+    </script>
+</body>
+</html>
