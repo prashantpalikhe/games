@@ -118,8 +118,56 @@
             </div>
         </div>
 
+        <!-- Settings Modal -->
+        <div v-if="showSettings" class="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm animate-fade-in">
+            <div class="bg-white w-full max-w-md md:rounded-2xl rounded-t-2xl p-6 pb-10 md:pb-6 animate-bounce-custom-small shadow-2xl" @click.stop>
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-gray-800">Settings</h3>
+                    <button @click="showSettings = false" class="text-gray-400 hover:text-gray-600 bg-gray-100 rounded-full p-1" v-html="icons.x"></button>
+                </div>
+                <div class="flex flex-col space-y-4">
+                    <button 
+                        @click="soundEnabled = !soundEnabled"
+                        class="py-4 px-4 rounded-xl font-bold text-left transition-all flex justify-between items-center border-2"
+                        :class="soundEnabled ? 'bg-blue-50 border-blue-500 text-blue-700' : 'bg-white border-gray-200 text-gray-600'"
+                    >
+                        <div class="flex items-center space-x-3">
+                            <span v-html="soundEnabled ? icons.volume : icons.volumeOff"></span>
+                            <span>Sound Effects</span>
+                        </div>
+                        <div class="w-12 h-6 rounded-full relative transition-colors duration-200" :class="soundEnabled ? 'bg-blue-500' : 'bg-gray-300'">
+                            <div class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform duration-200" :class="soundEnabled ? 'translate-x-6' : 'translate-x-0'"></div>
+                        </div>
+                    </button>
+                    
+                    <button 
+                        @click="hapticsEnabled = !hapticsEnabled"
+                        class="py-4 px-4 rounded-xl font-bold text-left transition-all flex justify-between items-center border-2"
+                        :class="hapticsEnabled ? 'bg-blue-50 border-blue-500 text-blue-700' : 'bg-white border-gray-200 text-gray-600'"
+                    >
+                        <div class="flex items-center space-x-3">
+                            <span v-html="hapticsEnabled ? icons.vibrate : icons.vibrateOff"></span>
+                            <span>Haptic Feedback</span>
+                        </div>
+                        <div class="w-12 h-6 rounded-full relative transition-colors duration-200" :class="hapticsEnabled ? 'bg-blue-500' : 'bg-gray-300'">
+                            <div class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform duration-200" :class="hapticsEnabled ? 'translate-x-6' : 'translate-x-0'"></div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- START SCREEN -->
-        <div v-if="screen === 'start'" class="flex flex-col items-center justify-center h-full p-6 text-center animate-fade-in">
+        <div v-if="screen === 'start'" class="flex flex-col items-center justify-center h-full p-6 text-center animate-fade-in relative">
+            <!-- Settings Button -->
+            <button 
+                @click="showSettings = true"
+                class="absolute right-4 p-2 bg-white border border-gray-200 hover:bg-gray-50 rounded-full text-gray-500 hover:text-gray-700 transition-colors shadow-sm"
+                style="top: calc(1rem + env(safe-area-inset-top, 20px));"
+            >
+                <span v-html="icons.gear"></span>
+            </button>
+
             <div class="mb-8 animate-bounce-custom">
                 <div class="w-32 h-24 bg-blue-500 rounded-lg shadow-lg flex items-center justify-center relative overflow-hidden border-4 border-blue-700 transform rotate-3">
                     <div class="absolute inset-0 flex flex-col">
@@ -476,7 +524,12 @@
             share: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`,
             lightning: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-400"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
             book: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
-            globe: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`
+            globe: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+            gear: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>`,
+            volume: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>`,
+            volumeOff: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>`,
+            vibrate: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v18"/><path d="M18 3v18"/><path d="M12 7v10"/></svg>`,
+            vibrateOff: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v18"/><path d="M18 3v18"/><path d="M12 7v10"/><line x1="2" y1="2" x2="22" y2="22"/></svg>`
         };
 
         createApp({
@@ -504,6 +557,11 @@
                 const showRegionSelector = ref(false);
                 const continents = ['World', 'Africa', 'Asia', 'Europe', 'North America', 'Oceania', 'South America'];
                 
+                // Settings State
+                const soundEnabled = ref(true);
+                const hapticsEnabled = ref(true);
+                const showSettings = ref(false);
+
                 // Timer State (Blitz Mode)
                 const timerInterval = ref(null);
                 const timeLeft = ref(0);
@@ -621,6 +679,7 @@
 
                 // Audio Logic
                 const playSound = (type) => {
+                    if (!soundEnabled.value) return;
                     if (!audioContext) return;
                     
                     const ctx = audioContext;
@@ -652,13 +711,40 @@
                 };
 
                 // Haptic Feedback
+                let hapticSwitch = null;
+                const createHapticSwitch = () => {
+                    if (hapticSwitch) return hapticSwitch;
+                    const input = document.createElement('input');
+                    input.type = 'checkbox';
+                    input.setAttribute('switch', '');
+                    input.style.position = 'absolute';
+                    input.style.opacity = '0';
+                    input.style.height = '0';
+                    input.style.width = '0';
+                    input.style.pointerEvents = 'none';
+                    input.style.zIndex = '-1';
+                    document.body.appendChild(input);
+                    hapticSwitch = input;
+                    return input;
+                };
+
                 const triggerHaptic = (type) => {
+                    if (!hapticsEnabled.value) return;
+
                     if (navigator.vibrate) {
                         if (type === 'correct') {
                             navigator.vibrate([50]); // Short light tap
                         } else if (type === 'incorrect') {
                             navigator.vibrate([100, 50, 100]); // Double buzz
                         }
+                        return;
+                    }
+
+                    // iOS Workaround
+                    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                    if (isIOS) {
+                        const sw = createHapticSwitch();
+                        sw.checked = !sw.checked;
                     }
                 };
 
@@ -991,6 +1077,24 @@
                             collectedFlags.value = {};
                         }
                     }
+
+                    // Load Settings
+                    const savedSettings = localStorage.getItem('flag-master-settings');
+                    if (savedSettings) {
+                        try {
+                            const parsed = JSON.parse(savedSettings);
+                            if (parsed.sound !== undefined) soundEnabled.value = parsed.sound;
+                            if (parsed.haptics !== undefined) hapticsEnabled.value = parsed.haptics;
+                        } catch(e) {}
+                    }
+
+                    // Watchers to save settings
+                    Vue.watch([soundEnabled, hapticsEnabled], () => {
+                        localStorage.setItem('flag-master-settings', JSON.stringify({
+                            sound: soundEnabled.value,
+                            haptics: hapticsEnabled.value
+                        }));
+                    });
                 });
 
                 onUnmounted(() => {
@@ -1027,6 +1131,9 @@
                     selectedRegion,
                     continents,
                     collectedFlags,
+                    soundEnabled,
+                    hapticsEnabled,
+                    showSettings,
                     icons: ICONS,
                     queue,
                     getRegionCount: (region) => {
