@@ -362,7 +362,7 @@
             <!-- Header -->
             <div class="pt-6 pb-6 px-4 flex flex-col bg-white z-10 safe-top">
                 <div class="flex items-center justify-between w-full">
-                    <button @click="reloadPage" class="text-gray-400 hover:text-gray-600 no-select" v-html="icons.x"></button>
+                    <button @click="quitGame" class="text-gray-400 hover:text-gray-600 no-select" v-html="icons.x"></button>
                     
                     <div class="flex-1 mx-4 flex items-center space-x-3">
                         <!-- Progress Bar Container -->
@@ -1202,8 +1202,18 @@
                     }
                 };
 
-                const reloadPage = () => {
-                    location.reload();
+                const quitGame = () => {
+                    clearInterval(timerInterval.value);
+                    if (autoAdvanceTimer.value) clearTimeout(autoAdvanceTimer.value);
+                    
+                    // Reset critical state
+                    screen.value = 'start';
+                    score.value = 0;
+                    streak.value = 0;
+                    lives.value = 3;
+                    currentIndex.value = 0;
+                    feedback.value = null;
+                    userAnswer.value = '';
                 };
 
                 const handleImageError = (e) => {
@@ -1398,7 +1408,7 @@
                     initGame,
                     handleAnswer,
                     nextQuestion,
-                    reloadPage,
+                    quitGame,
                     handleImageError,
                     shareScore,
                     progress,
