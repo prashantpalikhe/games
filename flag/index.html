@@ -352,6 +352,7 @@
                 const selectedOption = ref(null);
                 const feedback = ref(null); // 'correct', 'incorrect', null
                 const lastFeedback = ref(null); // To persist feedback during transition
+                const hasCelebratedHighScore = ref(false);
                 let audioContext = null;
 
                 // Logic
@@ -401,6 +402,7 @@
                     score.value = 0;
                     lives.value = 3;
                     streak.value = 0;
+                    hasCelebratedHighScore.value = false;
                     queue.value = shuffleArray(COUNTRIES);
                     currentIndex.value = 0;
                     selectedOption.value = null;
@@ -479,10 +481,29 @@
                         triggerHaptic('correct');
                         
                         // Update High Score
+                        let beatHighScore = false;
                         if (score.value > highScore.value) {
+                            // Only confetti if this is the moment we beat the old record
+                            // We check if the previous score (score.value - points) was <= old high score
+                            const pointsJustEarned = 10 + ((streak.value - 1) * 2); // Recalculate points just added
+                            const prevScore = score.value - pointsJustEarned;
+                            
+                            // We need to store the old high score somewhere to know if we JUST beat it.
+                            // Actually, a simpler way is: if we are already in "high score territory", don't confetti.
+                            // But highScore.value is updated immediately.
+                            
+                            // Let's track if we've already celebrated this run
+                            if (!hasCelebratedHighScore.value) {
+                                beatHighScore = true;
+                                hasCelebratedHighScore.value = true;
+                            }
+                            
                             highScore.value = score.value;
                             localStorage.setItem('flag-master-highscore', highScore.value);
-                            // Confetti for High Score
+                        }
+
+                        if (beatHighScore) {
+                            // Confetti for NEW High Score (First time only this run)
                             triggerConfetti();
                         } else if (streak.value > 0 && streak.value % 5 === 0) {
                             // Confetti every 5 streak
