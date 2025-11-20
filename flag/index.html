@@ -96,6 +96,9 @@
     <!-- App Container -->
     <div id="app" class="w-full max-w-md h-full max-h-[900px] bg-white shadow-2xl relative overflow-hidden flex flex-col md:rounded-xl md:h-[90vh] md:mt-0">
         
+        <!-- Fireworks Container -->
+        <div ref="fireworksContainer" class="absolute inset-0 pointer-events-none z-40"></div>
+
         <!-- Region Selector Modal -->
         <div v-if="showRegionSelector" class="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm animate-fade-in">
             <div class="bg-white w-full max-w-md md:rounded-2xl rounded-t-2xl p-6 pb-10 md:pb-6 animate-bounce-custom-small shadow-2xl" @click.stop>
@@ -569,8 +572,24 @@
                 const autoAdvanceTimer = ref(null);
                 
                 let audioContext = null;
+                let fireworksInstance = null;
+                const fireworksContainer = ref(null);
 
                 // Logic
+                const loadScript = (src) => {
+                    return new Promise((resolve, reject) => {
+                        if (document.querySelector(`script[src="${src}"]`)) {
+                            resolve();
+                            return;
+                        }
+                        const script = document.createElement('script');
+                        script.src = src;
+                        script.onload = resolve;
+                        script.onerror = reject;
+                        document.head.appendChild(script);
+                    });
+                };
+
                 const shuffleArray = (array) => {
                     const newArray = [...array];
                     for (let i = newArray.length - 1; i > 0; i--) {
@@ -844,8 +863,43 @@
                     });
                 };
 
+                const triggerRealFireworks = async () => {
+                    try {
+                        await loadScript('https://cdn.jsdelivr.net/npm/fireworks-js@2.10.8/dist/index.umd.js');
+                        
+                        if (!fireworksInstance && fireworksContainer.value) {
+                            const Fireworks = window.Fireworks.default || window.Fireworks;
+                            fireworksInstance = new Fireworks(fireworksContainer.value, {
+                                hue: { min: 0, max: 360 },
+                                delay: { min: 30, max: 60 },
+                                rocketsPoint: { min: 50, max: 50 },
+                                speed: 2,
+                                acceleration: 1.05,
+                                friction: 0.98,
+                                gravity: 1.5,
+                                particles: 50,
+                                trace: 3,
+                                explosion: 5,
+                                autoresize: true,
+                                brightness: { min: 50, max: 80, decay: { min: 0.015, max: 0.03 } },
+                                boundaries: { top: 50, bottom: fireworksContainer.value.clientHeight, left: 50, right: fireworksContainer.value.clientWidth }
+                            });
+                        }
+
+                        if (fireworksInstance) {
+                            fireworksInstance.start();
+                            setTimeout(() => {
+                                fireworksInstance.stop();
+                            }, 3000);
+                        }
+                    } catch (e) {
+                        console.error('Failed to load fireworks', e);
+                        triggerConfetti(); // Fallback
+                    }
+                };
+
                 const triggerCelebration = () => {
-                    const celebrations = [triggerConfetti, triggerFireworks, triggerSchoolPride, triggerPride];
+                    const celebrations = [triggerConfetti, triggerFireworks, triggerSchoolPride, triggerPride, triggerRealFireworks];
                     const randomCelebration = celebrations[Math.floor(Math.random() * celebrations.length)];
                     randomCelebration();
                 };
@@ -1134,6 +1188,7 @@
                     soundEnabled,
                     hapticsEnabled,
                     showSettings,
+                    fireworksContainer,
                     icons: ICONS,
                     queue,
                     getRegionCount: (region) => {
