@@ -237,20 +237,38 @@
                 Region: {{ selectedRegion }}
             </button>
 
-            <div class="grid grid-cols-2 gap-4 w-full max-w-xs">
-                <button @click="initGame('normal')" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-4 rounded-2xl border-b-4 border-green-700 active:border-b-0 active:translate-y-1 transition-all shadow-lg text-lg uppercase tracking-wide no-select">
-                    Normal
-                </button>
-                <button @click="initGame('reverse')" class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-4 px-4 rounded-2xl border-b-4 border-purple-700 active:border-b-0 active:translate-y-1 transition-all shadow-lg text-lg uppercase tracking-wide no-select">
-                    Reverse
-                </button>
-                <button @click="initGame('blitz')" class="col-span-2 w-full bg-red-500 hover:bg-red-600 text-white font-bold py-4 px-4 rounded-2xl border-b-4 border-red-700 active:border-b-0 active:translate-y-1 transition-all shadow-lg text-lg uppercase tracking-wide no-select flex items-center justify-center space-x-2">
-                    <span v-html="icons.lightning"></span>
-                    <span>Blitz Mode</span>
-                </button>
+            <!-- Game Modes Carousel -->
+            <div class="w-full overflow-x-auto pb-4 px-4 -mx-4 flex space-x-4 snap-x snap-mandatory no-scrollbar">
+                <div 
+                    v-for="mode in gameModes" 
+                    :key="mode.id"
+                    @click="initGame(mode.id)"
+                    class="flex-shrink-0 w-40 h-48 rounded-2xl p-4 flex flex-col items-center justify-between border-b-4 active:border-b-0 active:translate-y-1 transition-all shadow-md snap-center relative overflow-hidden cursor-pointer no-select"
+                    :class="{
+                        'bg-green-500 border-green-700 hover:bg-green-600': mode.color === 'green',
+                        'bg-purple-500 border-purple-700 hover:bg-purple-600': mode.color === 'purple',
+                        'bg-red-500 border-red-700 hover:bg-red-600': mode.color === 'red',
+                        'bg-blue-500 border-blue-700 hover:bg-blue-600': mode.color === 'blue'
+                    }"
+                >
+                    <div class="text-white opacity-90 transform scale-125 mt-4" v-html="mode.icon"></div>
+                    
+                    <div class="text-center text-white">
+                        <div class="text-xl font-black uppercase tracking-wide mb-1">{{ mode.name }}</div>
+                        <div class="text-xs font-medium opacity-90 leading-tight">{{ mode.description }}</div>
+                    </div>
+
+                    <div class="w-8 h-1 bg-white/30 rounded-full mb-2"></div>
+                </div>
+
+                <!-- Coming Soon Card -->
+                <div class="flex-shrink-0 w-40 h-48 bg-gray-100 border-b-4 border-gray-300 rounded-2xl p-4 flex flex-col items-center justify-center snap-center opacity-70">
+                    <span class="text-3xl mb-2">🚧</span>
+                    <span class="font-bold text-gray-400 text-sm">More Soon</span>
+                </div>
             </div>
             
-            <button @click="screen = 'passport'" class="mt-8 text-blue-500 font-bold flex items-center space-x-2 px-4 py-2 rounded-full hover:bg-blue-50 transition-colors">
+            <button @click="screen = 'passport'" class="mt-6 text-blue-500 font-bold flex items-center space-x-2 px-4 py-2 rounded-full hover:bg-blue-50 transition-colors">
                 <span v-html="icons.book"></span>
                 <span>My Passport</span>
             </button>
@@ -628,6 +646,31 @@
                 const floatingPoints = ref([]);
                 const shakeActive = ref(false);
                 let pointIdCounter = 0;
+
+                // Game Modes Config
+                const gameModes = [
+                    { 
+                        id: 'normal', 
+                        name: 'Normal', 
+                        description: 'Identify the flag shown',
+                        color: 'green',
+                        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>`
+                    },
+                    { 
+                        id: 'reverse', 
+                        name: 'Reverse', 
+                        description: 'Find the flag for the country',
+                        color: 'purple',
+                        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><line x1="1" y1="3" x2="23" y2="3"/><line x1="12" y1="14" x2="12" y2="21"/></svg>`
+                    },
+                    { 
+                        id: 'blitz', 
+                        name: 'Blitz', 
+                        description: 'Fast-paced timed challenge',
+                        color: 'red',
+                        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-400"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`
+                    }
+                ];
 
                 // Logic
                 const triggerFloatingPoints = (x, y, amount) => {
@@ -1267,6 +1310,7 @@
                     icons: ICONS,
                     queue,
                     shakeActive,
+                    gameModes,
                     getRegionCount: (region) => {
                         const regionCountries = COUNTRIES.filter(c => c.continent === region);
                         const collected = regionCountries.filter(c => collectedFlags.value[c.code]);
