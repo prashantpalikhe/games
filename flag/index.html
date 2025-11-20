@@ -570,72 +570,250 @@
 
         // --- DATA ---
         const COUNTRIES = [
-            { code: 'ad', name: 'Andorra', continent: 'Europe' }, { code: 'ae', name: 'United Arab Emirates', continent: 'Asia' }, { code: 'af', name: 'Afghanistan', continent: 'Asia' }, 
-            { code: 'ag', name: 'Antigua and Barbuda', continent: 'North America' }, { code: 'al', name: 'Albania', continent: 'Europe' }, { code: 'am', name: 'Armenia', continent: 'Asia' }, 
-            { code: 'ao', name: 'Angola', continent: 'Africa' }, { code: 'ar', name: 'Argentina', continent: 'South America' }, { code: 'at', name: 'Austria', continent: 'Europe' }, 
-            { code: 'au', name: 'Australia', continent: 'Oceania' }, { code: 'az', name: 'Azerbaijan', continent: 'Asia' }, { code: 'ba', name: 'Bosnia and Herzegovina', continent: 'Europe' }, 
-            { code: 'bb', name: 'Barbados', continent: 'North America' }, { code: 'bd', name: 'Bangladesh', continent: 'Asia' }, { code: 'be', name: 'Belgium', continent: 'Europe' }, 
-            { code: 'bf', name: 'Burkina Faso', continent: 'Africa' }, { code: 'bg', name: 'Bulgaria', continent: 'Europe' }, { code: 'bh', name: 'Bahrain', continent: 'Asia' }, 
-            { code: 'bi', name: 'Burundi', continent: 'Africa' }, { code: 'bj', name: 'Benin', continent: 'Africa' }, { code: 'bn', name: 'Brunei', continent: 'Asia' }, 
-            { code: 'bo', name: 'Bolivia', continent: 'South America' }, { code: 'br', name: 'Brazil', continent: 'South America' }, { code: 'bs', name: 'Bahamas', continent: 'North America' }, 
-            { code: 'bt', name: 'Bhutan', continent: 'Asia' }, { code: 'bw', name: 'Botswana', continent: 'Africa' }, { code: 'by', name: 'Belarus', continent: 'Europe' }, 
-            { code: 'bz', name: 'Belize', continent: 'North America' }, { code: 'ca', name: 'Canada', continent: 'North America' }, { code: 'cd', name: 'DR Congo', continent: 'Africa' }, 
-            { code: 'cf', name: 'Central African Republic', continent: 'Africa' }, { code: 'cg', name: 'Congo', continent: 'Africa' }, { code: 'ch', name: 'Switzerland', continent: 'Europe' }, 
-            { code: 'ci', name: 'Ivory Coast', continent: 'Africa' }, { code: 'cl', name: 'Chile', continent: 'South America' }, { code: 'cm', name: 'Cameroon', continent: 'Africa' }, 
-            { code: 'cn', name: 'China', continent: 'Asia' }, { code: 'co', name: 'Colombia', continent: 'South America' }, { code: 'cr', name: 'Costa Rica', continent: 'North America' }, 
-            { code: 'cu', name: 'Cuba', continent: 'North America' }, { code: 'cv', name: 'Cape Verde', continent: 'Africa' }, { code: 'cy', name: 'Cyprus', continent: 'Europe' }, 
-            { code: 'cz', name: 'Czechia', continent: 'Europe' }, { code: 'de', name: 'Germany', continent: 'Europe' }, { code: 'dj', name: 'Djibouti', continent: 'Africa' }, 
-            { code: 'dk', name: 'Denmark', continent: 'Europe' }, { code: 'dm', name: 'Dominica', continent: 'North America' }, { code: 'do', name: 'Dominican Republic', continent: 'North America' }, 
-            { code: 'dz', name: 'Algeria', continent: 'Africa' }, { code: 'ec', name: 'Ecuador', continent: 'South America' }, { code: 'ee', name: 'Estonia', continent: 'Europe' }, 
-            { code: 'eg', name: 'Egypt', continent: 'Africa' }, { code: 'er', name: 'Eritrea', continent: 'Africa' }, { code: 'es', name: 'Spain', continent: 'Europe' }, 
-            { code: 'et', name: 'Ethiopia', continent: 'Africa' }, { code: 'fi', name: 'Finland', continent: 'Europe' }, { code: 'fj', name: 'Fiji', continent: 'Oceania' }, 
-            { code: 'fm', name: 'Micronesia', continent: 'Oceania' }, { code: 'fr', name: 'France', continent: 'Europe' }, { code: 'ga', name: 'Gabon', continent: 'Africa' }, 
-            { code: 'gb', name: 'United Kingdom', continent: 'Europe' }, { code: 'gd', name: 'Grenada', continent: 'North America' }, { code: 'ge', name: 'Georgia', continent: 'Asia' }, 
-            { code: 'gh', name: 'Ghana', continent: 'Africa' }, { code: 'gm', name: 'Gambia', continent: 'Africa' }, { code: 'gn', name: 'Guinea', continent: 'Africa' }, 
-            { code: 'gq', name: 'Equatorial Guinea', continent: 'Africa' }, { code: 'gr', name: 'Greece', continent: 'Europe' }, { code: 'gt', name: 'Guatemala', continent: 'North America' }, 
-            { code: 'gw', name: 'Guinea-Bissau', continent: 'Africa' }, { code: 'gy', name: 'Guyana', continent: 'South America' }, { code: 'hn', name: 'Honduras', continent: 'North America' }, 
-            { code: 'hr', name: 'Croatia', continent: 'Europe' }, { code: 'ht', name: 'Haiti', continent: 'North America' }, { code: 'hu', name: 'Hungary', continent: 'Europe' }, 
-            { code: 'id', name: 'Indonesia', continent: 'Asia' }, { code: 'ie', name: 'Ireland', continent: 'Europe' }, { code: 'il', name: 'Israel', continent: 'Asia' }, 
-            { code: 'in', name: 'India', continent: 'Asia' }, { code: 'iq', name: 'Iraq', continent: 'Asia' }, { code: 'ir', name: 'Iran', continent: 'Asia' }, 
-            { code: 'is', name: 'Iceland', continent: 'Europe' }, { code: 'it', name: 'Italy', continent: 'Europe' }, { code: 'jm', name: 'Jamaica', continent: 'North America' }, 
-            { code: 'jo', name: 'Jordan', continent: 'Asia' }, { code: 'jp', name: 'Japan', continent: 'Asia' }, { code: 'ke', name: 'Kenya', continent: 'Africa' }, 
-            { code: 'kg', name: 'Kyrgyzstan', continent: 'Asia' }, { code: 'kh', name: 'Cambodia', continent: 'Asia' }, { code: 'ki', name: 'Kiribati', continent: 'Oceania' }, 
-            { code: 'km', name: 'Comoros', continent: 'Africa' }, { code: 'kn', name: 'Saint Kitts and Nevis', continent: 'North America' }, { code: 'kp', name: 'North Korea', continent: 'Asia' }, 
-            { code: 'kr', name: 'South Korea', continent: 'Asia' }, { code: 'kw', name: 'Kuwait', continent: 'Asia' }, { code: 'kz', name: 'Kazakhstan', continent: 'Asia' }, 
-            { code: 'la', name: 'Laos', continent: 'Asia' }, { code: 'lb', name: 'Lebanon', continent: 'Asia' }, { code: 'lc', name: 'Saint Lucia', continent: 'North America' }, 
-            { code: 'li', name: 'Liechtenstein', continent: 'Europe' }, { code: 'lk', name: 'Sri Lanka', continent: 'Asia' }, { code: 'lr', name: 'Liberia', continent: 'Africa' }, 
-            { code: 'ls', name: 'Lesotho', continent: 'Africa' }, { code: 'lt', name: 'Lithuania', continent: 'Europe' }, { code: 'lu', name: 'Luxembourg', continent: 'Europe' }, 
-            { code: 'lv', name: 'Latvia', continent: 'Europe' }, { code: 'ly', name: 'Libya', continent: 'Africa' }, { code: 'ma', name: 'Morocco', continent: 'Africa' }, 
-            { code: 'mc', name: 'Monaco', continent: 'Europe' }, { code: 'md', name: 'Moldova', continent: 'Europe' }, { code: 'me', name: 'Montenegro', continent: 'Europe' }, 
-            { code: 'mg', name: 'Madagascar', continent: 'Africa' }, { code: 'mh', name: 'Marshall Islands', continent: 'Oceania' }, { code: 'mk', name: 'North Macedonia', continent: 'Europe' }, 
-            { code: 'ml', name: 'Mali', continent: 'Africa' }, { code: 'mm', name: 'Myanmar', continent: 'Asia' }, { code: 'mn', name: 'Mongolia', continent: 'Asia' }, 
-            { code: 'mr', name: 'Mauritania', continent: 'Africa' }, { code: 'mt', name: 'Malta', continent: 'Europe' }, { code: 'mu', name: 'Mauritius', continent: 'Africa' }, 
-            { code: 'mv', name: 'Maldives', continent: 'Asia' }, { code: 'mw', name: 'Malawi', continent: 'Africa' }, { code: 'mx', name: 'Mexico', continent: 'North America' }, 
-            { code: 'my', name: 'Malaysia', continent: 'Asia' }, { code: 'mz', name: 'Mozambique', continent: 'Africa' }, { code: 'na', name: 'Namibia', continent: 'Africa' }, 
-            { code: 'ne', name: 'Niger', continent: 'Africa' }, { code: 'ng', name: 'Nigeria', continent: 'Africa' }, { code: 'ni', name: 'Nicaragua', continent: 'North America' }, 
-            { code: 'nl', name: 'Netherlands', continent: 'Europe' }, { code: 'no', name: 'Norway', continent: 'Europe' }, { code: 'np', name: 'Nepal', continent: 'Asia' }, 
-            { code: 'nr', name: 'Nauru', continent: 'Oceania' }, { code: 'nz', name: 'New Zealand', continent: 'Oceania' }, { code: 'om', name: 'Oman', continent: 'Asia' }, 
-            { code: 'pa', name: 'Panama', continent: 'North America' }, { code: 'pe', name: 'Peru', continent: 'South America' }, { code: 'pg', name: 'Papua New Guinea', continent: 'Oceania' }, 
-            { code: 'ph', name: 'Philippines', continent: 'Asia' }, { code: 'pk', name: 'Pakistan', continent: 'Asia' }, { code: 'pl', name: 'Poland', continent: 'Europe' }, 
-            { code: 'pt', name: 'Portugal', continent: 'Europe' }, { code: 'pw', name: 'Palau', continent: 'Oceania' }, { code: 'py', name: 'Paraguay', continent: 'South America' }, 
-            { code: 'qa', name: 'Qatar', continent: 'Asia' }, { code: 'ro', name: 'Romania', continent: 'Europe' }, { code: 'rs', name: 'Serbia', continent: 'Europe' }, 
-            { code: 'ru', name: 'Russia', continent: 'Europe' }, { code: 'rw', name: 'Rwanda', continent: 'Africa' }, { code: 'sa', name: 'Saudi Arabia', continent: 'Asia' }, 
-            { code: 'sb', name: 'Solomon Islands', continent: 'Oceania' }, { code: 'sc', name: 'Seychelles', continent: 'Africa' }, { code: 'sd', name: 'Sudan', continent: 'Africa' }, 
-            { code: 'se', name: 'Sweden', continent: 'Europe' }, { code: 'sg', name: 'Singapore', continent: 'Asia' }, { code: 'si', name: 'Slovenia', continent: 'Europe' }, 
-            { code: 'sk', name: 'Slovakia', continent: 'Europe' }, { code: 'sl', name: 'Sierra Leone', continent: 'Africa' }, { code: 'sm', name: 'San Marino', continent: 'Europe' }, 
-            { code: 'sn', name: 'Senegal', continent: 'Africa' }, { code: 'so', name: 'Somalia', continent: 'Africa' }, { code: 'sr', name: 'Suriname', continent: 'South America' }, 
-            { code: 'ss', name: 'South Sudan', continent: 'Africa' }, { code: 'st', name: 'Sao Tome and Principe', continent: 'Africa' }, { code: 'sv', name: 'El Salvador', continent: 'North America' }, 
-            { code: 'sy', name: 'Syria', continent: 'Asia' }, { code: 'sz', name: 'Eswatini', continent: 'Africa' }, { code: 'td', name: 'Chad', continent: 'Africa' }, 
-            { code: 'tg', name: 'Togo', continent: 'Africa' }, { code: 'th', name: 'Thailand', continent: 'Asia' }, { code: 'tj', name: 'Tajikistan', continent: 'Asia' }, 
-            { code: 'tl', name: 'Timor-Leste', continent: 'Asia' }, { code: 'tm', name: 'Turkmenistan', continent: 'Asia' }, { code: 'tn', name: 'Tunisia', continent: 'Africa' }, 
-            { code: 'to', name: 'Tonga', continent: 'Oceania' }, { code: 'tr', name: 'Turkey', continent: 'Asia' }, { code: 'tt', name: 'Trinidad and Tobago', continent: 'North America' }, 
-            { code: 'tv', name: 'Tuvalu', continent: 'Oceania' }, { code: 'tw', name: 'Taiwan', continent: 'Asia' }, { code: 'tz', name: 'Tanzania', continent: 'Africa' }, 
-            { code: 'ua', name: 'Ukraine', continent: 'Europe' }, { code: 'ug', name: 'Uganda', continent: 'Africa' }, { code: 'us', name: 'United States', continent: 'North America' }, 
-            { code: 'uy', name: 'Uruguay', continent: 'South America' }, { code: 'uz', name: 'Uzbekistan', continent: 'Asia' }, { code: 'va', name: 'Vatican City', continent: 'Europe' }, 
-            { code: 'vc', name: 'Saint Vincent and the Grenadines', continent: 'North America' }, { code: 've', name: 'Venezuela', continent: 'South America' }, { code: 'vn', name: 'Vietnam', continent: 'Asia' }, 
-            { code: 'vu', name: 'Vanuatu', continent: 'Oceania' }, { code: 'ws', name: 'Samoa', continent: 'Oceania' }, { code: 'ye', name: 'Yemen', continent: 'Asia' }, { code: 'za', name: 'South Africa', continent: 'Africa' }, 
-            { code: 'zm', name: 'Zambia', continent: 'Africa' }, { code: 'zw', name: 'Zimbabwe', continent: 'Africa' }
+            { code: 'ad', name: 'Andorra', continent: 'Europe', difficulty: 'hard' }, 
+            { code: 'ae', name: 'United Arab Emirates', continent: 'Asia', difficulty: 'medium' }, 
+            { code: 'af', name: 'Afghanistan', continent: 'Asia', difficulty: 'medium' }, 
+            { code: 'ag', name: 'Antigua and Barbuda', continent: 'North America', difficulty: 'hard' }, 
+            { code: 'al', name: 'Albania', continent: 'Europe', difficulty: 'medium' }, 
+            { code: 'am', name: 'Armenia', continent: 'Asia', difficulty: 'medium' }, 
+            { code: 'ao', name: 'Angola', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'ar', name: 'Argentina', continent: 'South America', difficulty: 'easy' }, 
+            { code: 'at', name: 'Austria', continent: 'Europe', difficulty: 'medium' }, 
+            { code: 'au', name: 'Australia', continent: 'Oceania', difficulty: 'easy' }, 
+            { code: 'az', name: 'Azerbaijan', continent: 'Asia', difficulty: 'medium' }, 
+            { code: 'ba', name: 'Bosnia and Herzegovina', continent: 'Europe', difficulty: 'hard' }, 
+            { code: 'bb', name: 'Barbados', continent: 'North America', difficulty: 'medium' }, 
+            { code: 'bd', name: 'Bangladesh', continent: 'Asia', difficulty: 'medium' }, 
+            { code: 'be', name: 'Belgium', continent: 'Europe', difficulty: 'easy' }, 
+            { code: 'bf', name: 'Burkina Faso', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'bg', name: 'Bulgaria', continent: 'Europe', difficulty: 'medium' }, 
+            { code: 'bh', name: 'Bahrain', continent: 'Asia', difficulty: 'hard' }, 
+            { code: 'bi', name: 'Burundi', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'bj', name: 'Benin', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'bn', name: 'Brunei', continent: 'Asia', difficulty: 'hard' }, 
+            { code: 'bo', name: 'Bolivia', continent: 'South America', difficulty: 'medium' }, 
+            { code: 'br', name: 'Brazil', continent: 'South America', difficulty: 'easy' }, 
+            { code: 'bs', name: 'Bahamas', continent: 'North America', difficulty: 'medium' }, 
+            { code: 'bt', name: 'Bhutan', continent: 'Asia', difficulty: 'hard' }, 
+            { code: 'bw', name: 'Botswana', continent: 'Africa', difficulty: 'medium' }, 
+            { code: 'by', name: 'Belarus', continent: 'Europe', difficulty: 'medium' }, 
+            { code: 'bz', name: 'Belize', continent: 'North America', difficulty: 'hard' }, 
+            { code: 'ca', name: 'Canada', continent: 'North America', difficulty: 'easy' }, 
+            { code: 'cd', name: 'DR Congo', continent: 'Africa', difficulty: 'medium' }, 
+            { code: 'cf', name: 'Central African Republic', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'cg', name: 'Congo', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'ch', name: 'Switzerland', continent: 'Europe', difficulty: 'easy' }, 
+            { code: 'ci', name: 'Ivory Coast', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'cl', name: 'Chile', continent: 'South America', difficulty: 'easy' }, 
+            { code: 'cm', name: 'Cameroon', continent: 'Africa', difficulty: 'medium' }, 
+            { code: 'cn', name: 'China', continent: 'Asia', difficulty: 'easy' }, 
+            { code: 'co', name: 'Colombia', continent: 'South America', difficulty: 'medium' }, 
+            { code: 'cr', name: 'Costa Rica', continent: 'North America', difficulty: 'medium' }, 
+            { code: 'cu', name: 'Cuba', continent: 'North America', difficulty: 'medium' }, 
+            { code: 'cv', name: 'Cape Verde', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'cy', name: 'Cyprus', continent: 'Europe', difficulty: 'medium' }, 
+            { code: 'cz', name: 'Czechia', continent: 'Europe', difficulty: 'medium' }, 
+            { code: 'de', name: 'Germany', continent: 'Europe', difficulty: 'easy' }, 
+            { code: 'dj', name: 'Djibouti', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'dk', name: 'Denmark', continent: 'Europe', difficulty: 'easy' }, 
+            { code: 'dm', name: 'Dominica', continent: 'North America', difficulty: 'hard' }, 
+            { code: 'do', name: 'Dominican Republic', continent: 'North America', difficulty: 'medium' }, 
+            { code: 'dz', name: 'Algeria', continent: 'Africa', difficulty: 'medium' }, 
+            { code: 'ec', name: 'Ecuador', continent: 'South America', difficulty: 'medium' }, 
+            { code: 'ee', name: 'Estonia', continent: 'Europe', difficulty: 'medium' }, 
+            { code: 'eg', name: 'Egypt', continent: 'Africa', difficulty: 'easy' }, 
+            { code: 'er', name: 'Eritrea', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'es', name: 'Spain', continent: 'Europe', difficulty: 'easy' }, 
+            { code: 'et', name: 'Ethiopia', continent: 'Africa', difficulty: 'medium' }, 
+            { code: 'fi', name: 'Finland', continent: 'Europe', difficulty: 'easy' }, 
+            { code: 'fj', name: 'Fiji', continent: 'Oceania', difficulty: 'hard' }, 
+            { code: 'fm', name: 'Micronesia', continent: 'Oceania', difficulty: 'hard' }, 
+            { code: 'fr', name: 'France', continent: 'Europe', difficulty: 'easy' }, 
+            { code: 'ga', name: 'Gabon', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'gb', name: 'United Kingdom', continent: 'Europe', difficulty: 'easy' }, 
+            { code: 'gd', name: 'Grenada', continent: 'North America', difficulty: 'hard' }, 
+            { code: 'ge', name: 'Georgia', continent: 'Asia', difficulty: 'medium' }, 
+            { code: 'gh', name: 'Ghana', continent: 'Africa', difficulty: 'medium' }, 
+            { code: 'gm', name: 'Gambia', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'gn', name: 'Guinea', continent: 'Africa', difficulty: 'medium' }, 
+            { code: 'gq', name: 'Equatorial Guinea', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'gr', name: 'Greece', continent: 'Europe', difficulty: 'easy' }, 
+            { code: 'gt', name: 'Guatemala', continent: 'North America', difficulty: 'medium' }, 
+            { code: 'gw', name: 'Guinea-Bissau', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'gy', name: 'Guyana', continent: 'South America', difficulty: 'hard' }, 
+            { code: 'hn', name: 'Honduras', continent: 'North America', difficulty: 'medium' }, 
+            { code: 'hr', name: 'Croatia', continent: 'Europe', difficulty: 'medium' }, 
+            { code: 'ht', name: 'Haiti', continent: 'North America', difficulty: 'medium' }, 
+            { code: 'hu', name: 'Hungary', continent: 'Europe', difficulty: 'medium' }, 
+            { code: 'id', name: 'Indonesia', continent: 'Asia', difficulty: 'hard' }, 
+            { code: 'ie', name: 'Ireland', continent: 'Europe', difficulty: 'easy' }, 
+            { code: 'il', name: 'Israel', continent: 'Asia', difficulty: 'easy' }, 
+            { code: 'in', name: 'India', continent: 'Asia', difficulty: 'easy' }, 
+            { code: 'iq', name: 'Iraq', continent: 'Asia', difficulty: 'medium' }, 
+            { code: 'ir', name: 'Iran', continent: 'Asia', difficulty: 'medium' }, 
+            { code: 'is', name: 'Iceland', continent: 'Europe', difficulty: 'easy' }, 
+            { code: 'it', name: 'Italy', continent: 'Europe', difficulty: 'easy' }, 
+            { code: 'jm', name: 'Jamaica', continent: 'North America', difficulty: 'medium' }, 
+            { code: 'jo', name: 'Jordan', continent: 'Asia', difficulty: 'hard' }, 
+            { code: 'jp', name: 'Japan', continent: 'Asia', difficulty: 'easy' }, 
+            { code: 'ke', name: 'Kenya', continent: 'Africa', difficulty: 'medium' }, 
+            { code: 'kg', name: 'Kyrgyzstan', continent: 'Asia', difficulty: 'hard' }, 
+            { code: 'kh', name: 'Cambodia', continent: 'Asia', difficulty: 'medium' }, 
+            { code: 'ki', name: 'Kiribati', continent: 'Oceania', difficulty: 'hard' }, 
+            { code: 'km', name: 'Comoros', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'kn', name: 'Saint Kitts and Nevis', continent: 'North America', difficulty: 'hard' }, 
+            { code: 'kp', name: 'North Korea', continent: 'Asia', difficulty: 'medium' }, 
+            { code: 'kr', name: 'South Korea', continent: 'Asia', difficulty: 'easy' }, 
+            { code: 'kw', name: 'Kuwait', continent: 'Asia', difficulty: 'hard' }, 
+            { code: 'kz', name: 'Kazakhstan', continent: 'Asia', difficulty: 'medium' }, 
+            { code: 'la', name: 'Laos', continent: 'Asia', difficulty: 'hard' }, 
+            { code: 'lb', name: 'Lebanon', continent: 'Asia', difficulty: 'hard' }, 
+            { code: 'lc', name: 'Saint Lucia', continent: 'North America', difficulty: 'hard' }, 
+            { code: 'li', name: 'Liechtenstein', continent: 'Europe', difficulty: 'hard' }, 
+            { code: 'lk', name: 'Sri Lanka', continent: 'Asia', difficulty: 'medium' }, 
+            { code: 'lr', name: 'Liberia', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'ls', name: 'Lesotho', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'lt', name: 'Lithuania', continent: 'Europe', difficulty: 'medium' }, 
+            { code: 'lu', name: 'Luxembourg', continent: 'Europe', difficulty: 'hard' }, 
+            { code: 'lv', name: 'Latvia', continent: 'Europe', difficulty: 'medium' }, 
+            { code: 'ly', name: 'Libya', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'ma', name: 'Morocco', continent: 'Africa', difficulty: 'medium' }, 
+            { code: 'mc', name: 'Monaco', continent: 'Europe', difficulty: 'hard' }, 
+            { code: 'md', name: 'Moldova', continent: 'Europe', difficulty: 'hard' }, 
+            { code: 'me', name: 'Montenegro', continent: 'Europe', difficulty: 'medium' }, 
+            { code: 'mg', name: 'Madagascar', continent: 'Africa', difficulty: 'medium' }, 
+            { code: 'mh', name: 'Marshall Islands', continent: 'Oceania', difficulty: 'hard' }, 
+            { code: 'mk', name: 'North Macedonia', continent: 'Europe', difficulty: 'medium' }, 
+            { code: 'ml', name: 'Mali', continent: 'Africa', difficulty: 'medium' }, 
+            { code: 'mm', name: 'Myanmar', continent: 'Asia', difficulty: 'medium' }, 
+            { code: 'mn', name: 'Mongolia', continent: 'Asia', difficulty: 'medium' }, 
+            { code: 'mr', name: 'Mauritania', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'mt', name: 'Malta', continent: 'Europe', difficulty: 'hard' }, 
+            { code: 'mu', name: 'Mauritius', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'mv', name: 'Maldives', continent: 'Asia', difficulty: 'hard' }, 
+            { code: 'mw', name: 'Malawi', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'mx', name: 'Mexico', continent: 'North America', difficulty: 'easy' }, 
+            { code: 'my', name: 'Malaysia', continent: 'Asia', difficulty: 'medium' }, 
+            { code: 'mz', name: 'Mozambique', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'na', name: 'Namibia', continent: 'Africa', difficulty: 'medium' }, 
+            { code: 'ne', name: 'Niger', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'ng', name: 'Nigeria', continent: 'Africa', difficulty: 'medium' }, 
+            { code: 'ni', name: 'Nicaragua', continent: 'North America', difficulty: 'hard' }, 
+            { code: 'nl', name: 'Netherlands', continent: 'Europe', difficulty: 'easy' }, 
+            { code: 'no', name: 'Norway', continent: 'Europe', difficulty: 'easy' }, 
+            { code: 'np', name: 'Nepal', continent: 'Asia', difficulty: 'medium' }, 
+            { code: 'nr', name: 'Nauru', continent: 'Oceania', difficulty: 'hard' }, 
+            { code: 'nz', name: 'New Zealand', continent: 'Oceania', difficulty: 'easy' }, 
+            { code: 'om', name: 'Oman', continent: 'Asia', difficulty: 'hard' }, 
+            { code: 'pa', name: 'Panama', continent: 'North America', difficulty: 'medium' }, 
+            { code: 'pe', name: 'Peru', continent: 'South America', difficulty: 'medium' }, 
+            { code: 'pg', name: 'Papua New Guinea', continent: 'Oceania', difficulty: 'medium' }, 
+            { code: 'ph', name: 'Philippines', continent: 'Asia', difficulty: 'medium' }, 
+            { code: 'pk', name: 'Pakistan', continent: 'Asia', difficulty: 'medium' }, 
+            { code: 'pl', name: 'Poland', continent: 'Europe', difficulty: 'medium' }, 
+            { code: 'pt', name: 'Portugal', continent: 'Europe', difficulty: 'easy' }, 
+            { code: 'pw', name: 'Palau', continent: 'Oceania', difficulty: 'hard' }, 
+            { code: 'py', name: 'Paraguay', continent: 'South America', difficulty: 'hard' }, 
+            { code: 'qa', name: 'Qatar', continent: 'Asia', difficulty: 'medium' }, 
+            { code: 'ro', name: 'Romania', continent: 'Europe', difficulty: 'medium' }, 
+            { code: 'rs', name: 'Serbia', continent: 'Europe', difficulty: 'medium' }, 
+            { code: 'ru', name: 'Russia', continent: 'Europe', difficulty: 'easy' }, 
+            { code: 'rw', name: 'Rwanda', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'sa', name: 'Saudi Arabia', continent: 'Asia', difficulty: 'easy' }, 
+            { code: 'sb', name: 'Solomon Islands', continent: 'Oceania', difficulty: 'hard' }, 
+            { code: 'sc', name: 'Seychelles', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'sd', name: 'Sudan', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'se', name: 'Sweden', continent: 'Europe', difficulty: 'easy' }, 
+            { code: 'sg', name: 'Singapore', continent: 'Asia', difficulty: 'medium' }, 
+            { code: 'si', name: 'Slovenia', continent: 'Europe', difficulty: 'medium' }, 
+            { code: 'sk', name: 'Slovakia', continent: 'Europe', difficulty: 'medium' }, 
+            { code: 'sl', name: 'Sierra Leone', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'sm', name: 'San Marino', continent: 'Europe', difficulty: 'hard' }, 
+            { code: 'sn', name: 'Senegal', continent: 'Africa', difficulty: 'medium' }, 
+            { code: 'so', name: 'Somalia', continent: 'Africa', difficulty: 'medium' }, 
+            { code: 'sr', name: 'Suriname', continent: 'South America', difficulty: 'hard' }, 
+            { code: 'ss', name: 'South Sudan', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'st', name: 'Sao Tome and Principe', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'sv', name: 'El Salvador', continent: 'North America', difficulty: 'medium' }, 
+            { code: 'sy', name: 'Syria', continent: 'Asia', difficulty: 'hard' }, 
+            { code: 'sz', name: 'Eswatini', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'td', name: 'Chad', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'tg', name: 'Togo', continent: 'Africa', difficulty: 'hard' }, 
+            { code: 'th', name: 'Thailand', continent: 'Asia', difficulty: 'easy' }, 
+            { code: 'tj', name: 'Tajikistan', continent: 'Asia', difficulty: 'hard' }, 
+            { code: 'tl', name: 'Timor-Leste', continent: 'Asia', difficulty: 'hard' }, 
+            { code: 'tm', name: 'Turkmenistan', continent: 'Asia', difficulty: 'hard' }, 
+            { code: 'tn', name: 'Tunisia', continent: 'Africa', difficulty: 'medium' }, 
+            { code: 'to', name: 'Tonga', continent: 'Oceania', difficulty: 'hard' }, 
+            { code: 'tr', name: 'Turkey', continent: 'Asia', difficulty: 'easy' }, 
+            { code: 'tt', name: 'Trinidad and Tobago', continent: 'North America', difficulty: 'medium' }, 
+            { code: 'tv', name: 'Tuvalu', continent: 'Oceania', difficulty: 'hard' }, 
+            { code: 'tw', name: 'Taiwan', continent: 'Asia', difficulty: 'medium' }, 
+            { code: 'tz', name: 'Tanzania', continent: 'Africa', difficulty: 'medium' }, 
+            { code: 'ua', name: 'Ukraine', continent: 'Europe', difficulty: 'easy' }, 
+            { code: 'ug', name: 'Uganda', continent: 'Africa', difficulty: 'medium' }, 
+            { code: 'us', name: 'United States', continent: 'North America', difficulty: 'easy' }, 
+            { code: 'uy', name: 'Uruguay', continent: 'South America', difficulty: 'medium' }, 
+            { code: 'uz', name: 'Uzbekistan', continent: 'Asia', difficulty: 'hard' }, 
+            { code: 'va', name: 'Vatican City', continent: 'Europe', difficulty: 'medium' }, 
+            { code: 'vc', name: 'Saint Vincent and the Grenadines', continent: 'North America', difficulty: 'hard' }, 
+            { code: 've', name: 'Venezuela', continent: 'South America', difficulty: 'medium' }, 
+            { code: 'vn', name: 'Vietnam', continent: 'Asia', difficulty: 'medium' }, 
+            { code: 'vu', name: 'Vanuatu', continent: 'Oceania', difficulty: 'hard' }, 
+            { code: 'ws', name: 'Samoa', continent: 'Oceania', difficulty: 'hard' }, 
+            { code: 'ye', name: 'Yemen', continent: 'Asia', difficulty: 'hard' }, 
+            { code: 'za', name: 'South Africa', continent: 'Africa', difficulty: 'easy' }, 
+            { code: 'zm', name: 'Zambia', continent: 'Africa', difficulty: 'medium' }, 
+            { code: 'zw', name: 'Zimbabwe', continent: 'Africa', difficulty: 'medium' }
         ];
+        
+        const SIMILAR_FLAGS = {
+            'ro': ['td', 'ad', 'md'], // Romania -> Chad, Andorra, Moldova
+            'td': ['ro', 'ad', 'md'], // Chad -> Romania...
+            'id': ['mc', 'pl', 'sg'], // Indonesia -> Monaco, Poland, Singapore
+            'mc': ['id', 'pl', 'sg'],
+            'pl': ['id', 'mc', 'sg'],
+            'ie': ['ci', 'it'], // Ireland -> Ivory Coast, Italy
+            'ci': ['ie', 'it'],
+            'nz': ['au', 'gb'], // NZ -> Australia, UK
+            'au': ['nz', 'gb'],
+            'ml': ['gn', 'gh'], // Mali -> Guinea, Ghana
+            'gn': ['ml', 'gh', 'gw'],
+            've': ['ec', 'co'], // Venezuela -> Ecuador, Colombia
+            'ec': ['ve', 'co'],
+            'co': ['ve', 'ec'],
+            'lu': ['nl', 'py', 'fr'], // Luxembourg -> Netherlands, Paraguay, France
+            'nl': ['lu', 'py', 'fr'],
+            'hr': ['rs', 'si', 'sk', 'ru'], // Croatia -> Serbia, Slovenia, Slovakia, Russia
+            'rs': ['hr', 'si', 'sk', 'ru'],
+            'si': ['hr', 'rs', 'sk', 'ru'],
+            'sk': ['hr', 'rs', 'si', 'ru'],
+            'ru': ['si', 'sk', 'rs'],
+            'no': ['is', 'dk', 'fi', 'se'], // Nordic Crosses
+            'is': ['no', 'dk', 'fi', 'se'],
+            'dk': ['no', 'is', 'fi', 'se'],
+            'fi': ['no', 'is', 'dk', 'se'],
+            'se': ['no', 'is', 'dk', 'fi'],
+            'us': ['lr', 'my'], // USA -> Liberia, Malaysia
+            'lr': ['us', 'my', 'cl'],
+            'my': ['us', 'lr'],
+            'cu': ['pr', 'ph'], // Cuba -> Puerto Rico (not in list but similar style), Philippines
+            'cl': ['tx', 'lr'], // Chile -> Texas (lol), Liberia
+            'jp': ['bd', 'pw'], // Japan -> Bangladesh, Palau
+            'bd': ['jp', 'pw'],
+            'tr': ['tn', 'pk'], // Turkey -> Tunisia, Pakistan
+            'tn': ['tr', 'pk', 'dz'],
+            'cn': ['vn', 'su'], // China -> Vietnam, USSR(hist)
+            'vn': ['cn', 'ma'],
+            'so': ['vn', 'mm'], // Somalia (star)
+            'qa': ['bh'], // Qatar -> Bahrain
+            'bh': ['qa'],
+            'sv': ['ni', 'hn', 'gt', 'ar'], // Central American blue/white
+            'ni': ['sv', 'hn', 'gt', 'ar'],
+            'hn': ['sv', 'ni', 'gt', 'ar'],
+            'gt': ['sv', 'ni', 'hn', 'ar'],
+            'ar': ['sv', 'ni', 'hn', 'gt', 'uy'],
+        };
 
         const ICONS = {
             heart: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>`,
@@ -805,26 +983,90 @@
                 };
 
                 const generateQuestion = () => {
-                    const correctOption = queue.value[currentIndex.value];
+                    // Determine target difficulty based on streak
+                    // Streak 0-2: Easy (or mix)
+                    // Streak 3-5: Medium
+                    // Streak 6+: Hard
+                    let targetDifficulty = 'medium';
+                    if (streak.value < 3) targetDifficulty = 'easy';
+                    else if (streak.value > 5) targetDifficulty = 'hard';
+
+                    // If struggling (low lives), bias towards easy
+                    if (lives.value === 1) targetDifficulty = 'easy';
+
+                    // Filter available countries by difficulty if possible
+                    let availablePool = COUNTRIES.filter(c => !queue.value.includes(c)); // Simplified: In a real endless mode we'd pick from non-recent
                     
+                    // Note: The original game logic used a fixed 'queue' shuffled at start.
+                    // To support adaptive difficulty, we need to pick the *next* question dynamically,
+                    // rather than pre-determining the whole list. 
+                    // However, 'queue' is currently used for progress tracking (currentIndex / queue.length).
+                    // For now, let's keep using the queue but we might need to resort it or just pick 
+                    // from the remaining items in the queue that match our criteria.
+                    
+                    // Let's look at the *next* item in the pre-shuffled queue as the "base" choice,
+                    // but maybe we can swap it with something else in the queue if it doesn't match our difficulty target?
+                    // Or, for true adaptive difficulty, we should just pick a random unasked country that fits the criteria.
+                    
+                    // Since rewriting the whole queue logic is a bigger refactor, let's do this:
+                    // We will stick to the current correctOption (queue[currentIndex]), BUT we will 
+                    // make the DISTRACTORS smart. 
+                    // AND, if we want to truly change the *Question* difficulty, we would need to shuffle the queue 
+                    // so that a 'Hard' country comes next.
+                    
+                    // Strategy: Look ahead in the queue. Find the first country that matches targetDifficulty.
+                    // Swap it with the current position.
+                    
+                    let correctOption = queue.value[currentIndex.value];
+                    
+                    // Try to find a better candidate in the future queue
+                    const futureIndex = queue.value.slice(currentIndex.value).findIndex(c => c.difficulty === targetDifficulty);
+                    if (futureIndex !== -1) {
+                        const actualIndex = currentIndex.value + futureIndex;
+                        // Swap
+                        const temp = queue.value[currentIndex.value];
+                        queue.value[currentIndex.value] = queue.value[actualIndex];
+                        queue.value[actualIndex] = temp;
+                        correctOption = queue.value[currentIndex.value];
+                    }
+
                     // Pick 3 distractors
                     const distractors = [];
-                    // Filter available distractors to match the current region as well
-                    let availableDistractors = COUNTRIES.filter(c => c.code !== correctOption.code);
+                    
+                    // 1. Similarity Traps (Priority)
+                    if (SIMILAR_FLAGS[correctOption.code]) {
+                        const traps = SIMILAR_FLAGS[correctOption.code];
+                        // Shuffle traps
+                        const shuffledTraps = shuffleArray(traps);
+                        
+                        for (const trapCode of shuffledTraps) {
+                            const trapCountry = COUNTRIES.find(c => c.code === trapCode);
+                            if (trapCountry && distractors.length < 3) {
+                                distractors.push(trapCountry);
+                            }
+                        }
+                    }
+
+                    // 2. Filter available distractors (Region based if possible)
+                    let availableDistractors = COUNTRIES.filter(c => c.code !== correctOption.code && !distractors.includes(c));
                     if (selectedRegion.value !== 'World') {
                         availableDistractors = availableDistractors.filter(c => c.continent === selectedRegion.value);
                     }
                     
-                    // If we don't have enough distractors (rare, but possible in very small regions if we added any), fallback to world
+                    // Fallback if not enough
                     if (availableDistractors.length < 3) {
-                         availableDistractors = COUNTRIES.filter(c => c.code !== correctOption.code);
+                         availableDistractors = COUNTRIES.filter(c => c.code !== correctOption.code && !distractors.includes(c));
                     }
                     
+                    // Fill remaining spots
                     while (distractors.length < 3) {
                         const randomIndex = Math.floor(Math.random() * availableDistractors.length);
                         const randomDistractor = availableDistractors[randomIndex];
+                        // Check distinctness again just in case
                         if (!distractors.includes(randomDistractor)) {
                             distractors.push(randomDistractor);
+                            // Remove from pool to avoid dupes
+                            availableDistractors.splice(randomIndex, 1);
                         }
                     }
                     
