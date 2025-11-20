@@ -955,7 +955,14 @@
                     if (isCorrect) {
                         feedback.value = 'correct';
                         lastFeedback.value = 'correct';
-                        const points = 10 + (streak.value * 2);
+                        let points = 10 + (streak.value * 2);
+                        
+                        if (gameMode.value === 'blitz') {
+                            // Speed bonus: more points for answering faster
+                            // Up to 50 extra points (10 per second remaining)
+                            points += Math.ceil(timeLeft.value * 10);
+                        }
+
                         score.value += points;
                         streak.value += 1;
                         
