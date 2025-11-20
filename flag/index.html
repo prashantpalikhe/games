@@ -108,6 +108,12 @@
             <p class="text-gray-500 text-lg mb-8 max-w-md">
                 Master all {{ totalCountries }} flags of the world in one endless run!
             </p>
+            
+            <div v-if="highScore > 0" class="mb-8 bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full font-bold inline-flex items-center shadow-sm">
+                <span class="mr-2" v-html="icons.trophy"></span>
+                Best Score: {{ highScore }}
+            </div>
+
             <button @click="initGame" class="w-full max-w-xs bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-2xl border-b-4 border-green-700 active:border-b-0 active:translate-y-1 transition-all shadow-lg text-xl uppercase tracking-wide no-select">
                 Start Quiz
             </button>
@@ -226,6 +232,13 @@
                     <span class="text-gray-600 font-bold">Total Score</span>
                     <span class="text-2xl font-extrabold text-blue-500">{{ score }}</span>
                 </div>
+                <div class="flex justify-between items-center mb-4 border-b pb-4 border-gray-300" v-if="highScore > 0">
+                    <span class="text-gray-600 font-bold">Best Score</span>
+                    <div class="flex items-center">
+                        <span v-if="score >= highScore && score > 0" class="mr-2 text-xs bg-yellow-400 text-white px-2 py-1 rounded-full font-bold animate-pulse">NEW!</span>
+                        <span class="text-2xl font-extrabold text-yellow-600">{{ highScore }}</span>
+                    </div>
+                </div>
                 <div class="flex justify-between items-center">
                     <span class="text-gray-600 font-bold">Flags Identified</span>
                     <span class="text-xl font-extrabold text-green-500">{{ currentIndex }}/{{ totalCountries }}</span>
@@ -330,6 +343,7 @@
                 const score = ref(0);
                 const lives = ref(3);
                 const streak = ref(0);
+                const highScore = ref(0);
                 const queue = ref([]);
                 const currentIndex = ref(0);
                 const currentQuestion = ref(null);
@@ -391,6 +405,12 @@
                         lastFeedback.value = 'correct';
                         score.value += 10 + (streak.value * 2);
                         streak.value += 1;
+                        
+                        // Update High Score
+                        if (score.value > highScore.value) {
+                            highScore.value = score.value;
+                            localStorage.setItem('flag-master-highscore', highScore.value);
+                        }
                     } else {
                         feedback.value = 'incorrect';
                         lastFeedback.value = 'incorrect';
@@ -507,6 +527,12 @@
                 onMounted(() => {
                     window.addEventListener('keydown', handleKeydown);
                     document.addEventListener('gesturestart', handleGestureStart);
+                    
+                    // Load High Score
+                    const savedScore = localStorage.getItem('flag-master-highscore');
+                    if (savedScore) {
+                        highScore.value = parseInt(savedScore);
+                    }
                 });
 
                 onUnmounted(() => {
@@ -518,6 +544,7 @@
                     screen,
                     score,
                     lives,
+                    highScore,
                     currentIndex,
                     currentQuestion,
                     selectedOption,
