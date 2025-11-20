@@ -382,6 +382,11 @@
                 <span class="mr-2" v-html="icons.rotateCcw"></span>
                 <span>Try Again</span>
             </button>
+
+            <button @click="shareScore" class="mt-4 w-full max-w-xs bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-bold py-3 px-8 rounded-2xl border-b-4 border-yellow-600 active:border-b-0 active:translate-y-1 transition-all shadow-md text-lg uppercase tracking-wide flex items-center justify-center space-x-2 no-select">
+                <span class="mr-2" v-html="icons.share"></span>
+                <span>Share Score</span>
+            </button>
         </div>
 
     </div>
@@ -467,6 +472,7 @@
             x: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`,
             check: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
             rotateCcw: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12"/><path d="M3 3v9h9"/></svg>`,
+            share: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`,
             lightning: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-400"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
             book: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
             globe: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`
@@ -746,6 +752,30 @@
                     e.target.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
                 };
 
+                const shareScore = async () => {
+                    const text = `I scored ${score.value} points in Flag Master! 🏳️ Can you beat me?`;
+                    const url = window.location.href;
+                    
+                    if (navigator.share) {
+                        try {
+                            await navigator.share({
+                                title: 'Flag Master Score',
+                                text: text,
+                                url: url
+                            });
+                        } catch (err) {
+                            console.log('Share cancelled or failed', err);
+                        }
+                    } else {
+                        try {
+                            await navigator.clipboard.writeText(`${text} ${url}`);
+                            alert('Score copied to clipboard!');
+                        } catch (err) {
+                            console.error('Failed to copy: ', err);
+                        }
+                    }
+                };
+
                 // Computed
                 const progress = computed(() => ((currentIndex.value) / queue.value.length) * 100);
                 const isCorrect = computed(() => {
@@ -877,6 +907,7 @@
                     nextQuestion,
                     reloadPage,
                     handleImageError,
+                    shareScore,
                     progress,
                     isCorrect,
                     totalCountries,
