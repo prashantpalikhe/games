@@ -350,6 +350,7 @@
                 const selectedOption = ref(null);
                 const feedback = ref(null); // 'correct', 'incorrect', null
                 const lastFeedback = ref(null); // To persist feedback during transition
+                let audioContext = null;
 
                 // Logic
                 const shuffleArray = (array) => {
@@ -381,7 +382,20 @@
                     return { correctOption, options };
                 };
 
+                const initAudio = () => {
+                    if (!audioContext) {
+                        const AudioContext = window.AudioContext || window.webkitAudioContext;
+                        if (AudioContext) {
+                            audioContext = new AudioContext();
+                        }
+                    }
+                    if (audioContext && audioContext.state === 'suspended') {
+                        audioContext.resume();
+                    }
+                };
+
                 const initGame = () => {
+                    initAudio();
                     score.value = 0;
                     lives.value = 3;
                     streak.value = 0;
@@ -396,10 +410,9 @@
 
                 // Audio Logic
                 const playSound = (type) => {
-                    const AudioContext = window.AudioContext || window.webkitAudioContext;
-                    if (!AudioContext) return;
+                    if (!audioContext) return;
                     
-                    const ctx = new AudioContext();
+                    const ctx = audioContext;
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
                     
