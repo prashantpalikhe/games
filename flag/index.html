@@ -859,7 +859,8 @@
                 };
 
                 const shareScore = async () => {
-                    const text = `I scored ${score.value} points in Flag Master! 🏳️ Can you beat me?`;
+                    const modeName = gameMode.value === 'normal' ? 'Normal' : gameMode.value === 'reverse' ? 'Reverse' : 'Blitz';
+                    const text = `I scored ${score.value} points in Flag Master (${modeName} Mode)! 🏳️ Can you beat me?`;
                     const url = window.location.href;
                     
                     if (navigator.share) {
