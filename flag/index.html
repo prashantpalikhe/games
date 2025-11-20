@@ -15,6 +15,8 @@
 
     <title>Flag Master</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <!-- Vue 3 CDN -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
 
@@ -451,6 +453,15 @@
                     }
                 };
 
+                // Confetti Logic
+                const triggerConfetti = () => {
+                    confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { y: 0.6 }
+                    });
+                };
+
                 const handleAnswer = (option) => {
                     if (feedback.value !== null) return; // Already answered
 
@@ -471,6 +482,11 @@
                         if (score.value > highScore.value) {
                             highScore.value = score.value;
                             localStorage.setItem('flag-master-highscore', highScore.value);
+                            // Confetti for High Score
+                            triggerConfetti();
+                        } else if (streak.value > 0 && streak.value % 5 === 0) {
+                            // Confetti every 5 streak
+                            triggerConfetti();
                         }
                     } else {
                         feedback.value = 'incorrect';
