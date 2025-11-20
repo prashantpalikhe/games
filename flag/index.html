@@ -417,7 +417,29 @@
                     </h3>
                 </div>
 
-                <div class="grid w-full" :class="gameMode === 'reverse' ? 'grid-cols-2 gap-4' : 'grid-cols-1 gap-3'" v-if="currentQuestion">
+                <!-- Input for Hard Mode -->
+                <div v-if="gameMode === 'hard'" class="w-full px-4">
+                    <form @submit.prevent="handleAnswer(userAnswer)" class="flex flex-col space-y-4">
+                         <input 
+                            type="text" 
+                            v-model="userAnswer"
+                            placeholder="Type country name..." 
+                            class="w-full p-4 rounded-xl border-2 border-gray-200 text-lg font-bold text-center focus:outline-none focus:border-blue-500 transition-colors"
+                            :class="{'border-green-500 bg-green-50 text-green-700': feedback === 'correct', 'border-red-500 bg-red-50 text-red-700': feedback === 'incorrect'}"
+                            :disabled="feedback !== null"
+                            autofocus
+                        >
+                        <button 
+                            type="submit" 
+                            class="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl shadow-md active:translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            :disabled="!userAnswer || feedback !== null"
+                        >
+                            Submit Answer
+                        </button>
+                    </form>
+                </div>
+
+                <div class="grid w-full" :class="gameMode === 'reverse' ? 'grid-cols-2 gap-4' : 'grid-cols-1 gap-3'" v-else-if="currentQuestion">
                     <button 
                         v-for="(option, idx) in currentQuestion.options" 
                         :key="option.code"
@@ -649,6 +671,7 @@
                 const feedback = ref(null); // 'correct', 'incorrect', 'timeout', null
                 const lastFeedback = ref(null); // To persist feedback during transition
                 const hasCelebratedHighScore = ref(false);
+                const userAnswer = ref(''); // For hard mode
                 
                 // Passport / Collection State
                 const collectedFlags = ref({}); // { 'us': 1, 'fr': 3 } - counts of correct answers
@@ -699,6 +722,13 @@
                         description: 'Fast-paced timed challenge',
                         color: 'red',
                         icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-400"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`
+                    },
+                    { 
+                        id: 'hard', 
+                        name: 'Hard', 
+                        description: 'Type the country name',
+                        color: 'blue',
+                        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`
                     }
                 ];
 
@@ -740,6 +770,29 @@
                         script.onerror = reject;
                         document.head.appendChild(script);
                     });
+                };
+
+                const levenshtein = (a, b) => {
+                    const matrix = [];
+                    for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+                    for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+
+                    for (let i = 1; i <= b.length; i++) {
+                        for (let j = 1; j <= a.length; j++) {
+                            if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                                matrix[i][j] = matrix[i - 1][j - 1];
+                            } else {
+                                matrix[i][j] = Math.min(
+                                    matrix[i - 1][j - 1] + 1,
+                                    Math.min(
+                                        matrix[i][j - 1] + 1,
+                                        matrix[i - 1][j] + 1
+                                    )
+                                );
+                            }
+                        }
+                    }
+                    return matrix[b.length][a.length];
                 };
 
                 const shuffleArray = (array) => {
@@ -841,6 +894,7 @@
                     lastFeedback.value = null;
                     currentQuestion.value = generateQuestion();
                     screen.value = 'playing';
+                    userAnswer.value = '';
 
                     if (mode === 'blitz') {
                         startTimer();
@@ -1022,8 +1076,29 @@
 
                     clearInterval(timerInterval.value);
                     
-                    selectedOption.value = option;
-                    const isCorrect = option.code === currentQuestion.value.correctOption.code;
+                    let isCorrect = false;
+                    let isPerfect = false;
+                    const correctCode = currentQuestion.value.correctOption.code;
+
+                    if (gameMode.value === 'hard') {
+                        // Hard Mode Logic
+                        const input = (typeof option === 'string' ? option : userAnswer.value).trim().toLowerCase();
+                        const correctName = currentQuestion.value.correctOption.name.toLowerCase();
+                        
+                        const maxDistance = correctName.length <= 4 ? 1 : 2;
+                        const dist = levenshtein(input, correctName);
+
+                        if (dist === 0) {
+                            isCorrect = true;
+                            isPerfect = true;
+                        } else if (dist <= maxDistance) {
+                            isCorrect = true;
+                        }
+                    } else {
+                        // Standard Logic
+                        selectedOption.value = option;
+                        isCorrect = option.code === correctCode;
+                    }
 
                     if (isCorrect) {
                         feedback.value = 'correct';
@@ -1034,6 +1109,9 @@
                             // Speed bonus: more points for answering faster
                             // Up to 50 extra points (10 per second remaining)
                             points += Math.ceil(timeLeft.value * 10);
+                        } else if (gameMode.value === 'hard') {
+                            points += 10; // Hard mode base bonus
+                            if (isPerfect) points += 20; // Perfect spelling bonus
                         }
 
                         score.value += points;
@@ -1067,10 +1145,10 @@
                         }
                         
                         // Update Passport
-                        if (!collectedFlags.value[option.code]) {
-                            collectedFlags.value[option.code] = 0;
+                        if (!collectedFlags.value[correctCode]) {
+                            collectedFlags.value[correctCode] = 0;
                         }
-                        collectedFlags.value[option.code]++;
+                        collectedFlags.value[correctCode]++;
                         localStorage.setItem('flag-master-collection', JSON.stringify(collectedFlags.value));
 
                         if (beatHighScore) {
@@ -1079,6 +1157,8 @@
                         } else if (streak.value > 0 && streak.value % 5 === 0) {
                             // Confetti every 5 streak
                             triggerCelebration();
+                        } else if (isPerfect && gameMode.value === 'hard') {
+                            triggerConfetti();
                         }
 
                         if (gameMode.value === 'blitz') {
@@ -1115,6 +1195,7 @@
                         currentQuestion.value = generateQuestion();
                         selectedOption.value = null;
                         feedback.value = null;
+                        userAnswer.value = '';
                         if (gameMode.value === 'blitz') {
                             startTimer();
                         }
@@ -1303,7 +1384,7 @@
                     document.removeEventListener('gesturestart', handleGestureStart);
                 });
 
-                return {
+                    return {
                     screen,
                     gameMode,
                     score,
@@ -1313,6 +1394,7 @@
                     currentQuestion,
                     selectedOption,
                     feedback,
+                    userAnswer,
                     initGame,
                     handleAnswer,
                     nextQuestion,
