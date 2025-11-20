@@ -95,6 +95,7 @@
 
     <!-- App Container -->
     <div id="app" class="w-full max-w-md h-full max-h-[900px] bg-white shadow-2xl relative overflow-hidden flex flex-col md:rounded-xl md:h-[90vh] md:mt-0">
+        
         <!-- Region Selector Modal -->
         <div v-if="showRegionSelector" class="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm animate-fade-in">
             <div class="bg-white w-full max-w-md md:rounded-2xl rounded-t-2xl p-6 pb-10 md:pb-6 animate-bounce-custom-small shadow-2xl" @click.stop>
@@ -670,6 +671,99 @@
                     });
                 };
 
+                const triggerEmojiRain = () => {
+                    const emojis = ['🌍', '🌎', '🌏', '🗺️', '🚩', '🎌', '🏳️'];
+                    const end = Date.now() + 1000;
+                    
+                    (function frame() {
+                        confetti({
+                            particleCount: 3,
+                            angle: 60,
+                            spread: 55,
+                            origin: { x: 0 },
+                            shapes: ['circle'],
+                            scalar: 2,
+                            contents: emojis
+                        });
+                        confetti({
+                            particleCount: 3,
+                            angle: 120,
+                            spread: 55,
+                            origin: { x: 1 },
+                            shapes: ['circle'],
+                            scalar: 2,
+                            contents: emojis
+                        });
+
+                        if (Date.now() < end) {
+                            requestAnimationFrame(frame);
+                        }
+                    }());
+                };
+
+                const triggerFireworks = () => {
+                    const duration = 1000;
+                    const animationEnd = Date.now() + duration;
+                    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+                    const randomInRange = (min, max) => Math.random() * (max - min) + min;
+
+                    const interval = setInterval(function() {
+                        const timeLeft = animationEnd - Date.now();
+
+                        if (timeLeft <= 0) {
+                            return clearInterval(interval);
+                        }
+
+                        const particleCount = 50 * (timeLeft / duration);
+                        confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
+                        confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
+                    }, 250);
+                };
+
+                const triggerSchoolPride = () => {
+                    const end = Date.now() + 1000;
+                    const colors = ['#bb0000', '#ffffff'];
+
+                    (function frame() {
+                        confetti({
+                            particleCount: 2,
+                            angle: 60,
+                            spread: 55,
+                            origin: { x: 0 },
+                            colors: colors
+                        });
+                        confetti({
+                            particleCount: 2,
+                            angle: 120,
+                            spread: 55,
+                            origin: { x: 1 },
+                            colors: colors
+                        });
+
+                        if (Date.now() < end) {
+                            requestAnimationFrame(frame);
+                        }
+                    }());
+                };
+                
+                const triggerPride = () => {
+                    const colors = ['#FF0018', '#FFA52C', '#FFFF41', '#008018', '#0000F9', '#86007D'];
+                    confetti({
+                        particleCount: 150,
+                        spread: 100,
+                        origin: { y: 0.6 },
+                        colors: colors,
+                        disableForReducedMotion: true
+                    });
+                };
+
+                const triggerCelebration = () => {
+                    const celebrations = [triggerConfetti, triggerFireworks, triggerSchoolPride, triggerPride];
+                    const randomCelebration = celebrations[Math.floor(Math.random() * celebrations.length)];
+                    randomCelebration();
+                };
+
                 const handleAnswer = (option) => {
                     if (feedback.value !== null) return; // Already answered
 
@@ -711,10 +805,10 @@
 
                         if (beatHighScore) {
                             // Confetti for NEW High Score (First time only this run, if beating a non-zero record)
-                            triggerConfetti();
+                            triggerCelebration();
                         } else if (streak.value > 0 && streak.value % 5 === 0) {
                             // Confetti every 5 streak
-                            triggerConfetti();
+                            triggerCelebration();
                         }
 
                         if (gameMode.value === 'blitz') {
