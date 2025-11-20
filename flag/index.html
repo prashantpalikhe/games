@@ -19,6 +19,32 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
 
     <style>
+        /* Force full height and background for iOS status bar area */
+        :root {
+            --safe-top: env(safe-area-inset-top, 20px);
+        }
+        
+        html {
+            height: 100%;
+            background-color: #ffffff;
+            padding: 0;
+            margin: 0;
+        }
+        
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            /* Extend background to status bar */
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
         /* Custom utilities for animations */
         @keyframes bounce-custom {
             0%, 100% { transform: translateY(-10%); animation-timing-function: cubic-bezier(0.8, 0, 1, 1); }
@@ -30,7 +56,7 @@
         
         /* Safe area for notch */
         .safe-top {
-            padding-top: env(safe-area-inset-top);
+            padding-top: var(--safe-top);
         }
         
         /* Smooth transitions for the bottom sheet */
@@ -62,10 +88,10 @@
         }
     </style>
 </head>
-<body class="bg-white text-gray-800 font-sans h-screen w-screen overflow-hidden flex justify-center items-center">
+<body class="bg-white text-gray-800 font-sans overflow-hidden flex justify-center items-center">
 
     <!-- App Container -->
-    <div id="app" class="w-full max-w-md h-full max-h-[900px] bg-white shadow-2xl relative overflow-hidden flex flex-col md:rounded-xl md:h-[90vh]">
+    <div id="app" class="w-full max-w-md h-full max-h-[900px] bg-white shadow-2xl relative overflow-hidden flex flex-col md:rounded-xl md:h-[90vh] md:mt-0">
         
         <!-- START SCREEN -->
         <div v-if="screen === 'start'" class="flex flex-col items-center justify-center h-full p-6 text-center animate-fade-in">
