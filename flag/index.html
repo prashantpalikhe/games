@@ -91,10 +91,10 @@
     </style>
 </head>
 <body class="bg-white text-gray-800 font-sans overflow-hidden flex justify-center items-center">
+    
 
     <!-- App Container -->
     <div id="app" class="w-full max-w-md h-full max-h-[900px] bg-white shadow-2xl relative overflow-hidden flex flex-col md:rounded-xl md:h-[90vh] md:mt-0">
-        
         <!-- Region Selector Modal -->
         <div v-if="showRegionSelector" class="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm animate-fade-in">
             <div class="bg-white w-full max-w-md md:rounded-2xl rounded-t-2xl p-6 pb-10 md:pb-6 animate-bounce-custom-small shadow-2xl" @click.stop>
@@ -834,6 +834,7 @@
                 }
 
                 onMounted(() => {
+                    
                     window.addEventListener('keydown', handleKeydown);
                     document.addEventListener('gesturestart', handleGestureStart);
                     
@@ -888,6 +889,7 @@
                     continents,
                     collectedFlags,
                     icons: ICONS,
+                    queue,
                     getRegionCount: (region) => {
                         const regionCountries = COUNTRIES.filter(c => c.continent === region);
                         const collected = regionCountries.filter(c => collectedFlags.value[c.code]);
