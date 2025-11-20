@@ -335,6 +335,7 @@
                 const currentQuestion = ref(null);
                 const selectedOption = ref(null);
                 const feedback = ref(null); // 'correct', 'incorrect', null
+                const lastFeedback = ref(null); // To persist feedback during transition
 
                 // Logic
                 const shuffleArray = (array) => {
@@ -374,6 +375,7 @@
                     currentIndex.value = 0;
                     selectedOption.value = null;
                     feedback.value = null;
+                    lastFeedback.value = null;
                     currentQuestion.value = generateQuestion();
                     screen.value = 'playing';
                 };
@@ -386,10 +388,12 @@
 
                     if (isCorrect) {
                         feedback.value = 'correct';
+                        lastFeedback.value = 'correct';
                         score.value += 10 + (streak.value * 2);
                         streak.value += 1;
                     } else {
                         feedback.value = 'incorrect';
+                        lastFeedback.value = 'incorrect';
                         lives.value -= 1;
                         streak.value = 0;
                     }
@@ -419,7 +423,12 @@
 
                 // Computed
                 const progress = computed(() => ((currentIndex.value) / COUNTRIES.length) * 100);
-                const isCorrect = computed(() => feedback.value === 'correct');
+                const isCorrect = computed(() => {
+                    if (feedback.value !== null) {
+                        return feedback.value === 'correct';
+                    }
+                    return lastFeedback.value === 'correct';
+                });
                 const totalCountries = computed(() => COUNTRIES.length);
 
                 // Dynamic Classes
@@ -464,7 +473,7 @@
                 const bottomSheetClasses = computed(() => {
                     let classes = isCorrect.value ? "bg-green-100 border-green-200" : "bg-red-100 border-red-200";
                     if (feedback.value === null) {
-                        classes = "translate-y-full bg-white border-gray-200";
+                        classes += " translate-y-full";
                     } else {
                         classes += " translate-y-0";
                     }
