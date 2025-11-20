@@ -159,13 +159,20 @@
             animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
         }
 
-        /* Hide scrollbar */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
+        /* Custom scrollbar for modals */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
         }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
         }
     </style>
 </head>
@@ -232,6 +239,64 @@
                         <div class="w-12 h-6 rounded-full relative transition-colors duration-200" :class="soundEnabled ? 'bg-blue-500' : 'bg-gray-300'">
                             <div class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform duration-200" :class="soundEnabled ? 'translate-x-6' : 'translate-x-0'"></div>
                         </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mistakes Modal -->
+        <div v-if="showMistakesModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm animate-fade-in p-4">
+            <div class="bg-white w-full max-w-md rounded-2xl p-6 shadow-2xl animate-bounce-custom-small max-h-[80vh] flex flex-col" @click.stop>
+                <div class="flex justify-between items-center mb-4 flex-shrink-0">
+                    <h3 class="text-2xl font-bold text-gray-800">Your Mistakes</h3>
+                    <button @click="showMistakesModal = false" class="text-gray-400 hover:text-gray-600 bg-gray-100 rounded-full p-1" v-html="icons.x"></button>
+                </div>
+                
+                <div class="overflow-y-auto flex-1 pr-2 -mr-2 custom-scrollbar">
+                    <div class="space-y-4 pb-4">
+                        <div 
+                            v-for="(item, idx) in wrongAnswers" 
+                            :key="idx" 
+                            class="bg-gray-50 rounded-xl p-4 border border-gray-200 flex flex-col"
+                        >
+                            <div class="flex items-start space-x-4 mb-3">
+                                <img 
+                                    :src="`https://flagcdn.com/w160/${item.question.correctOption.code}.png`" 
+                                    class="w-20 h-auto object-cover rounded shadow-sm border border-gray-200"
+                                    loading="lazy"
+                                >
+                                <div>
+                                    <div class="text-xs text-gray-400 font-bold uppercase mb-0.5">Correct Answer</div>
+                                    <div class="text-lg font-extrabold text-gray-800 leading-tight">
+                                        {{ item.question.correctOption.name }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="w-full bg-red-50 rounded-lg p-2 flex items-center border border-red-100">
+                                <div class="mr-2 bg-red-100 text-red-500 rounded-full p-1">
+                                    <span class="w-6 h-6 block" v-html="icons.x"></span>
+                                </div>
+                                <div>
+                                    <div class="text-[10px] text-red-400 font-bold uppercase leading-none mb-0.5">You Answered</div>
+                                    <div class="text-sm font-bold text-red-600 leading-tight">
+                                        <span v-if="item.type === 'timeout'">Time's Up!</span>
+                                        <span v-else-if="typeof item.userAnswer === 'string'">
+                                            "{{ item.userAnswer }}"
+                                        </span>
+                                        <span v-else-if="item.userAnswer">
+                                            {{ item.userAnswer.name }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4 pt-4 border-t border-gray-100 flex-shrink-0">
+                    <button @click="showMistakesModal = false" class="w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition-colors">
+                        Close
                     </button>
                 </div>
             </div>
@@ -561,40 +626,15 @@
                 </div>
             </div>
 
-            <!-- Wrong Answers List -->
-            <div v-if="wrongAnswers.length > 0" class="w-full max-w-sm mb-6 text-left">
-                <div class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2 pl-1">Review Mistakes</div>
-                <div class="bg-white rounded-xl border-2 border-gray-200 shadow-sm overflow-hidden">
-                    <div class="max-h-48 overflow-y-auto no-scrollbar">
-                        <div v-for="(item, idx) in wrongAnswers" :key="idx" class="p-3 border-b border-gray-100 last:border-0 flex items-center hover:bg-gray-50 transition-colors">
-                            <!-- Correct Flag -->
-                            <img 
-                                :src="`https://flagcdn.com/w160/${item.question.correctOption.code}.png`" 
-                                class="w-12 h-8 object-cover rounded shadow-sm border border-gray-200 flex-shrink-0 mr-3"
-                                loading="lazy"
-                            >
-                            <div class="flex-1 min-w-0">
-                                <!-- Correct Answer -->
-                                <div class="text-sm font-bold text-gray-800 truncate">
-                                    {{ item.question.correctOption.name }}
-                                </div>
-                                <!-- User Mistake -->
-                                <div class="text-xs text-red-500 truncate font-medium flex items-center">
-                                    <span v-if="item.type === 'timeout'">Time's Up!</span>
-                                    
-                                    <span v-else-if="typeof item.userAnswer === 'string'">
-                                        Typed: "{{ item.userAnswer }}"
-                                    </span>
-                                    
-                                    <span v-else-if="item.userAnswer">
-                                        Picked: {{ item.userAnswer.name }}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- Wrong Answers Button -->
+            <button 
+                v-if="wrongAnswers.length > 0" 
+                @click="showMistakesModal = true"
+                class="mb-6 px-6 py-3 bg-white border-2 border-red-100 rounded-xl text-red-500 font-bold flex items-center shadow-sm hover:bg-red-50 hover:border-red-200 transition-all w-full max-w-xs justify-center group"
+            >
+                <span class="mr-2 group-hover:scale-110 transition-transform">⚠️</span>
+                <span>Review {{ wrongAnswers.length }} Mistakes</span>
+            </button>
 
             <button @click="screen = 'start'" class="w-full max-w-xs bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-2xl border-b-4 border-blue-700 active:border-b-0 active:translate-y-1 transition-all shadow-lg text-lg uppercase tracking-wide flex items-center justify-center space-x-2 no-select">
                 <span class="mr-2" v-html="icons.rotateCcw"></span>
@@ -886,6 +926,7 @@
                 const lives = ref(3);
                 const streak = ref(0);
                 const wrongAnswers = ref([]);
+                const showMistakesModal = ref(false);
                 const highScore = ref(0);
                 const queue = ref([]);
                 const currentIndex = ref(0);
@@ -1173,6 +1214,7 @@
                     lives.value = mode === 'blitz' ? 1 : 3;
                     streak.value = 0;
                     wrongAnswers.value = [];
+                    showMistakesModal.value = false;
                     hasCelebratedHighScore.value = false;
                     
                     // Filter Countries
@@ -1729,6 +1771,7 @@
                     shakeActive,
                     streak,
                     wrongAnswers,
+                    showMistakesModal,
                     progressBarClass,
                     icons: ICONS,
                     queue,
