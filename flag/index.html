@@ -116,9 +116,14 @@
                 Best Score: {{ highScore }}
             </div>
 
-            <button @click="initGame" class="w-full max-w-xs bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-2xl border-b-4 border-green-700 active:border-b-0 active:translate-y-1 transition-all shadow-lg text-xl uppercase tracking-wide no-select">
-                Start Quiz
-            </button>
+            <div class="grid grid-cols-2 gap-4 w-full max-w-xs">
+                <button @click="initGame('normal')" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-4 rounded-2xl border-b-4 border-green-700 active:border-b-0 active:translate-y-1 transition-all shadow-lg text-lg uppercase tracking-wide no-select">
+                    Normal
+                </button>
+                <button @click="initGame('reverse')" class="w-full bg-purple-500 hover:bg-purple-600 text-white font-bold py-4 px-4 rounded-2xl border-b-4 border-purple-700 active:border-b-0 active:translate-y-1 transition-all shadow-lg text-lg uppercase tracking-wide no-select">
+                    Reverse
+                </button>
+            </div>
         </div>
 
         <!-- PLAYING SCREEN -->
@@ -140,36 +145,58 @@
             <!-- Game Board -->
             <div class="flex-1 overflow-y-auto p-4 flex flex-col items-center w-full pb-32">
                 <h2 class="text-2xl font-bold text-gray-700 mt-4 mb-6 text-left w-full">
-                    Which country is this?
+                    {{ gameMode === 'reverse' ? 'Which flag is this?' : 'Which country is this?' }}
                 </h2>
 
-                <div class="mb-6 p-4 bg-white rounded-2xl shadow-sm border-2 border-gray-100 w-full flex justify-center">
+                <div class="mb-6 p-4 bg-white rounded-2xl shadow-sm border-2 border-gray-100 w-full flex justify-center items-center min-h-[160px]">
                     <img 
-                        v-if="currentQuestion"
+                        v-if="currentQuestion && gameMode === 'normal'"
                         :src="`https://flagcdn.com/w640/${currentQuestion.correctOption.code}.png`" 
                         alt="Flag" 
                         class="h-40 w-auto rounded-md shadow-md object-cover border border-gray-200"
                         @error="handleImageError"
                     >
+                    <h3 v-if="currentQuestion && gameMode === 'reverse'" class="text-3xl font-extrabold text-gray-800 text-center">
+                        {{ currentQuestion.correctOption.name }}
+                    </h3>
                 </div>
 
-                <div class="grid grid-cols-1 gap-3 w-full" v-if="currentQuestion">
+                <div class="grid w-full" :class="gameMode === 'reverse' ? 'grid-cols-2 gap-4' : 'grid-cols-1 gap-3'" v-if="currentQuestion">
                     <button 
                         v-for="(option, idx) in currentQuestion.options" 
                         :key="option.code"
                         @click="handleAnswer(option)"
-                        class="relative w-full p-4 rounded-2xl border-2 border-b-4 text-lg font-bold transition-all flex items-center justify-between group no-select"
-                        :class="getOptionClass(option)"
+                        class="relative w-full rounded-2xl border-2 border-b-4 font-bold transition-all flex items-center justify-between group no-select"
+                        :class="[
+                            getOptionClass(option),
+                            gameMode === 'reverse' ? 'p-2 h-32 flex-col justify-center' : 'p-4 text-lg'
+                        ]"
                         :disabled="feedback !== null"
                     >
-                        <div class="flex items-center">
+                        <div class="flex items-center" :class="{'w-full justify-center': gameMode === 'reverse'}">
                             <span 
-                                class="flex items-center justify-center w-8 h-8 rounded-lg text-sm border mr-3"
+                                class="flex items-center justify-center w-8 h-8 rounded-lg text-sm border absolute top-2 left-2"
                                 :class="getNumberClass(option)"
+                                v-if="gameMode === 'reverse'"
                             >
                                 {{ idx + 1 }}
                             </span>
-                            <span>{{ option.name }}</span>
+                            <span 
+                                class="flex items-center justify-center w-8 h-8 rounded-lg text-sm border mr-3"
+                                :class="getNumberClass(option)"
+                                v-else
+                            >
+                                {{ idx + 1 }}
+                            </span>
+                            
+                            <span v-if="gameMode === 'normal'">{{ option.name }}</span>
+                            <img 
+                                v-if="gameMode === 'reverse'"
+                                :src="`https://flagcdn.com/w320/${option.code}.png`" 
+                                alt="Flag" 
+                                class="h-20 w-auto rounded shadow-sm object-cover"
+                                @error="handleImageError"
+                            >
                         </div>
                     </button>
                 </div>
@@ -247,7 +274,7 @@
                 </div>
             </div>
 
-            <button @click="initGame" class="w-full max-w-xs bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-2xl border-b-4 border-blue-700 active:border-b-0 active:translate-y-1 transition-all shadow-lg text-lg uppercase tracking-wide flex items-center justify-center space-x-2 no-select">
+            <button @click="screen = 'start'" class="w-full max-w-xs bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-2xl border-b-4 border-blue-700 active:border-b-0 active:translate-y-1 transition-all shadow-lg text-lg uppercase tracking-wide flex items-center justify-center space-x-2 no-select">
                 <span class="mr-2" v-html="icons.rotateCcw"></span>
                 <span>Try Again</span>
             </button>
@@ -342,6 +369,7 @@
             setup() {
                 // State
                 const screen = ref('start'); // start, playing, end
+                const gameMode = ref('normal'); // normal, reverse
                 const score = ref(0);
                 const lives = ref(3);
                 const streak = ref(0);
@@ -397,8 +425,9 @@
                     }
                 };
 
-                const initGame = () => {
+                const initGame = (mode = 'normal') => {
                     initAudio();
+                    gameMode.value = mode;
                     score.value = 0;
                     lives.value = 3;
                     streak.value = 0;
@@ -606,9 +635,13 @@
                         if (e.key === 'Enter' && feedback.value !== null) {
                             nextQuestion();
                         }
-                    } else if (screen.value === 'start' || screen.value === 'end') {
+                    } else if (screen.value === 'start') {
                         if (e.key === 'Enter') {
-                            initGame();
+                            initGame('normal');
+                        }
+                    } else if (screen.value === 'end') {
+                        if (e.key === 'Enter') {
+                            screen.value = 'start';
                         }
                     }
                 };
@@ -636,6 +669,7 @@
 
                 return {
                     screen,
+                    gameMode,
                     score,
                     lives,
                     highScore,
