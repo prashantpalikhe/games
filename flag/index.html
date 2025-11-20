@@ -159,6 +159,64 @@
                     <span>Blitz Mode</span>
                 </button>
             </div>
+            
+            <button @click="screen = 'passport'" class="mt-8 text-blue-500 font-bold flex items-center space-x-2 px-4 py-2 rounded-full hover:bg-blue-50 transition-colors">
+                <span v-html="icons.book"></span>
+                <span>My Passport</span>
+            </button>
+        </div>
+
+        <!-- PASSPORT SCREEN -->
+        <div v-if="screen === 'passport'" class="flex flex-col h-full bg-gray-50">
+            <div class="bg-white shadow-sm px-4 py-4 z-10 flex items-center justify-between safe-top">
+                <div class="flex items-center space-x-3">
+                    <button @click="screen = 'start'" class="text-gray-500 hover:text-gray-700 bg-gray-100 p-2 rounded-full transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+                    </button>
+                    <h2 class="text-xl font-bold text-gray-800">My Passport</h2>
+                </div>
+                <div class="text-sm font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+                    {{ Object.keys(collectedFlags).length }} / {{ totalCountries }}
+                </div>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto p-4">
+                <!-- Region Stats -->
+                <div class="grid grid-cols-2 gap-2 mb-6">
+                    <div class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex flex-col items-center justify-center" v-for="region in continents.filter(c => c !== 'World')" :key="region">
+                         <span class="text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">{{ region }}</span>
+                         <span class="text-lg font-extrabold" :class="getRegionProgress(region) === 100 ? 'text-green-500' : 'text-gray-700'">
+                            {{ getRegionCount(region) }}%
+                         </span>
+                         <div class="w-full h-1.5 bg-gray-100 rounded-full mt-2 overflow-hidden">
+                            <div class="h-full bg-green-500 rounded-full" :style="{ width: getRegionProgress(region) + '%' }"></div>
+                         </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-4 gap-3 pb-8">
+                    <div 
+                        v-for="country in COUNTRIES" 
+                        :key="country.code"
+                        class="aspect-square rounded-xl flex items-center justify-center relative overflow-hidden border-2 transition-all"
+                        :class="collectedFlags[country.code] ? 'bg-white border-blue-200 shadow-sm' : 'bg-gray-100 border-gray-200 opacity-60'"
+                    >
+                        <img 
+                            v-if="collectedFlags[country.code]"
+                            :src="`https://flagcdn.com/w160/${country.code}.png`" 
+                            loading="lazy"
+                            class="w-full h-full object-cover"
+                            :alt="country.name"
+                        >
+                        <span v-else class="text-2xl text-gray-300">?</span>
+                        
+                        <!-- Count Badge -->
+                        <div v-if="collectedFlags[country.code] > 1" class="absolute bottom-0 right-0 bg-blue-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-tl-lg">
+                            {{ collectedFlags[country.code] }}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- PLAYING SCREEN -->
@@ -410,6 +468,7 @@
             check: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
             rotateCcw: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12"/><path d="M3 3v9h9"/></svg>`,
             lightning: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-400"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
+            book: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
             globe: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`
         };
 
@@ -430,6 +489,9 @@
                 const lastFeedback = ref(null); // To persist feedback during transition
                 const hasCelebratedHighScore = ref(false);
                 
+                // Passport / Collection State
+                const collectedFlags = ref({}); // { 'us': 1, 'fr': 3 } - counts of correct answers
+
                 // Region Filter
                 const selectedRegion = ref('World');
                 const showRegionSelector = ref(false);
@@ -632,6 +694,13 @@
                                 hasCelebratedHighScore.value = true;
                             }
                         }
+                        
+                        // Update Passport
+                        if (!collectedFlags.value[option.code]) {
+                            collectedFlags.value[option.code] = 0;
+                        }
+                        collectedFlags.value[option.code]++;
+                        localStorage.setItem('flag-master-collection', JSON.stringify(collectedFlags.value));
 
                         if (beatHighScore) {
                             // Confetti for NEW High Score (First time only this run, if beating a non-zero record)
@@ -773,6 +842,17 @@
                     if (savedScore) {
                         highScore.value = parseInt(savedScore);
                     }
+                    
+                    // Load Passport
+                    const savedCollection = localStorage.getItem('flag-master-collection');
+                    if (savedCollection) {
+                        try {
+                            collectedFlags.value = JSON.parse(savedCollection);
+                        } catch (e) {
+                            console.error('Failed to load collection', e);
+                            collectedFlags.value = {};
+                        }
+                    }
                 });
 
                 onUnmounted(() => {
@@ -806,7 +886,18 @@
                     showRegionSelector,
                     selectedRegion,
                     continents,
-                    icons: ICONS
+                    collectedFlags,
+                    icons: ICONS,
+                    getRegionCount: (region) => {
+                        const regionCountries = COUNTRIES.filter(c => c.continent === region);
+                        const collected = regionCountries.filter(c => collectedFlags.value[c.code]);
+                        return Math.round((collected.length / regionCountries.length) * 100);
+                    },
+                    getRegionProgress: (region) => {
+                        const regionCountries = COUNTRIES.filter(c => c.continent === region);
+                        const collected = regionCountries.filter(c => collectedFlags.value[c.code]);
+                        return (collected.length / regionCountries.length) * 100;
+                    }
                 };
             }
         }).mount('#app');
