@@ -507,6 +507,7 @@
                 const timerInterval = ref(null);
                 const timeLeft = ref(0);
                 const BLITZ_TIME = 5; // seconds
+                const autoAdvanceTimer = ref(null);
                 
                 let audioContext = null;
 
@@ -715,6 +716,12 @@
                             // Confetti every 5 streak
                             triggerConfetti();
                         }
+
+                        if (gameMode.value === 'blitz') {
+                            autoAdvanceTimer.value = setTimeout(() => {
+                                nextQuestion();
+                            }, 600);
+                        }
                     } else {
                         feedback.value = 'incorrect';
                         lastFeedback.value = 'incorrect';
@@ -728,6 +735,11 @@
                 };
 
                 const nextQuestion = () => {
+                    if (autoAdvanceTimer.value) {
+                        clearTimeout(autoAdvanceTimer.value);
+                        autoAdvanceTimer.value = null;
+                    }
+
                     if (lives.value <= 0) {
                         screen.value = 'end';
                     } else if (currentIndex.value >= queue.value.length - 1) {
@@ -759,7 +771,7 @@
                     if (navigator.share) {
                         try {
                             await navigator.share({
-                                title: 'Flag Master Score',
+                                title: `🏆 Flag Master Score: ${score.value}`,
                                 text: text,
                                 url: url
                             });
@@ -888,6 +900,7 @@
 
                 onUnmounted(() => {
                     clearInterval(timerInterval.value);
+                    if (autoAdvanceTimer.value) clearTimeout(autoAdvanceTimer.value);
                     window.removeEventListener('keydown', handleKeydown);
                     document.removeEventListener('gesturestart', handleGestureStart);
                 });
