@@ -482,28 +482,20 @@
                         
                         // Update High Score
                         let beatHighScore = false;
+                        // Only confetti if we actually beat a *previous* high score that was > 0
                         if (score.value > highScore.value) {
-                            // Only confetti if this is the moment we beat the old record
-                            // We check if the previous score (score.value - points) was <= old high score
-                            const pointsJustEarned = 10 + ((streak.value - 1) * 2); // Recalculate points just added
-                            const prevScore = score.value - pointsJustEarned;
-                            
-                            // We need to store the old high score somewhere to know if we JUST beat it.
-                            // Actually, a simpler way is: if we are already in "high score territory", don't confetti.
-                            // But highScore.value is updated immediately.
-                            
-                            // Let's track if we've already celebrated this run
-                            if (!hasCelebratedHighScore.value) {
+                            const previousHigh = highScore.value;
+                            highScore.value = score.value;
+                            localStorage.setItem('flag-master-highscore', highScore.value);
+
+                            if (previousHigh > 0 && !hasCelebratedHighScore.value) {
                                 beatHighScore = true;
                                 hasCelebratedHighScore.value = true;
                             }
-                            
-                            highScore.value = score.value;
-                            localStorage.setItem('flag-master-highscore', highScore.value);
                         }
 
                         if (beatHighScore) {
-                            // Confetti for NEW High Score (First time only this run)
+                            // Confetti for NEW High Score (First time only this run, if beating a non-zero record)
                             triggerConfetti();
                         } else if (streak.value > 0 && streak.value % 5 === 0) {
                             // Confetti every 5 streak
