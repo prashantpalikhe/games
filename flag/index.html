@@ -1181,7 +1181,15 @@
                     timeLeft.value = BLITZ_TIME;
                     
                     timerInterval.value = setInterval(() => {
+                        const oldTime = Math.ceil(timeLeft.value);
                         timeLeft.value -= 0.05; // Update every 50ms
+                        const newTime = Math.ceil(timeLeft.value);
+
+                        // Ticking sound for last 3 seconds (when second changes)
+                        if (newTime <= 3 && newTime > 0 && newTime < oldTime) {
+                             playSound('tick');
+                        }
+
                         if (timeLeft.value <= 0) {
                             timeLeft.value = 0;
                             clearInterval(timerInterval.value);
@@ -1267,6 +1275,14 @@
                         gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
                         osc.start(ctx.currentTime);
                         osc.stop(ctx.currentTime + 0.3);
+                    } else if (type === 'tick') {
+                        // Short woodblock-like tick
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(800, ctx.currentTime);
+                        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.05);
+                        osc.start(ctx.currentTime);
+                        osc.stop(ctx.currentTime + 0.05);
                     }
                 };
 
