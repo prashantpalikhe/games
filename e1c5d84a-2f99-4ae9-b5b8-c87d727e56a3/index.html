@@ -3,42 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>P2P Secure Link - No Server</title>
+    <title>SyncLink P2P - Screen Share</title>
     
-    <!-- Tailwind CSS for styling -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- PeerJS for WebRTC handling (Public Signaling) -->
+    <!-- PeerJS -->
     <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
     
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        /* Custom scrollbar for chat */
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        video {
-            transform: scaleX(-1); /* Mirror effect */
-        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Only mirror the local camera view, not the remote view or screen share */
+        .mirror-mode { transform: scaleX(-1); }
+        
+        .fade-enter { opacity: 0; transform: translateY(10px); }
+        .fade-enter-active { opacity: 1; transform: translateY(0); transition: opacity 0.3s, transform 0.3s; }
     </style>
 </head>
 <body class="bg-gray-900 text-white h-screen flex flex-col overflow-hidden font-sans">
 
     <!-- Header -->
-    <header class="bg-gray-800 p-4 flex justify-between items-center shadow-md z-10">
+    <header class="bg-gray-800 p-3 md:p-4 flex justify-between items-center shadow-md z-10 shrink-0">
         <div class="flex items-center gap-2">
-            <i data-lucide="zap" class="text-yellow-400"></i>
-            <h1 class="font-bold text-lg tracking-wide">SyncLink <span class="text-xs text-gray-400 font-normal">P2P Secured</span></h1>
+            <div class="bg-blue-600 p-1.5 rounded-lg">
+                <i data-lucide="zap" class="w-4 h-4 text-white"></i>
+            </div>
+            <h1 class="font-bold text-lg tracking-wide hidden md:block">SyncLink <span class="text-xs text-gray-400 font-normal">P2P Secured</span></h1>
         </div>
-        <div id="status-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></span>
-            Initializing...
+        
+        <!-- Connection Status -->
+        <div id="status-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></span>
+            <span id="status-text">Initializing...</span>
         </div>
     </header>
 
@@ -46,74 +47,75 @@
     <main class="flex-1 flex flex-col md:flex-row relative overflow-hidden">
         
         <!-- Video Section -->
-        <div class="relative flex-1 bg-black flex items-center justify-center group">
+        <div class="relative flex-1 bg-black flex items-center justify-center group overflow-hidden">
             
-            <!-- Remote Video (Full Screen) -->
-            <video id="remote-video" autoplay playsinline class="w-full h-full object-cover"></video>
+            <!-- Remote Video -->
+            <video id="remote-video" autoplay playsinline class="w-full h-full object-contain"></video>
             
-            <!-- Placeholder when no video -->
-            <div id="video-placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-gray-500 bg-gray-900 z-0">
-                <i data-lucide="video-off" class="w-16 h-16 mb-4 opacity-50"></i>
-                <p class="text-sm">Waiting for video stream...</p>
+            <!-- Placeholder / Status Overlay -->
+            <div id="video-placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-gray-500 bg-gray-900/90 z-0 transition-all duration-500">
+                <div class="bg-gray-800/50 p-8 rounded-full mb-6 backdrop-blur-sm">
+                    <i data-lucide="users" class="w-12 h-12 opacity-50"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-300 mb-2">Waiting for connection</h3>
+                <p class="text-sm text-gray-500 max-w-xs text-center">Once connected, video will appear here automatically.</p>
             </div>
 
-            <!-- Local Video (Floating Picture-in-Picture) -->
-            <div class="absolute top-4 right-4 w-32 md:w-48 aspect-video bg-gray-800 rounded-lg overflow-hidden shadow-2xl border border-gray-700 z-10">
-                <video id="local-video" autoplay playsinline muted class="w-full h-full object-cover"></video>
+            <!-- Local Video (PIP) -->
+            <div class="absolute top-4 right-4 w-28 md:w-48 aspect-video bg-gray-800 rounded-xl overflow-hidden shadow-2xl border border-gray-700 z-20 transition-all hover:scale-105">
+                <!-- Added mirror-mode class by default for camera -->
+                <video id="local-video" autoplay playsinline muted class="w-full h-full object-cover mirror-mode"></video>
+                <div class="absolute bottom-1 left-2 text-[10px] font-mono bg-black/50 px-1 rounded text-white/80">YOU</div>
             </div>
 
-            <!-- Controls Overlay -->
-            <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-4 p-3 bg-gray-900/80 backdrop-blur-md rounded-2xl border border-gray-700/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
-                <button id="btn-toggle-mic" class="p-3 rounded-full bg-gray-700 hover:bg-gray-600 transition text-white" title="Toggle Microphone">
-                    <i data-lucide="mic"></i>
+            <!-- Action Bar -->
+            <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex items-center gap-3 px-6 py-3 bg-gray-900/90 backdrop-blur-xl rounded-full border border-gray-700/50 shadow-2xl z-30 transition-opacity duration-300 hover:opacity-100 opacity-90 md:opacity-0 md:group-hover:opacity-100">
+                <button id="btn-toggle-mic" class="p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition text-white active:scale-95" title="Toggle Mic">
+                    <i data-lucide="mic" class="w-5 h-5"></i>
                 </button>
-                <button id="btn-toggle-video" class="p-3 rounded-full bg-gray-700 hover:bg-gray-600 transition text-white" title="Toggle Camera">
-                    <i data-lucide="video"></i>
+                <button id="btn-toggle-video" class="p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition text-white active:scale-95" title="Toggle Camera">
+                    <i data-lucide="video" class="w-5 h-5"></i>
                 </button>
-                <button onclick="window.location.href=window.location.pathname" class="p-3 rounded-full bg-red-500 hover:bg-red-600 transition text-white" title="End Call">
-                    <i data-lucide="phone-off"></i>
+                <!-- Screen Share Button -->
+                <button id="btn-share-screen" class="p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition text-white active:scale-95" title="Share Screen">
+                    <i data-lucide="monitor" class="w-5 h-5"></i>
+                </button>
+                
+                <div class="w-px h-8 bg-gray-700 mx-1"></div>
+                
+                <button onclick="window.location.href=window.location.pathname" class="p-3 rounded-full bg-red-500/20 text-red-500 hover:bg-red-500 hover:text-white transition active:scale-95" title="Hang Up">
+                    <i data-lucide="phone-off" class="w-5 h-5"></i>
                 </button>
             </div>
 
-            <!-- Invite Overlay (Only visible when not connected) -->
-            <div id="invite-overlay" class="absolute inset-0 bg-black/80 backdrop-blur-sm z-30 flex flex-col items-center justify-center p-6 text-center hidden">
-                <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 max-w-md w-full shadow-2xl">
-                    <div class="w-16 h-16 bg-blue-500/20 text-blue-400 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i data-lucide="link" class="w-8 h-8"></i>
-                    </div>
-                    <h2 class="text-2xl font-bold mb-2">Invite a Peer</h2>
-                    <p class="text-gray-400 mb-6">Share this unique link to start a secure P2P video chat.</p>
-                    
-                    <div class="flex gap-2 mb-4">
-                        <input type="text" id="invite-link" readonly class="flex-1 bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-sm text-gray-300 focus:outline-none focus:border-blue-500 select-all">
-                        <button id="btn-copy" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-medium transition flex items-center gap-2">
-                            <i data-lucide="copy" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                    <p class="text-xs text-gray-500">Data flows directly between devices. No server storage.</p>
+            <!-- Invite / Error Modal -->
+            <div id="modal-overlay" class="absolute inset-0 bg-black/80 backdrop-blur-md z-40 flex items-center justify-center p-4 hidden">
+                <div id="modal-content" class="bg-gray-900 border border-gray-700 p-6 md:p-8 rounded-2xl max-w-md w-full shadow-2xl text-center transform transition-all scale-100">
+                    <!-- Dynamic Content -->
                 </div>
             </div>
         </div>
 
-        <!-- Chat Section (Collapsible on mobile) -->
-        <div class="w-full md:w-80 bg-gray-800 border-l border-gray-700 flex flex-col h-1/3 md:h-auto">
-            <div class="p-4 border-b border-gray-700 bg-gray-800/50 backdrop-blur">
-                <h3 class="font-semibold flex items-center gap-2">
-                    <i data-lucide="message-square" class="w-4 h-4 text-blue-400"></i> Chat
+        <!-- Chat Section -->
+        <div class="w-full md:w-80 bg-gray-900 border-t md:border-t-0 md:border-l border-gray-800 flex flex-col h-[40%] md:h-auto shrink-0">
+            <div class="p-3 border-b border-gray-800 bg-gray-900 flex justify-between items-center">
+                <h3 class="font-semibold text-sm flex items-center gap-2 text-gray-300">
+                    <i data-lucide="message-square" class="w-4 h-4"></i> Encrypted Chat
                 </h3>
+                <span class="text-[10px] bg-gray-800 text-gray-500 px-2 py-0.5 rounded">P2P</span>
             </div>
             
-            <!-- Messages Area -->
-            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3 scrollbar-hide bg-gray-900/30">
-                <div class="text-center text-xs text-gray-500 mt-4">
-                    Messages are encrypted and P2P.<br>Nothing is saved.
+            <!-- Logs / Messages -->
+            <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3 scrollbar-hide bg-black/20">
+                <div class="flex flex-col gap-2 opacity-50 text-xs text-center py-4">
+                    <p>Logs & Status updates will appear here.</p>
                 </div>
             </div>
 
-            <!-- Input Area -->
-            <form id="chat-form" class="p-3 bg-gray-800 border-t border-gray-700 flex gap-2">
-                <input type="text" id="chat-input" placeholder="Type a message..." class="flex-1 bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white p-2 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed">
+            <!-- Input -->
+            <form id="chat-form" class="p-3 bg-gray-900 border-t border-gray-800 flex gap-2">
+                <input type="text" id="chat-input" placeholder="Type a message..." autocomplete="off" class="flex-1 bg-gray-800 border border-gray-700/50 rounded-lg px-4 py-2 text-sm text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white p-2 rounded-lg transition disabled:opacity-50 active:scale-95">
                     <i data-lucide="send" class="w-4 h-4"></i>
                 </button>
             </form>
@@ -122,262 +124,354 @@
     </main>
 
     <script>
-        // --- Config & State ---
-        // We use PeerJS default public cloud server for signaling. 
-        // It acts as a broker to find the other person, then drops out.
+        // --- Globals ---
         let peer = null;
-        let conn = null; // Data connection (Chat)
-        let call = null; // Media connection (Video)
-        let localStream = null;
-        let myPeerId = null;
+        let conn = null;
+        let call = null;
         
-        // Check if we are the Guest (User B) trying to connect to a Host (User A)
+        let webcamStream = null; // Keeps the camera/mic stream
+        let currentStream = null; // The stream currently being sent (Camera OR Screen)
+        let myPeerId = null;
+        let isScreenSharing = false;
+        
+        // Parse URL
         const urlParams = new URLSearchParams(window.location.search);
         const remotePeerId = urlParams.get('connect');
         const isHost = !remotePeerId;
 
-        // --- UI Elements ---
+        // Elements
         const statusBadge = document.getElementById('status-badge');
-        const inviteOverlay = document.getElementById('invite-overlay');
-        const inviteLinkInput = document.getElementById('invite-link');
+        const statusText = document.getElementById('status-text');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalContent = document.getElementById('modal-content');
         const localVideo = document.getElementById('local-video');
         const remoteVideo = document.getElementById('remote-video');
+        const videoPlaceholder = document.getElementById('video-placeholder');
+        const chatMessages = document.getElementById('chat-messages');
         const chatForm = document.getElementById('chat-form');
         const chatInput = document.getElementById('chat-input');
-        const chatMessages = document.getElementById('chat-messages');
-        const videoPlaceholder = document.getElementById('video-placeholder');
+        const btnShareScreen = document.getElementById('btn-share-screen');
 
-        // --- Icons Init ---
+        // --- Icons ---
         lucide.createIcons();
 
-        // --- Main Initialization ---
-        async function init() {
-            try {
-                // 1. Get Local Stream (Camera/Mic)
-                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                localVideo.srcObject = localStream;
-            } catch (err) {
-                console.error("Failed to get local stream", err);
-                addMessage('System', 'Error accessing camera/microphone. Ensure permissions are granted.', 'error');
+        // --- Logger ---
+        function log(msg, type = 'info') {
+            console.log(`[${type.toUpperCase()}] ${msg}`);
+            
+            const div = document.createElement('div');
+            div.className = `text-xs p-2 rounded border mb-2 break-words fade-enter-active`;
+            
+            if (type === 'error') {
+                div.className += ' bg-red-900/20 border-red-900/30 text-red-400';
+            } else if (type === 'success') {
+                div.className += ' bg-green-900/20 border-green-900/30 text-green-400';
+            } else {
+                div.className += ' bg-gray-800/50 border-gray-700 text-gray-400';
             }
+            
+            div.textContent = msg;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
 
-            // 2. Initialize Peer
-            peer = new Peer();
+        // --- Status UI ---
+        function setStatus(msg, type) {
+            statusText.textContent = msg;
+            let colors = {
+                loading: ['bg-yellow-500/10', 'text-yellow-500', 'bg-yellow-500'],
+                success: ['bg-green-500/10', 'text-green-400', 'bg-green-500'],
+                error:   ['bg-red-500/10', 'text-red-400', 'bg-red-500'],
+                blue:    ['bg-blue-500/10', 'text-blue-400', 'bg-blue-500']
+            };
+            const c = colors[type] || colors.loading;
+            
+            statusBadge.className = `px-3 py-1 rounded-full text-xs font-bold border border-white/5 flex items-center gap-2 transition-all ${c[0]} ${c[1]}`;
+            statusBadge.querySelector('span').className = `w-2 h-2 rounded-full ${c[2]} ${type === 'loading' || type === 'blue' ? 'animate-pulse' : ''}`;
+        }
+
+        // --- Modal UI ---
+        function showModal(html) {
+            modalContent.innerHTML = html;
+            modalOverlay.classList.remove('hidden');
+            lucide.createIcons();
+        }
+        
+        function hideModal() {
+            modalOverlay.classList.add('hidden');
+        }
+
+        function showHostInvite(id) {
+            const link = `${window.location.protocol}//${window.location.host}${window.location.pathname}?connect=${id}`;
+            
+            showModal(`
+                <div class="flex justify-center mb-4">
+                    <div class="w-16 h-16 bg-blue-500/20 text-blue-400 rounded-full flex items-center justify-center">
+                        <i data-lucide="link" class="w-8 h-8"></i>
+                    </div>
+                </div>
+                <h2 class="text-xl font-bold text-white mb-2">Invite Peer</h2>
+                <p class="text-gray-400 text-sm mb-6">Do not close or refresh this page. Send this link to your peer.</p>
+                
+                <div class="flex gap-2 mb-4">
+                    <input type="text" value="${link}" readonly class="flex-1 bg-black/50 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-300 focus:outline-none font-mono select-all">
+                    <button onclick="navigator.clipboard.writeText('${link}'); this.innerHTML='<i data-lucide=\'check\'></i>'; setTimeout(()=> this.innerHTML='<i data-lucide=\'copy\'></i>', 1000); lucide.createIcons();" class="bg-blue-600 hover:bg-blue-500 text-white px-3 rounded-lg transition flex items-center justify-center min-w-[44px]">
+                        <i data-lucide="copy" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                <div class="text-xs text-gray-500 bg-gray-800/50 p-2 rounded border border-gray-700/50">
+                    Waiting for connection...
+                </div>
+            `);
+        }
+
+        function showErrorModal(title, msg, isFatal = false) {
+            showModal(`
+                <div class="flex justify-center mb-4">
+                    <div class="w-16 h-16 bg-red-500/20 text-red-400 rounded-full flex items-center justify-center">
+                        <i data-lucide="alert-triangle" class="w-8 h-8"></i>
+                    </div>
+                </div>
+                <h2 class="text-xl font-bold text-white mb-2">${title}</h2>
+                <p class="text-gray-400 text-sm mb-6">${msg}</p>
+                <button onclick="${isFatal ? "window.location.href=window.location.pathname" : "hideModal()"}" class="bg-red-600 hover:bg-red-500 text-white w-full py-2 rounded-lg font-medium transition">
+                    ${isFatal ? "Restart as Host" : "Close"}
+                </button>
+            `);
+        }
+
+        // --- Core Logic ---
+
+        async function init() {
+            setStatus('Accessing Camera...', 'loading');
+            try {
+                webcamStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                currentStream = webcamStream; // Start with webcam
+                
+                localVideo.srcObject = webcamStream;
+                log('Camera access granted.', 'success');
+                initPeer();
+            } catch (err) {
+                console.error(err);
+                setStatus('Camera Error', 'error');
+                log('Failed to access camera. ' + err.message, 'error');
+                showErrorModal('Camera Access Denied', 'Please allow camera and microphone access to use this app.');
+            }
+        }
+
+        function initPeer() {
+            setStatus('Connecting to Server...', 'loading');
+            
+            // Create Peer
+            peer = new Peer({
+                debug: 2, 
+            });
 
             peer.on('open', (id) => {
                 myPeerId = id;
-                console.log('My ID:', id);
+                log(`Connected to server. ID: ${id}`, 'info');
 
                 if (isHost) {
-                    // HOST MODE
-                    updateStatus('Waiting for Peer', 'yellow');
-                    showInviteScreen(id);
-                    
-                    // Listen for incoming connections
-                    peer.on('connection', (connection) => {
-                        handleDataConnection(connection);
-                    });
-                    
-                    peer.on('call', (incomingCall) => {
-                        handleCall(incomingCall);
-                    });
+                    setStatus('Waiting for Peer', 'loading');
+                    showHostInvite(id);
                 } else {
-                    // GUEST MODE
-                    updateStatus('Connecting to Host...', 'blue');
+                    setStatus('Connecting to Host...', 'blue');
                     connectToHost(remotePeerId);
                 }
             });
 
+            peer.on('connection', (connection) => {
+                handleDataConnection(connection);
+            });
+
+            peer.on('call', (incomingCall) => {
+                handleCall(incomingCall);
+            });
+
             peer.on('error', (err) => {
-                console.error(err);
-                updateStatus('Connection Error', 'red');
-                addMessage('System', 'Connection error: ' + err.type, 'error');
+                console.error('Peer Error:', err);
+                if (err.type === 'peer-unavailable') {
+                    setStatus('Peer Unavailable', 'error');
+                    showErrorModal('Link Expired', 'The host is not available. Links are one-time use.', true);
+                } else {
+                    log(`Error: ${err.type}`, 'error');
+                }
             });
         }
 
-        // --- Host Logic ---
-        function showInviteScreen(id) {
-            inviteOverlay.classList.remove('hidden');
-            const link = `${window.location.protocol}//${window.location.host}${window.location.pathname}?connect=${id}`;
-            inviteLinkInput.value = link;
-        }
-
-        // --- Guest Logic ---
         function connectToHost(hostId) {
-            // 1. Open Data Connection (Chat)
-            const connection = peer.connect(hostId);
+            if (!hostId) return;
+            const connection = peer.connect(hostId, { reliable: true });
             handleDataConnection(connection);
 
-            // 2. Call (Video)
-            const outgoingCall = peer.call(hostId, localStream);
-            handleCall(outgoingCall);
+            setTimeout(() => {
+                // We always call with currentStream
+                const outgoingCall = peer.call(hostId, currentStream);
+                handleCall(outgoingCall);
+            }, 500);
         }
-
-        // --- Handlers ---
 
         function handleDataConnection(connection) {
             conn = connection;
             
             conn.on('open', () => {
-                updateStatus('Connected Securely', 'green');
-                inviteOverlay.classList.add('hidden');
-                addMessage('System', 'Peer connected via P2P channel.', 'system');
+                setStatus('Securely Connected', 'success');
+                hideModal();
+                log('Data channel established.', 'success');
+                conn.send({ type: 'system', message: 'Peer joined.' });
             });
 
             conn.on('data', (data) => {
-                if (data.type === 'chat') {
-                    addMessage('Peer', data.message, 'received');
-                }
+                if (data.type === 'chat') addChatMessage('Peer', data.message, false);
             });
 
             conn.on('close', () => {
-                updateStatus('Peer Disconnected', 'red');
-                addMessage('System', 'Peer disconnected.', 'error');
-                // Handle remote video cleanup if needed
+                setStatus('Peer Disconnected', 'error');
+                log('Peer disconnected.', 'error');
                 remoteVideo.srcObject = null;
-                videoPlaceholder.style.zIndex = "0"; 
+                videoPlaceholder.style.opacity = '1';
+                videoPlaceholder.style.zIndex = '10';
             });
         }
 
         function handleCall(currentCall) {
             call = currentCall;
             
-            // Answer the call if we receive one (Host side logic mainly, but good for both)
-            // If we initiated the call, this 'call' object is already the one we need.
-            // However, peerJS `peer.on('call')` gives us a call we must answer.
-            
             if (isHost) {
-                // We answer incoming call
-                call.answer(localStream); 
+                call.answer(currentStream);
             }
 
-            // Stream handler
             call.on('stream', (remoteStream) => {
                 remoteVideo.srcObject = remoteStream;
-                videoPlaceholder.style.zIndex = "-1"; // Hide placeholder
+                videoPlaceholder.style.opacity = '0';
+                setTimeout(() => { videoPlaceholder.style.zIndex = '-1'; }, 500);
             });
 
             call.on('close', () => {
                 remoteVideo.srcObject = null;
-                videoPlaceholder.style.zIndex = "0";
+                videoPlaceholder.style.zIndex = '10';
+                videoPlaceholder.style.opacity = '1';
             });
         }
 
-        // --- Chat Functions ---
-        chatForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const msg = chatInput.value.trim();
-            if (!msg) return;
+        // --- Screen Share Logic ---
 
-            if (conn && conn.open) {
-                conn.send({ type: 'chat', message: msg });
-                addMessage('You', msg, 'sent');
-                chatInput.value = '';
+        btnShareScreen.addEventListener('click', async () => {
+            if (isScreenSharing) {
+                stopScreenShare();
             } else {
-                addMessage('System', 'Not connected to a peer yet.', 'error');
+                startScreenShare();
             }
         });
 
-        function addMessage(sender, text, type) {
+        async function startScreenShare() {
+            try {
+                const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+                const screenTrack = screenStream.getVideoTracks()[0];
+                
+                // If user clicks "Stop Sharing" on browser UI
+                screenTrack.onended = () => stopScreenShare();
+
+                // Swap track in PeerConnection
+                if (call && call.peerConnection) {
+                    const sender = call.peerConnection.getSenders().find(s => s.track.kind === 'video');
+                    if (sender) {
+                        sender.replaceTrack(screenTrack);
+                    }
+                }
+
+                // Update Local View
+                localVideo.srcObject = screenStream;
+                localVideo.classList.remove('mirror-mode'); // Don't mirror text
+
+                // Update UI
+                btnShareScreen.classList.add('bg-blue-600', 'hover:bg-blue-500');
+                btnShareScreen.classList.remove('bg-gray-800', 'hover:bg-gray-700');
+                isScreenSharing = true;
+                log('Screen sharing started.', 'info');
+
+            } catch (err) {
+                console.error("Screen share cancelled or failed", err);
+                log('Screen share cancelled.', 'info');
+            }
+        }
+
+        function stopScreenShare() {
+            if (!isScreenSharing) return;
+
+            // Get original webcam video track
+            const webcamTrack = webcamStream.getVideoTracks()[0];
+
+            // Swap track back in PeerConnection
+            if (call && call.peerConnection) {
+                const sender = call.peerConnection.getSenders().find(s => s.track.kind === 'video');
+                if (sender) {
+                    sender.replaceTrack(webcamTrack);
+                }
+            }
+
+            // Update Local View
+            localVideo.srcObject = webcamStream;
+            localVideo.classList.add('mirror-mode'); // Mirror camera again
+
+            // Update UI
+            btnShareScreen.classList.remove('bg-blue-600', 'hover:bg-blue-500');
+            btnShareScreen.classList.add('bg-gray-800', 'hover:bg-gray-700');
+            isScreenSharing = false;
+            log('Screen sharing stopped.', 'info');
+        }
+
+        // --- Chat & Toggles ---
+        
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const text = chatInput.value.trim();
+            if (!text) return;
+            if (conn && conn.open) {
+                conn.send({ type: 'chat', message: text });
+                addChatMessage('You', text, true);
+                chatInput.value = '';
+            }
+        });
+
+        function addChatMessage(sender, text, isSelf) {
             const div = document.createElement('div');
-            
-            let classes = "max-w-[85%] rounded-lg p-3 text-sm break-words animate-fade-in ";
-            let align = "self-start"; // Default left
-
-            if (type === 'sent') {
-                classes += "bg-blue-600 text-white";
-                align = "self-end";
-            } else if (type === 'received') {
-                classes += "bg-gray-700 text-gray-200";
-            } else if (type === 'system') {
-                classes += "bg-green-900/30 text-green-400 text-xs w-full text-center border border-green-800/50";
-                align = "self-center";
-            } else if (type === 'error') {
-                classes += "bg-red-900/30 text-red-400 text-xs w-full text-center border border-red-800/50";
-                align = "self-center";
-            }
-
-            div.className = classes;
-            div.textContent = text;
-
-            // Wrapper for alignment
-            const wrapper = document.createElement('div');
-            wrapper.className = `flex flex-col ${align} w-full`;
-            wrapper.appendChild(div);
-            
-            // Sender label for normal messages
-            if (type === 'sent' || type === 'received') {
-                const label = document.createElement('span');
-                label.className = `text-[10px] text-gray-500 mt-1 ${type === 'sent' ? 'text-right' : 'text-left'}`;
-                label.textContent = sender;
-                wrapper.appendChild(label);
-            }
-
-            chatMessages.appendChild(wrapper);
+            const align = isSelf ? 'self-end items-end' : 'self-start items-start';
+            const bg = isSelf ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-200';
+            div.className = `flex flex-col ${align} max-w-[85%] mb-2 fade-enter-active`;
+            div.innerHTML = `<div class="${bg} px-3 py-2 rounded-lg text-sm break-words shadow-sm">${text}</div><span class="text-[10px] text-gray-500 mt-1 px-1">${sender}</span>`;
+            chatMessages.appendChild(div);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
-        // --- Utilities ---
-        function updateStatus(text, color) {
-            let bgClass = '';
-            let textClass = '';
-            let borderClass = '';
-            let dotClass = '';
-
-            if (color === 'green') {
-                bgClass = 'bg-green-500/20'; textClass = 'text-green-400'; borderClass = 'border-green-500/30'; dotClass = 'bg-green-400';
-            } else if (color === 'yellow') {
-                bgClass = 'bg-yellow-500/20'; textClass = 'text-yellow-400'; borderClass = 'border-yellow-500/30'; dotClass = 'bg-yellow-400';
-            } else if (color === 'red') {
-                bgClass = 'bg-red-500/20'; textClass = 'text-red-400'; borderClass = 'border-red-500/30'; dotClass = 'bg-red-400';
-            } else if (color === 'blue') {
-                bgClass = 'bg-blue-500/20'; textClass = 'text-blue-400'; borderClass = 'border-blue-500/30'; dotClass = 'bg-blue-400';
-            }
-
-            statusBadge.className = `px-3 py-1 rounded-full text-xs font-bold flex items-center gap-2 transition-colors duration-300 ${bgClass} ${textClass} ${borderClass}`;
-            statusBadge.innerHTML = `<span class="w-2 h-2 rounded-full ${dotClass} ${color === 'yellow' || color === 'blue' ? 'animate-pulse' : ''}"></span>${text}`;
-        }
-
-        // Copy Button
-        document.getElementById('btn-copy').addEventListener('click', () => {
-            inviteLinkInput.select();
-            document.execCommand('copy');
-            const btn = document.getElementById('btn-copy');
-            const originalContent = btn.innerHTML;
-            btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i>`;
-            btn.classList.remove('bg-blue-600');
-            btn.classList.add('bg-green-600');
-            setTimeout(() => {
-                btn.innerHTML = originalContent;
-                btn.classList.add('bg-blue-600');
-                btn.classList.remove('bg-green-600');
-                lucide.createIcons();
-            }, 2000);
-        });
-
-        // Media Controls
-        let isAudioEnabled = true;
-        let isVideoEnabled = true;
-
+        let isAudio = true;
+        let isVideo = true;
+        
         document.getElementById('btn-toggle-mic').addEventListener('click', function() {
-            isAudioEnabled = !isAudioEnabled;
-            localStream.getAudioTracks()[0].enabled = isAudioEnabled;
-            this.innerHTML = isAudioEnabled ? '<i data-lucide="mic"></i>' : '<i data-lucide="mic-off" class="text-red-400"></i>';
-            this.classList.toggle('bg-red-900/50', !isAudioEnabled);
+            if (!webcamStream) return;
+            isAudio = !isAudio;
+            // Always toggle the webcam audio track (even if screen sharing)
+            webcamStream.getAudioTracks()[0].enabled = isAudio;
+            this.className = isAudio 
+                ? 'p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition text-white active:scale-95'
+                : 'p-3 rounded-full bg-red-500 text-white hover:bg-red-600 transition active:scale-95';
+            this.innerHTML = isAudio ? '<i data-lucide="mic" class="w-5 h-5"></i>' : '<i data-lucide="mic-off" class="w-5 h-5"></i>';
             lucide.createIcons();
         });
 
         document.getElementById('btn-toggle-video').addEventListener('click', function() {
-            isVideoEnabled = !isVideoEnabled;
-            localStream.getVideoTracks()[0].enabled = isVideoEnabled;
-            this.innerHTML = isVideoEnabled ? '<i data-lucide="video"></i>' : '<i data-lucide="video-off" class="text-red-400"></i>';
-            this.classList.toggle('bg-red-900/50', !isVideoEnabled);
+            if (!webcamStream) return;
+            isVideo = !isVideo;
+            // Toggle webcam video track
+            webcamStream.getVideoTracks()[0].enabled = isVideo;
+            this.className = isVideo 
+                ? 'p-3 rounded-full bg-gray-800 hover:bg-gray-700 transition text-white active:scale-95'
+                : 'p-3 rounded-full bg-red-500 text-white hover:bg-red-600 transition active:scale-95';
+            this.innerHTML = isVideo ? '<i data-lucide="video" class="w-5 h-5"></i>' : '<i data-lucide="video-off" class="w-5 h-5"></i>';
             lucide.createIcons();
         });
 
-        // Start
         init();
-
     </script>
 </body>
 </html>
