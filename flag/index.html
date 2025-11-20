@@ -10,12 +10,14 @@
     <meta name="apple-mobile-web-app-title" content="Flag Master">
     <meta name="theme-color" content="#ffffff">
     
-    <!-- Note: iOS requires a PNG file. Please convert your icon.svg to icon.png -->
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
 
     <title>Flag Master</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+
     <style>
         /* Custom utilities for animations */
         @keyframes bounce-custom {
@@ -42,23 +44,175 @@
             touch-action: manipulation;
             overscroll-behavior: none;
         }
+
+        /* Fade transition for screens */
+        .fade-enter-active,
+        .fade-leave-active {
+            transition: opacity 0.3s ease;
+        }
+
+        .fade-enter-from,
+        .fade-leave-to {
+            opacity: 0;
+        }
     </style>
 </head>
-<!-- Changed bg-gray-100 to bg-white for full white theme -->
 <body class="bg-white text-gray-800 font-sans h-screen w-screen overflow-hidden flex justify-center items-center">
 
     <!-- App Container -->
-    <div id="app-container" class="w-full max-w-md h-full max-h-[900px] bg-white shadow-2xl relative overflow-hidden flex flex-col md:rounded-xl md:h-[90vh]">
-        <!-- Content will be injected here by JavaScript -->
-    </div>
+    <div id="app" class="w-full max-w-md h-full max-h-[900px] bg-white shadow-2xl relative overflow-hidden flex flex-col md:rounded-xl md:h-[90vh]">
+        
+        <!-- START SCREEN -->
+        <div v-if="screen === 'start'" class="flex flex-col items-center justify-center h-full p-6 text-center animate-fade-in">
+            <div class="mb-8 animate-bounce-custom">
+                <div class="w-32 h-24 bg-blue-500 rounded-lg shadow-lg flex items-center justify-center relative overflow-hidden border-4 border-blue-700 transform rotate-3">
+                    <div class="absolute inset-0 flex flex-col">
+                        <div class="h-1/3 bg-yellow-400"></div>
+                        <div class="h-1/3 bg-blue-500"></div>
+                        <div class="h-1/3 bg-red-500"></div>
+                    </div>
+                </div>
+            </div>
+            <h1 class="text-4xl font-extrabold text-gray-800 mb-4">Flag Master</h1>
+            <p class="text-gray-500 text-lg mb-8 max-w-md">
+                Master all {{ totalCountries }} flags of the world in one endless run!
+            </p>
+            <button @click="initGame" class="w-full max-w-xs bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-2xl border-b-4 border-green-700 active:border-b-0 active:translate-y-1 transition-all shadow-lg text-xl uppercase tracking-wide no-select">
+                Start Quiz
+            </button>
+        </div>
 
-    <!-- Inline SVG Icons map for easy usage -->
-    <div style="display: none;">
-        <!-- Icons will be inserted dynamically as SVG strings in JS -->
+        <!-- PLAYING SCREEN -->
+        <div v-if="screen === 'playing'" class="flex flex-col h-full relative">
+            <!-- Header -->
+            <div class="pt-6 pb-2 px-4 flex items-center justify-between bg-white z-10">
+                <button @click="reloadPage" class="text-gray-400 hover:text-gray-600 no-select" v-html="icons.x"></button>
+                <div class="flex-1 mx-4">
+                    <div class="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="h-full bg-green-500 transition-all duration-500 ease-out rounded-full" :style="{ width: progress + '%' }"></div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-1">
+                    <span v-html="lives > 0 ? icons.heartFilled : icons.heart"></span>
+                    <span class="text-xl font-bold text-red-500">{{ lives }}</span>
+                </div>
+            </div>
+
+            <!-- Game Board -->
+            <div class="flex-1 overflow-y-auto p-4 flex flex-col items-center w-full pb-32">
+                <h2 class="text-2xl font-bold text-gray-700 mt-4 mb-6 text-left w-full">
+                    Which country is this?
+                </h2>
+
+                <div class="mb-6 p-4 bg-white rounded-2xl shadow-sm border-2 border-gray-100 w-full flex justify-center">
+                    <img 
+                        v-if="currentQuestion"
+                        :src="`https://flagcdn.com/w640/${currentQuestion.correctOption.code}.png`" 
+                        alt="Flag" 
+                        class="h-40 w-auto rounded-md shadow-md object-cover border border-gray-200"
+                        @error="handleImageError"
+                    >
+                </div>
+
+                <div class="grid grid-cols-1 gap-3 w-full" v-if="currentQuestion">
+                    <button 
+                        v-for="(option, idx) in currentQuestion.options" 
+                        :key="option.code"
+                        @click="handleAnswer(option)"
+                        class="relative w-full p-4 rounded-2xl border-2 border-b-4 text-lg font-bold transition-all flex items-center justify-between group no-select"
+                        :class="getOptionClass(option)"
+                        :disabled="feedback !== null"
+                    >
+                        <div class="flex items-center">
+                            <span 
+                                class="flex items-center justify-center w-8 h-8 rounded-lg text-sm border mr-3"
+                                :class="getNumberClass(option)"
+                            >
+                                {{ idx + 1 }}
+                            </span>
+                            <span>{{ option.name }}</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bottom Sheet -->
+            <div 
+                class="fixed bottom-0 left-0 right-0 max-w-md mx-auto sheet-transition p-4 border-t-2 flex flex-col z-50 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.3)]"
+                :class="bottomSheetClasses"
+            >
+                <div class="flex items-center justify-between mb-4 px-2">
+                    <div class="flex items-center space-x-3">
+                        <div 
+                            class="p-2 rounded-full text-white"
+                            :class="isCorrect ? 'bg-green-500' : 'bg-red-500'"
+                        >
+                            <span v-html="isCorrect ? icons.check : icons.x"></span>
+                        </div>
+                        <div>
+                            <h3 
+                                class="text-xl font-extrabold"
+                                :class="isCorrect ? 'text-green-600' : 'text-red-600'"
+                            >
+                                {{ isCorrect ? 'Excellent!' : 'Incorrect' }}
+                            </h3>
+                            <p v-if="!isCorrect" class="text-red-500 font-medium">
+                                Correct: {{ currentQuestion?.correctOption.name }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <button 
+                    @click="nextQuestion" 
+                    class="w-full py-3 px-6 rounded-xl font-bold text-white text-lg uppercase tracking-wider border-b-4 active:border-b-0 active:translate-y-1 transition-all shadow-md no-select"
+                    :class="isCorrect ? 'bg-green-500 hover:bg-green-600 border-green-700' : 'bg-red-500 hover:bg-red-600 border-red-700'"
+                >
+                    Continue
+                </button>
+                <div class="h-4 md:h-0"></div>
+            </div>
+
+            <!-- Desktop Hint -->
+            <div class="hidden md:block fixed bottom-4 right-4 text-xs text-gray-400 bg-white p-2 rounded border shadow-sm">
+                Press <strong>1-4</strong> to answer, <strong>Enter</strong> to continue
+            </div>
+        </div>
+
+        <!-- END SCREEN -->
+        <div v-if="screen === 'end'" class="flex flex-col items-center justify-center h-full p-6 text-center">
+            <div class="mb-6">
+                <div class="w-32 h-32 mx-auto" :class="lives > 0 ? 'text-yellow-400' : 'text-gray-300'">
+                    <span v-html="lives > 0 ? icons.trophyLarge : icons.heartLarge"></span>
+                </div>
+            </div>
+            
+            <h2 class="text-3xl font-extrabold text-gray-800 mb-2">
+                {{ lives > 0 ? 'World Master!' : 'Out of Hearts!' }}
+            </h2>
+            
+            <div class="bg-gray-100 p-6 rounded-2xl w-full max-w-sm mb-8 border-2 border-gray-200">
+                <div class="flex justify-between items-center mb-4 border-b pb-4 border-gray-300">
+                    <span class="text-gray-600 font-bold">Total Score</span>
+                    <span class="text-2xl font-extrabold text-blue-500">{{ score }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-600 font-bold">Flags Identified</span>
+                    <span class="text-xl font-extrabold text-green-500">{{ currentIndex }}/{{ totalCountries }}</span>
+                </div>
+            </div>
+
+            <button @click="initGame" class="w-full max-w-xs bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-2xl border-b-4 border-blue-700 active:border-b-0 active:translate-y-1 transition-all shadow-lg text-lg uppercase tracking-wide flex items-center justify-center space-x-2 no-select">
+                <span class="mr-2" v-html="icons.rotateCcw"></span>
+                <span>Try Again</span>
+            </button>
+        </div>
+
     </div>
 
     <script>
-        // --- DATA SOURCE ---
+        const { createApp, ref, computed, onMounted, onUnmounted } = Vue;
+
+        // --- DATA ---
         const COUNTRIES = [
             { code: 'ad', name: 'Andorra' }, { code: 'ae', name: 'United Arab Emirates' }, { code: 'af', name: 'Afghanistan' }, 
             { code: 'ag', name: 'Antigua and Barbuda' }, { code: 'al', name: 'Albania' }, { code: 'am', name: 'Armenia' }, 
@@ -127,349 +281,222 @@
             { code: 'zm', name: 'Zambia' }, { code: 'zw', name: 'Zimbabwe' }
         ];
 
-        // --- SVGs ---
         const ICONS = {
             heart: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>`,
             heartFilled: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>`,
             trophy: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-400"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>`,
+            trophyLarge: `<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-400"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>`,
+            heartLarge: `<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>`,
             x: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`,
             check: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
             rotateCcw: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12"/><path d="M3 3v9h9"/></svg>`
         };
 
-        // --- STATE ---
-        let state = {
-            screen: 'start', // start, playing, end
-            score: 0,
-            lives: 3,
-            streak: 0,
-            queue: [], // Shuffled list of countries
-            currentIndex: 0,
-            currentQuestion: null, // { correctOption: obj, options: [obj, obj, obj, obj] }
-            selectedOption: null,
-            feedback: null // 'correct', 'incorrect', null
-        };
+        createApp({
+            setup() {
+                // State
+                const screen = ref('start'); // start, playing, end
+                const score = ref(0);
+                const lives = ref(3);
+                const streak = ref(0);
+                const queue = ref([]);
+                const currentIndex = ref(0);
+                const currentQuestion = ref(null);
+                const selectedOption = ref(null);
+                const feedback = ref(null); // 'correct', 'incorrect', null
 
-        // --- LOGIC ---
-
-        function shuffleArray(array) {
-            const newArray = [...array];
-            for (let i = newArray.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-            }
-            return newArray;
-        }
-
-        function generateQuestion() {
-            const correctOption = state.queue[state.currentIndex];
-            
-            // Pick 3 distractors
-            const distractors = [];
-            const availableDistractors = COUNTRIES.filter(c => c.code !== correctOption.code);
-            
-            while (distractors.length < 3) {
-                const randomIndex = Math.floor(Math.random() * availableDistractors.length);
-                const randomDistractor = availableDistractors[randomIndex];
-                if (!distractors.includes(randomDistractor)) {
-                    distractors.push(randomDistractor);
-                }
-            }
-            
-            const options = shuffleArray([correctOption, ...distractors]);
-            
-            return {
-                correctOption,
-                options
-            };
-        }
-
-        function initGame() {
-            state.score = 0;
-            state.lives = 3;
-            state.streak = 0;
-            state.queue = shuffleArray(COUNTRIES);
-            state.currentIndex = 0;
-            state.selectedOption = null;
-            state.feedback = null;
-            state.currentQuestion = generateQuestion();
-            state.screen = 'playing';
-            render();
-        }
-
-        function handleAnswer(option) {
-            if (state.feedback !== null) return; // Already answered
-
-            state.selectedOption = option;
-            const isCorrect = option.code === state.currentQuestion.correctOption.code;
-
-            if (isCorrect) {
-                state.feedback = 'correct';
-                state.score += 10 + (state.streak * 2);
-                state.streak += 1;
-            } else {
-                state.feedback = 'incorrect';
-                state.lives -= 1;
-                state.streak = 0;
-            }
-
-            render();
-        }
-
-        function nextQuestion() {
-            // Check game over conditions
-            if (state.lives <= 0) {
-                state.screen = 'end';
-            } else if (state.currentIndex >= state.queue.length - 1) {
-                // Victory - went through all flags!
-                state.screen = 'end';
-            } else {
-                state.currentIndex += 1;
-                state.currentQuestion = generateQuestion();
-                state.selectedOption = null;
-                state.feedback = null;
-            }
-            render();
-        }
-
-        // --- RENDERING ---
-
-        const appEl = document.getElementById('app-container');
-
-        function render() {
-            if (state.screen === 'start') {
-                appEl.innerHTML = '';
-                renderStartScreen();
-            } else if (state.screen === 'playing') {
-                renderPlayingScreen();
-            } else if (state.screen === 'end') {
-                appEl.innerHTML = '';
-                renderEndScreen();
-            }
-        }
-
-        function renderStartScreen() {
-            appEl.innerHTML = `
-                <div class="flex flex-col items-center justify-center h-full p-6 text-center animate-fade-in">
-                    <div class="mb-8 animate-bounce-custom">
-                        <div class="w-32 h-24 bg-blue-500 rounded-lg shadow-lg flex items-center justify-center relative overflow-hidden border-4 border-blue-700 transform rotate-3">
-                            <div class="absolute inset-0 flex flex-col">
-                                <div class="h-1/3 bg-yellow-400"></div>
-                                <div class="h-1/3 bg-blue-500"></div>
-                                <div class="h-1/3 bg-red-500"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <h1 class="text-4xl font-extrabold text-gray-800 mb-4">Flag Master</h1>
-                    <p class="text-gray-500 text-lg mb-8 max-w-md">
-                        Master all ${COUNTRIES.length} flags of the world in one endless run!
-                    </p>
-                    <button onclick="initGame()" class="w-full max-w-xs bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-2xl border-b-4 border-green-700 active:border-b-0 active:translate-y-1 transition-all shadow-lg text-xl uppercase tracking-wide no-select">
-                        Start Quiz
-                    </button>
-                </div>
-            `;
-        }
-
-        function renderPlayingScreen() {
-            // 1. Ensure Skeleton Exists (Persist DOM elements to enable CSS transitions)
-            if (!document.getElementById('playing-ui-root')) {
-                appEl.innerHTML = `
-                    <div id="playing-ui-root" class="flex flex-col h-full relative">
-                        <div id="game-header"></div>
-                        <div id="game-board" class="flex-1 overflow-y-auto p-4 flex flex-col items-center w-full pb-32"></div>
-                        <div id="bottom-sheet-container" class="fixed bottom-0 left-0 right-0 max-w-md mx-auto sheet-transition p-4 border-t-2 flex flex-col z-50 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.3)] bg-white border-gray-200 translate-y-full"></div>
-                        <div class="hidden md:block fixed bottom-4 right-4 text-xs text-gray-400 bg-white p-2 rounded border shadow-sm">
-                            Press <strong>1-4</strong> to answer, <strong>Enter</strong> to continue
-                        </div>
-                    </div>
-                `;
-            }
-
-            const isFeedbackMode = state.feedback !== null;
-            const isCorrect = state.feedback === 'correct';
-
-            // 2. Update Header
-            const progress = ((state.currentIndex) / COUNTRIES.length) * 100;
-            const headerHtml = `
-                <div class="pt-6 pb-2 px-4 flex items-center justify-between bg-white z-10">
-                    <button onclick="location.reload()" class="text-gray-400 hover:text-gray-600 no-select">
-                        ${ICONS.x}
-                    </button>
-                    <div class="flex-1 mx-4">
-                        <div class="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
-                            <div class="h-full bg-green-500 transition-all duration-500 ease-out rounded-full" style="width: ${progress}%"></div>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-1">
-                        ${state.lives > 0 ? ICONS.heartFilled : ICONS.heart}
-                        <span class="text-xl font-bold text-red-500">${state.lives}</span>
-                    </div>
-                </div>
-            `;
-            const headerEl = document.getElementById('game-header');
-            if (headerEl) headerEl.innerHTML = headerHtml;
-
-            // 3. Update Board
-            let boardHtml = `
-                <h2 class="text-2xl font-bold text-gray-700 mt-4 mb-6 text-left w-full">
-                    Which country is this?
-                </h2>
-
-                <div class="mb-6 p-4 bg-white rounded-2xl shadow-sm border-2 border-gray-100 w-full flex justify-center">
-                     <img 
-                       src="https://flagcdn.com/w640/${state.currentQuestion.correctOption.code}.png" 
-                       alt="Flag" 
-                       class="h-40 w-auto rounded-md shadow-md object-cover border border-gray-200"
-                       onerror="this.onerror=null; this.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='"
-                     >
-                </div>
-
-                <div class="grid grid-cols-1 gap-3 w-full">
-            `;
-
-            // Options
-            state.currentQuestion.options.forEach((option, idx) => {
-                let btnClass = "relative w-full p-4 rounded-2xl border-2 border-b-4 text-lg font-bold transition-all flex items-center justify-between group no-select ";
-                let numberClass = "flex items-center justify-center w-8 h-8 rounded-lg text-sm border mr-3 ";
-                
-                if (isFeedbackMode) {
-                    if (option.code === state.currentQuestion.correctOption.code) {
-                        btnClass += "bg-green-100 border-green-500 text-green-700";
-                        numberClass += "border-green-500 text-green-700 bg-green-200";
-                    } else if (state.selectedOption && state.selectedOption.code === option.code) {
-                        btnClass += "bg-red-100 border-red-500 text-red-700";
-                        numberClass += "border-red-500 text-red-700 bg-red-200";
-                    } else {
-                        btnClass += "bg-white border-gray-200 opacity-50 text-gray-400";
-                        numberClass += "border-gray-200 bg-white";
+                // Logic
+                const shuffleArray = (array) => {
+                    const newArray = [...array];
+                    for (let i = newArray.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
                     }
-                } else {
-                    // Default State
-                    if (state.selectedOption === option) {
-                         btnClass += "bg-blue-100 border-blue-500 text-blue-700";
-                         numberClass += "border-blue-500 text-blue-700 bg-blue-200";
-                    } else {
-                         btnClass += "bg-white border-gray-200 hover:bg-gray-50 text-gray-700 active:border-b-2 active:translate-y-[2px]";
-                         numberClass += "border-gray-200 text-gray-400 bg-white";
-                    }
-                }
+                    return newArray;
+                };
 
-                const clickHandler = isFeedbackMode ? '' : `onclick='handleAnswer(${JSON.stringify(option)})'`;
-
-                boardHtml += `
-                    <button ${clickHandler} class="${btnClass}">
-                        <div class="flex items-center">
-                            <span class="${numberClass}">${idx + 1}</span>
-                            <span>${option.name}</span>
-                        </div>
-                    </button>
-                `;
-            });
-
-            boardHtml += `</div>`;
-            const boardEl = document.getElementById('game-board');
-            if (boardEl) boardEl.innerHTML = boardHtml;
-
-            // 4. Update Bottom Sheet
-            const sheetEl = document.getElementById('bottom-sheet-container');
-            if (sheetEl) {
-                // Update Classes
-                let sheetClasses = "fixed bottom-0 left-0 right-0 max-w-md mx-auto sheet-transition p-4 border-t-2 flex flex-col z-50 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.3)] ";
-                if (!isFeedbackMode) {
-                    sheetClasses += "translate-y-full bg-white border-gray-200";
-                } else {
-                    sheetClasses += "translate-y-0 ";
-                    sheetClasses += isCorrect ? "bg-green-100 border-green-200" : "bg-red-100 border-red-200";
-                }
-                sheetEl.className = sheetClasses;
-
-                // Update Content
-                const sheetContent = `
-                    <div class="flex items-center justify-between mb-4 px-2">
-                        <div class="flex items-center space-x-3">
-                            <div class="p-2 rounded-full ${isCorrect ? 'bg-green-500' : 'bg-red-500'} text-white">
-                                ${isCorrect ? ICONS.check : ICONS.x}
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-extrabold ${isCorrect ? 'text-green-600' : 'text-red-600'}">
-                                    ${isCorrect ? 'Excellent!' : 'Incorrect'}
-                                </h3>
-                                ${!isCorrect ? `<p class="text-red-500 font-medium">Correct: ${state.currentQuestion.correctOption.name}</p>` : ''}
-                            </div>
-                        </div>
-                    </div>
-                    <button onclick="nextQuestion()" class="w-full py-3 px-6 rounded-xl font-bold text-white text-lg uppercase tracking-wider border-b-4 active:border-b-0 active:translate-y-1 transition-all shadow-md ${isCorrect ? 'bg-green-500 hover:bg-green-600 border-green-700' : 'bg-red-500 hover:bg-red-600 border-red-700'} no-select">
-                        Continue
-                    </button>
-                    <div class="h-4 md:h-0"></div>
-                `;
-                sheetEl.innerHTML = sheetContent;
-            }
-        }
-
-        function renderEndScreen() {
-            const isWin = state.lives > 0;
-            appEl.innerHTML = `
-                <div class="flex flex-col items-center justify-center h-full p-6 text-center">
-                    <div class="mb-6">
-                        <div class="w-32 h-32 mx-auto ${isWin ? 'text-yellow-400' : 'text-gray-300'}">
-                             ${isWin ? ICONS.trophy.replace('width="24"', 'width="128"').replace('height="24"', 'height="128"') : ICONS.heart.replace('width="24"', 'width="128"').replace('height="24"', 'height="128"')}
-                        </div>
-                    </div>
+                const generateQuestion = () => {
+                    const correctOption = queue.value[currentIndex.value];
                     
-                    <h2 class="text-3xl font-extrabold text-gray-800 mb-2">
-                        ${isWin ? 'World Master!' : 'Out of Hearts!'}
-                    </h2>
+                    // Pick 3 distractors
+                    const distractors = [];
+                    const availableDistractors = COUNTRIES.filter(c => c.code !== correctOption.code);
                     
-                    <div class="bg-gray-100 p-6 rounded-2xl w-full max-w-sm mb-8 border-2 border-gray-200">
-                        <div class="flex justify-between items-center mb-4 border-b pb-4 border-gray-300">
-                            <span class="text-gray-600 font-bold">Total Score</span>
-                            <span class="text-2xl font-extrabold text-blue-500">${state.score}</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-600 font-bold">Flags Identified</span>
-                            <span class="text-xl font-extrabold text-green-500">${state.currentIndex}/${COUNTRIES.length}</span>
-                        </div>
-                    </div>
-
-                    <button onclick="initGame()" class="w-full max-w-xs bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-2xl border-b-4 border-blue-700 active:border-b-0 active:translate-y-1 transition-all shadow-lg text-lg uppercase tracking-wide flex items-center justify-center space-x-2 no-select">
-                        <span class="mr-2">${ICONS.rotateCcw}</span>
-                        <span>Try Again</span>
-                    </button>
-                </div>
-            `;
-        }
-
-        // --- KEYBOARD INPUT ---
-        window.addEventListener('keydown', (e) => {
-            if (state.screen === 'playing') {
-                // Number keys 1-4
-                if (['1', '2', '3', '4'].includes(e.key) && state.feedback === null) {
-                    const index = parseInt(e.key) - 1;
-                    if (state.currentQuestion && state.currentQuestion.options[index]) {
-                        handleAnswer(state.currentQuestion.options[index]);
+                    while (distractors.length < 3) {
+                        const randomIndex = Math.floor(Math.random() * availableDistractors.length);
+                        const randomDistractor = availableDistractors[randomIndex];
+                        if (!distractors.includes(randomDistractor)) {
+                            distractors.push(randomDistractor);
+                        }
                     }
+                    
+                    const options = shuffleArray([correctOption, ...distractors]);
+                    
+                    return { correctOption, options };
+                };
+
+                const initGame = () => {
+                    score.value = 0;
+                    lives.value = 3;
+                    streak.value = 0;
+                    queue.value = shuffleArray(COUNTRIES);
+                    currentIndex.value = 0;
+                    selectedOption.value = null;
+                    feedback.value = null;
+                    currentQuestion.value = generateQuestion();
+                    screen.value = 'playing';
+                };
+
+                const handleAnswer = (option) => {
+                    if (feedback.value !== null) return; // Already answered
+
+                    selectedOption.value = option;
+                    const isCorrect = option.code === currentQuestion.value.correctOption.code;
+
+                    if (isCorrect) {
+                        feedback.value = 'correct';
+                        score.value += 10 + (streak.value * 2);
+                        streak.value += 1;
+                    } else {
+                        feedback.value = 'incorrect';
+                        lives.value -= 1;
+                        streak.value = 0;
+                    }
+                };
+
+                const nextQuestion = () => {
+                    if (lives.value <= 0) {
+                        screen.value = 'end';
+                    } else if (currentIndex.value >= queue.value.length - 1) {
+                        screen.value = 'end';
+                    } else {
+                        currentIndex.value += 1;
+                        currentQuestion.value = generateQuestion();
+                        selectedOption.value = null;
+                        feedback.value = null;
+                    }
+                };
+
+                const reloadPage = () => {
+                    location.reload();
+                };
+
+                const handleImageError = (e) => {
+                    e.target.onerror = null;
+                    e.target.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+                };
+
+                // Computed
+                const progress = computed(() => ((currentIndex.value) / COUNTRIES.length) * 100);
+                const isCorrect = computed(() => feedback.value === 'correct');
+                const totalCountries = computed(() => COUNTRIES.length);
+
+                // Dynamic Classes
+                const getOptionClass = (option) => {
+                    let classes = '';
+                    if (feedback.value !== null) {
+                        if (option.code === currentQuestion.value.correctOption.code) {
+                            classes = "bg-green-100 border-green-500 text-green-700";
+                        } else if (selectedOption.value && selectedOption.value.code === option.code) {
+                            classes = "bg-red-100 border-red-500 text-red-700";
+                        } else {
+                            classes = "bg-white border-gray-200 opacity-50 text-gray-400";
+                        }
+                    } else {
+                        if (selectedOption.value === option) {
+                            classes = "bg-blue-100 border-blue-500 text-blue-700";
+                        } else {
+                            classes = "bg-white border-gray-200 hover:bg-gray-50 text-gray-700 active:border-b-2 active:translate-y-[2px]";
+                        }
+                    }
+                    return classes;
+                };
+
+                const getNumberClass = (option) => {
+                    if (feedback.value !== null) {
+                        if (option.code === currentQuestion.value.correctOption.code) {
+                            return "border-green-500 text-green-700 bg-green-200";
+                        } else if (selectedOption.value && selectedOption.value.code === option.code) {
+                            return "border-red-500 text-red-700 bg-red-200";
+                        } else {
+                            return "border-gray-200 bg-white";
+                        }
+                    } else {
+                        if (selectedOption.value === option) {
+                            return "border-blue-500 text-blue-700 bg-blue-200";
+                        } else {
+                            return "border-gray-200 text-gray-400 bg-white";
+                        }
+                    }
+                };
+
+                const bottomSheetClasses = computed(() => {
+                    let classes = isCorrect.value ? "bg-green-100 border-green-200" : "bg-red-100 border-red-200";
+                    if (feedback.value === null) {
+                        classes = "translate-y-full bg-white border-gray-200";
+                    } else {
+                        classes += " translate-y-0";
+                    }
+                    return classes;
+                });
+
+                // Keyboard Events
+                const handleKeydown = (e) => {
+                    if (screen.value === 'playing') {
+                        if (['1', '2', '3', '4'].includes(e.key) && feedback.value === null) {
+                            const index = parseInt(e.key) - 1;
+                            if (currentQuestion.value && currentQuestion.value.options[index]) {
+                                handleAnswer(currentQuestion.value.options[index]);
+                            }
+                        }
+                        if (e.key === 'Enter' && feedback.value !== null) {
+                            nextQuestion();
+                        }
+                    } else if (screen.value === 'start' || screen.value === 'end') {
+                        if (e.key === 'Enter') {
+                            initGame();
+                        }
+                    }
+                };
+
+                // Prevent Zoom
+                const handleGestureStart = (e) => {
+                    e.preventDefault();
                 }
-                // Enter key to continue
-                if (e.key === 'Enter' && state.feedback !== null) {
-                    nextQuestion();
-                }
-            } else if (state.screen === 'start' || state.screen === 'end') {
-                if (e.key === 'Enter') {
-                    initGame();
-                }
+
+                onMounted(() => {
+                    window.addEventListener('keydown', handleKeydown);
+                    document.addEventListener('gesturestart', handleGestureStart);
+                });
+
+                onUnmounted(() => {
+                    window.removeEventListener('keydown', handleKeydown);
+                    document.removeEventListener('gesturestart', handleGestureStart);
+                });
+
+                return {
+                    screen,
+                    score,
+                    lives,
+                    currentIndex,
+                    currentQuestion,
+                    selectedOption,
+                    feedback,
+                    initGame,
+                    handleAnswer,
+                    nextQuestion,
+                    reloadPage,
+                    handleImageError,
+                    progress,
+                    isCorrect,
+                    totalCountries,
+                    getOptionClass,
+                    getNumberClass,
+                    bottomSheetClasses,
+                    icons: ICONS
+                };
             }
-        });
-
-        // Prevent Zoom on Double Tap / Pinch
-        document.addEventListener('gesturestart', function (e) {
-            e.preventDefault();
-        });
-
-        // Initial Render
-        render();
-
+        }).mount('#app');
     </script>
 </body>
 </html>
