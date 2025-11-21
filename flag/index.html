@@ -282,7 +282,7 @@
                                 <div>
                                     <div class="text-xs text-gray-400 font-bold uppercase mb-0.5">Correct Answer</div>
                                     <div class="text-lg font-extrabold text-gray-800 leading-tight">
-                                        {{ item.question.correctOption.name }}
+                                        {{ gameMode === 'capitals' ? item.question.correctOption.capital : item.question.correctOption.name }}
                                     </div>
                                 </div>
                             </div>
@@ -299,7 +299,7 @@
                                             "{{ item.userAnswer }}"
                                         </span>
                                         <span v-else-if="item.userAnswer">
-                                            {{ item.userAnswer.name }}
+                                            {{ gameMode === 'capitals' ? item.userAnswer.capital : item.userAnswer.name }}
                                         </span>
                                     </div>
                                 </div>
@@ -490,10 +490,10 @@
             <!-- Game Board -->
             <div class="flex-1 overflow-y-auto p-4 flex flex-col items-center w-full pb-32">
                 <h2 class="text-2xl font-bold text-gray-700 mt-4 mb-6 text-left w-full">
-                    {{ gameMode === 'reverse' ? 'Which flag is this?' : 'Which country is this?' }}
+                    {{ gameMode === 'reverse' ? 'Which flag is this?' : (gameMode === 'capitals' ? 'What is the capital?' : 'Which country is this?') }}
                 </h2>
 
-                <div class="mb-6 p-4 bg-white rounded-2xl shadow-sm border-2 border-gray-100 w-full flex justify-center items-center min-h-[160px]">
+                <div class="mb-6 p-4 bg-white rounded-2xl shadow-sm border-2 border-gray-100 w-full flex flex-col justify-center items-center min-h-[160px]">
                     <img 
                         v-if="currentQuestion && gameMode !== 'reverse'"
                         :src="`https://flagcdn.com/w640/${currentQuestion.correctOption.code}.png`" 
@@ -502,7 +502,7 @@
                         :class="[currentEffect, { 'transition-all duration-500': feedback !== null }]"
                         @error="handleImageError"
                     >
-                    <h3 v-if="currentQuestion && gameMode === 'reverse'" class="text-3xl font-extrabold text-gray-800 text-center">
+                    <h3 v-if="currentQuestion && gameMode === 'reverse'" class="text-3xl font-extrabold text-gray-800 text-center mt-2">
                         {{ currentQuestion.correctOption.name }}
                     </h3>
                 </div>
@@ -557,7 +557,7 @@
                                 {{ idx + 1 }}
                             </span>
                             
-                            <span v-if="gameMode !== 'reverse'">{{ option.name }}</span>
+                            <span v-if="gameMode !== 'reverse'">{{ gameMode === 'capitals' ? option.capital : option.name }}</span>
                             <img 
                                 v-if="gameMode === 'reverse'"
                                 :src="`https://flagcdn.com/w320/${option.code}.png`" 
@@ -591,7 +591,7 @@
                                 {{ isCorrect ? 'Excellent!' : (feedback === 'timeout' ? "Time's Up!" : 'Incorrect') }}
                             </h3>
                             <p v-if="!isCorrect" class="text-red-500 font-medium">
-                                Correct: {{ currentQuestion?.correctOption.name }}
+                                Correct: {{ gameMode === 'capitals' ? currentQuestion?.correctOption.capital : currentQuestion?.correctOption.name }}
                             </p>
                         </div>
                     </div>
@@ -866,6 +866,49 @@
             { code: 'zm', name: 'Zambia', continent: 'Africa', difficulty: 'medium' }, 
             { code: 'zw', name: 'Zimbabwe', continent: 'Africa', difficulty: 'medium' }
         ];
+
+        const CAPITALS = {
+            ad: "Andorra la Vella", ae: "Abu Dhabi", af: "Kabul", ag: "Saint John's", al: "Tirana", am: "Yerevan", 
+            ao: "Luanda", ar: "Buenos Aires", at: "Vienna", au: "Canberra", az: "Baku", ba: "Sarajevo", bb: "Bridgetown", 
+            bd: "Dhaka", be: "Brussels", bf: "Ouagadougou", bg: "Sofia", bh: "Manama", bi: "Gitega", bj: "Porto-Novo", 
+            bn: "Bandar Seri Begawan", bo: "Sucre", br: "Brasília", bs: "Nassau", bt: "Thimphu", bw: "Gaborone", 
+            by: "Minsk", bz: "Belmopan", ca: "Ottawa", cd: "Kinshasa", cf: "Bangui", cg: "Brazzaville", ch: "Bern", 
+            ci: "Yamoussoukro", cl: "Santiago", cm: "Yaoundé", cn: "Beijing", co: "Bogotá", cr: "San José", cu: "Havana", 
+            cv: "Praia", cy: "Nicosia", cz: "Prague", de: "Berlin", dj: "Djibouti", dk: "Copenhagen", dm: "Roseau", 
+            do: "Santo Domingo", dz: "Algiers", ec: "Quito", ee: "Tallinn", eg: "Cairo", er: "Asmara", es: "Madrid", 
+            et: "Addis Ababa", fi: "Helsinki", fj: "Suva", fm: "Palikir", fr: "Paris", ga: "Libreville", gb: "London", 
+            gd: "St. George's", ge: "Tbilisi", gh: "Accra", gm: "Banjul", gn: "Conakry", gq: "Malabo", gr: "Athens", 
+            gt: "Guatemala City", gw: "Bissau", gy: "Georgetown", hn: "Tegucigalpa", hr: "Zagreb", ht: "Port-au-Prince", 
+            hu: "Budapest", id: "Jakarta", ie: "Dublin", il: "Jerusalem", in: "New Delhi", iq: "Baghdad", ir: "Tehran", 
+            is: "Reykjavik", it: "Rome", jm: "Kingston", jo: "Amman", jp: "Tokyo", ke: "Nairobi", kg: "Bishkek", 
+            kh: "Phnom Penh", ki: "South Tarawa", km: "Moroni", kn: "Basseterre", kp: "Pyongyang", kr: "Seoul", 
+            kw: "Kuwait City", kz: "Astana", la: "Vientiane", lb: "Beirut", lc: "Castries", li: "Vaduz", lk: "Sri Jayawardenepura Kotte", 
+            lr: "Monrovia", ls: "Maseru", lt: "Vilnius", lu: "Luxembourg", lv: "Riga", ly: "Tripoli", ma: "Rabat", 
+            mc: "Monaco", md: "Chisinau", me: "Podgorica", mg: "Antananarivo", mh: "Majuro", mk: "Skopje", ml: "Bamako", 
+            mm: "Naypyidaw", mn: "Ulaanbaatar", mr: "Nouakchott", mt: "Valletta", mu: "Port Louis", mv: "Malé", 
+            mw: "Lilongwe", mx: "Mexico City", my: "Kuala Lumpur", mz: "Maputo", na: "Windhoek", ne: "Niamey", 
+            ng: "Abuja", ni: "Managua", nl: "Amsterdam", no: "Oslo", np: "Kathmandu", nr: "Yaren", nz: "Wellington", 
+            om: "Muscat", pa: "Panama City", pe: "Lima", pg: "Port Moresby", ph: "Manila", pk: "Islamabad", pl: "Warsaw", 
+            pt: "Lisbon", pw: "Ngerulmud", py: "Asunción", qa: "Doha", ro: "Bucharest", rs: "Belgrade", ru: "Moscow", 
+            rw: "Kigali", sa: "Riyadh", sb: "Honiara", sc: "Victoria", sd: "Khartoum", se: "Stockholm", sg: "Singapore", 
+            si: "Ljubljana", sk: "Bratislava", sl: "Freetown", sm: "San Marino", sn: "Dakar", so: "Mogadishu", 
+            sr: "Paramaribo", ss: "Juba", st: "São Tomé", sv: "San Salvador", sy: "Damascus", sz: "Mbabane", 
+            td: "N'Djamena", tg: "Lomé", th: "Bangkok", tj: "Dushanbe", tl: "Dili", tm: "Ashgabat", tn: "Tunis", 
+            to: "Nuku'alofa", tr: "Ankara", tt: "Port of Spain", tv: "Funafuti", tw: "Taipei", tz: "Dodoma", 
+            ua: "Kyiv", ug: "Kampala", us: "Washington, D.C.", uy: "Montevideo", uz: "Tashkent", va: "Vatican City", 
+            vc: "Kingstown", ve: "Caracas", vn: "Hanoi", vu: "Port Vila", ws: "Apia", ye: "Sanaa", za: "Pretoria", 
+            zm: "Lusaka", zw: "Harare"
+        };
+
+        // Merge capitals
+        COUNTRIES.forEach(c => {
+            if (CAPITALS[c.code]) {
+                c.capital = CAPITALS[c.code];
+            } else {
+                console.warn('Missing capital for', c.code);
+                c.capital = 'Unknown';
+            }
+        });
         
         const SIMILAR_FLAGS = {
             'ro': ['td', 'ad', 'md'], // Romania -> Chad, Andorra, Moldova
@@ -1010,6 +1053,13 @@
                         description: 'Type the country name',
                         color: 'blue',
                         icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`
+                    },
+                    {
+                        id: 'capitals',
+                        name: 'Capitals',
+                        description: 'Guess the capital city',
+                        color: 'green',
+                        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4 8 4v14"/><path d="M8 21v-9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v9"/></svg>`
                     },
                     { 
                         id: 'mindfuck', 
@@ -1618,7 +1668,8 @@
                 };
 
                 const shareScore = async () => {
-                    const modeName = gameMode.value === 'normal' ? 'Normal' : gameMode.value === 'reverse' ? 'Reverse' : gameMode.value === 'blitz' ? 'Blitz' : gameMode.value === 'hard' ? 'Hard' : 'Mindfuck';
+                    const modeMap = { normal: 'Normal', reverse: 'Reverse', blitz: 'Blitz', hard: 'Hard', capitals: 'Capitals', mindfuck: 'Mindfuck' };
+                    const modeName = modeMap[gameMode.value] || 'Normal';
                     const text = `I scored ${score.value} points in Flag Master (${modeName} Mode)! 🏳️ Can you beat me?`;
                     const url = window.location.href;
                     
