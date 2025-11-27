@@ -243,7 +243,230 @@
           transform: rotate(360deg);
         }
       }
+
+      native-sheet.mistakes-sheet {
+        --native-sheet-bg: #f8fafc;
+        --native-sheet-content-padding: 24px 24px 40px;
+      }
     </style>
+    <script>
+      const NATIVE_SHEET_CSS = `
+        :host {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999;
+            visibility: hidden;
+            transition: visibility 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        :host([open]) {
+            visibility: visible;
+        }
+
+        .backdrop {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--native-sheet-backdrop, rgba(0,0,0,1));
+            opacity: 0;
+            will-change: opacity;
+            pointer-events: none;
+            transition: opacity 0.1s ease-out;
+        }
+
+        :host([open]) .backdrop {
+            pointer-events: auto;
+        }
+
+        .scroll-wrapper {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            scroll-behavior: smooth;
+            overscroll-behavior: contain;
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        .scroll-wrapper::-webkit-scrollbar { display: none; }
+
+        .shim {
+            min-height: 100vh;
+            width: 100%;
+            scroll-snap-align: start;
+            flex-shrink: 0;
+            pointer-events: none;
+        }
+
+        .sheet {
+            background: var(--native-sheet-bg, #fff);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            width: 100%;
+            scroll-snap-align: end;
+            scroll-snap-stop: always;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.1);
+            position: relative;
+            pointer-events: auto;
+        }
+
+        .sheet::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            height: 100vh;
+            background: inherit;
+        }
+
+        .content {
+            position: relative;
+            padding: var(--native-sheet-content-padding, 12px 24px 40px);
+        }
+      `;
+
+      class NativeSheet extends HTMLElement {
+        constructor() {
+          super();
+          this.attachShadow({ mode: "open" });
+          this._isOpen = false;
+        }
+
+        connectedCallback() {
+          this.render();
+          this.scrollWrapper = this.shadowRoot.querySelector(".scroll-wrapper");
+          this.backdrop = this.shadowRoot.querySelector(".backdrop");
+          this.shim = this.shadowRoot.querySelector(".shim");
+          this.sheet = this.shadowRoot.querySelector(".sheet");
+
+          this.observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting && entry.intersectionRatio > 0.9) {
+                  if (this._isOpen) {
+                    this.open = false;
+                  }
+                }
+              });
+            },
+            { threshold: [0.9] }
+          );
+
+          this.observer.observe(this.shim);
+          this.backdrop.addEventListener("click", () => (this.open = false));
+
+          // Handle scroll-based backdrop opacity with requestAnimationFrame for performance
+          this._scrollRaf = null;
+          this.handleScroll = () => {
+            if (this._scrollRaf) return;
+            this._scrollRaf = requestAnimationFrame(() => {
+              if (!this._isOpen) {
+                this._scrollRaf = null;
+                return;
+              }
+              const shimHeight = this.shim.offsetHeight;
+              const scrollTop = this.scrollWrapper.scrollTop;
+              // When scrollTop is at shimHeight, backdrop opacity is 0.7
+              // When scrollTop is 0 (pulled down), backdrop is invisible (opacity 0)
+              const progress = Math.max(0, Math.min(1, scrollTop / shimHeight));
+              this.backdrop.style.opacity = (progress * 0.7).toString();
+              this._scrollRaf = null;
+            });
+          };
+
+          this.scrollWrapper.addEventListener("scroll", this.handleScroll, { passive: true });
+        }
+
+        disconnectedCallback() {
+          if (this.observer && this.shim) {
+            this.observer.unobserve(this.shim);
+          }
+          if (this.scrollWrapper && this.handleScroll) {
+            this.scrollWrapper.removeEventListener("scroll", this.handleScroll);
+          }
+          if (this._scrollRaf) {
+            cancelAnimationFrame(this._scrollRaf);
+          }
+        }
+
+        static get observedAttributes() {
+          return ["open"];
+        }
+
+        attributeChangedCallback(name, oldValue, newValue) {
+          if (name === "open") {
+            const isOpen = newValue !== null;
+            if (this._isOpen !== isOpen) {
+              this._isOpen = isOpen;
+              this.triggerAnimation(isOpen);
+              this.dispatchEvent(
+                new CustomEvent("native-sheet-toggle", {
+                  detail: { open: this._isOpen },
+                  bubbles: true,
+                  composed: true,
+                })
+              );
+            }
+          }
+        }
+
+        get open() {
+          return this.hasAttribute("open");
+        }
+        set open(val) {
+          if (val) this.setAttribute("open", "");
+          else this.removeAttribute("open");
+        }
+
+        triggerAnimation(isOpen) {
+          if (isOpen) {
+            this.scrollWrapper.style.scrollBehavior = "smooth";
+            this.scrollWrapper.scrollTop = 0;
+            this.backdrop.style.opacity = "0";
+
+            requestAnimationFrame(() => {
+              this.scrollWrapper.style.scrollBehavior = "smooth";
+              this.scrollWrapper.scrollTop = this.shim.offsetHeight;
+              // Update opacity immediately and after scroll completes
+              this.handleScroll();
+              setTimeout(() => {
+                this.handleScroll();
+              }, 350);
+            });
+          } else {
+            this.scrollWrapper.style.scrollBehavior = "smooth";
+            this.scrollWrapper.scrollTop = 0;
+            this.backdrop.style.opacity = "0";
+          }
+        }
+
+        render() {
+          this.shadowRoot.innerHTML = `
+            <style>${NATIVE_SHEET_CSS}</style>
+            <div class="backdrop"></div>
+            <div class="scroll-wrapper">
+                <div class="shim"></div>
+                <div class="sheet">
+                    <div class="content">
+                        <slot></slot>
+                    </div>
+                </div>
+            </div>
+          `;
+        }
+      }
+
+      customElements.define("native-sheet", NativeSheet);
+    </script>
   </head>
   <body class="bg-gray-100 text-gray-800 font-sans overflow-hidden flex justify-center items-center animate-gradient">
     <!-- App Container -->
@@ -267,16 +490,16 @@
       <!-- Fireworks Container -->
       <div ref="fireworksContainer" class="absolute inset-0 pointer-events-none z-40"></div>
 
-      <!-- Region Selector Modal -->
-      <div
-        v-if="showRegionSelector"
-        class="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm animate-fade-in"
+      <!-- Region Selector Sheet -->
+      <native-sheet
+        :open="showRegionSelector ? '' : null"
+        @native-sheet-toggle="showRegionSelector = $event.detail.open"
       >
-        <div
-          class="bg-white w-full max-w-md md:rounded-2xl rounded-t-2xl p-6 pb-10 md:pb-6 animate-bounce-custom-small shadow-2xl"
-          @click.stop
-        >
-          <div class="flex justify-between items-center mb-6">
+        <div class="flex justify-center py-4">
+          <div class="w-12 h-1.5 bg-gray-300 rounded-full"></div>
+        </div>
+        <div class="w-full max-w-md mx-auto space-y-6">
+          <div class="flex justify-between items-center">
             <h3 class="text-2xl font-bold text-gray-800">Select Region</h3>
             <button
               @click="showRegionSelector = false"
@@ -297,18 +520,15 @@
             </button>
           </div>
         </div>
-      </div>
+      </native-sheet>
 
-      <!-- Settings Modal -->
-      <div
-        v-if="showSettings"
-        class="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm animate-fade-in"
-      >
-        <div
-          class="bg-white w-full max-w-md md:rounded-2xl rounded-t-2xl p-6 pb-10 md:pb-6 animate-bounce-custom-small shadow-2xl"
-          @click.stop
-        >
-          <div class="flex justify-between items-center mb-6">
+      <!-- Settings Sheet -->
+      <native-sheet :open="showSettings ? '' : null" @native-sheet-toggle="showSettings = $event.detail.open">
+        <div class="flex justify-center py-4">
+          <div class="w-12 h-1.5 bg-gray-300 rounded-full"></div>
+        </div>
+        <div class="w-full max-w-md mx-auto space-y-6">
+          <div class="flex justify-between items-center">
             <h3 class="text-2xl font-bold text-gray-800">Settings</h3>
             <button
               @click="showSettings = false"
@@ -338,18 +558,19 @@
             </button>
           </div>
         </div>
-      </div>
+      </native-sheet>
 
-      <!-- Mistakes Modal -->
-      <div
-        v-if="showMistakesModal"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm animate-fade-in p-4"
+      <!-- Mistakes Sheet -->
+      <native-sheet
+        class="mistakes-sheet"
+        :open="showMistakesModal ? '' : null"
+        @native-sheet-toggle="showMistakesModal = $event.detail.open"
       >
-        <div
-          class="bg-white w-full max-w-md rounded-2xl p-6 shadow-2xl animate-bounce-custom-small max-h-[80vh] flex flex-col"
-          @click.stop
-        >
-          <div class="flex justify-between items-center mb-4 flex-shrink-0">
+        <div class="flex justify-center py-4">
+          <div class="w-12 h-1.5 bg-gray-300 rounded-full"></div>
+        </div>
+        <div class="w-full max-w-md mx-auto flex flex-col space-y-4">
+          <div class="flex justify-between items-center">
             <h3 class="text-2xl font-bold text-gray-800">Your Mistakes</h3>
             <button
               @click="showMistakesModal = false"
@@ -358,7 +579,7 @@
             ></button>
           </div>
 
-          <div class="overflow-y-auto flex-1 pr-2 -mr-2 custom-scrollbar">
+          <div class="overflow-y-auto max-h-[60vh] pr-2 -mr-2 custom-scrollbar">
             <div class="space-y-4 pb-4">
               <div
                 v-for="(item, idx) in wrongAnswers"
@@ -399,7 +620,7 @@
             </div>
           </div>
 
-          <div class="mt-4 pt-4 border-t border-gray-100 flex-shrink-0">
+          <div class="pt-2 border-t border-gray-100">
             <button
               @click="showMistakesModal = false"
               class="w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition-colors"
@@ -408,7 +629,7 @@
             </button>
           </div>
         </div>
-      </div>
+      </native-sheet>
 
       <!-- START SCREEN -->
       <div
