@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Match-Up</title>
+    <title>Match-Up: Rounds Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&display=swap" rel="stylesheet" />
     <style>
       :root {
@@ -112,6 +112,7 @@
       }
 
       .score-pill {
+        display: none;
         background: #2b3b45;
         color: var(--primary);
         padding: 6px 16px;
@@ -189,6 +190,7 @@
       }
 
       #progress-container {
+        display: none;
         width: 100%;
         max-width: 500px;
         height: 12px;
@@ -248,6 +250,7 @@
         touch-action: manipulation;
         transition: transform 0.1s, border-bottom 0.1s;
         padding: 0 12px;
+        opacity: 1; /* Ensure opacity is reset */
       }
 
       .card-label {
@@ -482,13 +485,13 @@
         window.speechSynthesis.addEventListener("voiceschanged", populateVoices);
       }
 
-      // --- NEW: PROGRESS MANAGER (Handles LocalStorage) ---
+      // --- PROGRESS MANAGER ---
       class ProgressManager {
         constructor() {
           this.storageKey = "polyglot_mastery";
           this.metaKey = "__meta";
           this.data = this.load();
-          this.masteryThreshold = 4; // Word is "Learned" after 4 consecutive correct answers
+          this.masteryThreshold = 4;
           this.ensureMeta();
         }
 
@@ -550,7 +553,6 @@
           if (isCorrect) {
             this.data[id]++;
           } else {
-            // Punishment: If you get it wrong, strength resets to 0 (Leitner system)
             this.data[id] = 0;
           }
           this.save();
@@ -580,7 +582,6 @@
         }
 
         xpToNext(level) {
-          // Slightly increasing requirement so later levels feel harder.
           return Math.round(100 * Math.pow(1.2, level - 1));
         }
 
@@ -678,7 +679,10 @@
           this.score = 0;
           this.selectedLeft = null;
           this.selectedRight = null;
-          this.activePairs = 5;
+
+          // GAMEPLAY SETTINGS
+          this.maxPairsPerRound = 5;
+          this.currentPairsOnBoard = 0; // Track how many left on screen
 
           this.domLeft = document.querySelectorAll("#col-left .card-slot");
           this.domRight = document.querySelectorAll("#col-right .card-slot");
@@ -706,19 +710,34 @@
         restart() {
           this.score = 0;
           this.updateUI();
-          this.buildDeck();
+          this.buildDeck(); // Prepare the deck logic
+          this.startRound(); // Start the first round
+        }
 
+        // --- NEW ROUND LOGIC ---
+        startRound() {
+          // 1. Clear DOM
           this.domLeft.forEach((slot) => (slot.innerHTML = ""));
           this.domRight.forEach((slot) => (slot.innerHTML = ""));
 
-          // Fill initial board
-          const starterSet = [];
-          for (let i = 0; i < this.activePairs; i++) {
-            if (this.deck.length > 0) starterSet.push(this.deck.pop());
+          // 2. Ensure Deck has enough words
+          if (this.deck.length < this.maxPairsPerRound) {
+            // If deck running low, rebuild it (recycle words)
+            this.buildDeck();
           }
 
-          const lefts = [...starterSet];
-          const rights = [...starterSet].sort(() => 0.5 - Math.random());
+          // 3. Pull 5 words
+          const roundCards = [];
+          for (let i = 0; i < this.maxPairsPerRound; i++) {
+            if (this.deck.length > 0) roundCards.push(this.deck.pop());
+          }
+
+          // 4. Update State
+          this.currentPairsOnBoard = roundCards.length;
+
+          // 5. Render
+          const lefts = [...roundCards];
+          const rights = [...roundCards].sort(() => 0.5 - Math.random());
 
           for (let i = 0; i < lefts.length; i++) {
             this.renderCard(this.domLeft[i], lefts[i], "left");
@@ -726,9 +745,7 @@
           }
         }
 
-        // --- NEW: INTELLIGENT DECK BUILDER ---
         buildDeck() {
-          // 1. Separate words into "Mastered" and "Learning/New"
           const learning = [];
           const mastered = [];
 
@@ -740,22 +757,15 @@
             }
           });
 
-          // 2. Shuffle both piles
           learning.sort(() => 0.5 - Math.random());
           mastered.sort(() => 0.5 - Math.random());
 
-          // 3. Construct Deck Logic
-          // If we have plenty of new/learning words, use those.
-          // If we are running low (< 10), mix in mastered words for review.
           if (learning.length > 10) {
             this.deck = learning;
           } else {
-            // Mix: 70% learning, 30% mastered
             this.deck = [...learning, ...mastered.slice(0, 10)];
-            this.deck.sort(() => 0.5 - Math.random()); // Shuffle final mix
+            this.deck.sort(() => 0.5 - Math.random());
           }
-
-          console.log(`Deck built: ${learning.length} new/weak words, ${mastered.length} mastered words hidden.`);
         }
 
         renderCard(slot, wordObj, side) {
@@ -780,7 +790,7 @@
           speakBtn.className = "speak-btn";
           speakBtn.innerHTML =
             '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5.5 8.5 9H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h3.5L12 18.5V5.5Zm4.7-.2a1 1 0 0 0-.9 1.8 5 5 0 0 1 0 9 1 1 0 0 0 .9 1.8 7 7 0 0 0 0-12.6Zm-2 2.6a1 1 0 0 0-.9 1.8 2 2 0 0 1 0 3.6 1 1 0 0 0 .9 1.8 4 4 0 0 0 0-7.2Z"/></svg>';
-          speakBtn.setAttribute("aria-label", "Play pronunciation");
+
           speakBtn.addEventListener("click", (event) => {
             event.stopPropagation();
             speakText(displayText, lang);
@@ -822,13 +832,10 @@
         }
 
         handleCorrect(id) {
-          // Update Brain
           progressManager.update(id, true);
 
           const l = this.selectedLeft;
           const r = this.selectedRight;
-          const slotL = l.parentElement;
-          const slotR = r.parentElement;
 
           l.classList.add("correct");
           r.classList.add("correct");
@@ -838,19 +845,21 @@
           this.selectedLeft = null;
           this.selectedRight = null;
           this.score += 1;
+          this.currentPairsOnBoard -= 1; // Decrement counter
+
           progressManager.addXP(XP_PER_MATCH);
           progressManager.recordDailyPlay();
           this.updateUI();
 
-          setTimeout(() => {
-            slotL.innerHTML = "";
-            slotR.innerHTML = "";
-            this.refillSlot(slotL, slotR, l.dataset.id);
-          }, 200);
+          // CHECK IF BOARD IS EMPTY
+          if (this.currentPairsOnBoard <= 0) {
+            setTimeout(() => {
+              this.startRound(); // Load next round
+            }, 600); // Slight delay for satisfaction
+          }
         }
 
         handleWrong(id1, id2) {
-          // Update Brain (Penalty)
           progressManager.update(id1, false);
           progressManager.update(id2, false);
 
@@ -869,28 +878,12 @@
           this.selectedRight = null;
         }
 
-        refillSlot(slotL, slotR, lastMatchedId) {
-          // Get new word
-          let newWord;
-
-          if (this.deck.length > 0) {
-            newWord = this.deck.pop();
-          } else {
-            // ENDLESS MODE FALLBACK
-            // If the deck is empty (all words used in this session),
-            // we recycle the word that was just matched so play continues.
-            // Or we fetch a random word from fullData to keep it spicy.
-            newWord = this.fullData.find((w) => w.id === lastMatchedId);
-          }
-
-          this.renderCard(slotL, newWord, "left");
-          this.renderCard(slotR, newWord, "right");
-        }
-
         updateUI() {
           this.scoreEl.innerText = this.score;
-          // Visual progress bar just for the current "Session"
-          const pct = ((this.score % 20) / 20) * 100;
+          // Progress bar now shows % of Current Round cleared
+          const totalPairs = this.maxPairsPerRound;
+          const completed = totalPairs - this.currentPairsOnBoard;
+          const pct = Math.min((completed / totalPairs) * 100, 100);
           this.progressFill.style.width = pct + "%";
 
           const { level, xpIntoLevel, xpForNext, progress } = progressManager.getLevelData();
