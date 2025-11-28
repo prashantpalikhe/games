@@ -284,15 +284,17 @@
 
         .scroll-wrapper {
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            place-items: center;
+            flex-wrap: nowrap;
             overflow-y: scroll;
             scroll-snap-type: y mandatory;
             scrollbar-width: none;
             -ms-overflow-style: none;
             scroll-behavior: smooth;
             overscroll-behavior: contain;
-            display: flex;
-            flex-direction: column;
         }
 
 
@@ -304,33 +306,52 @@
             scroll-snap-align: start;
             flex-shrink: 0;
             pointer-events: none;
+            flex-grow: 0;
+            flex-shrink: 0;
+        }
+
+        .shim:last-of-type {
+            min-height: 100vh;
+            scroll-snap-align: end;
         }
 
         .sheet {
-            background: var(--native-sheet-bg, #fff);
-            border-top-left-radius: 20px;
-            border-top-right-radius: 20px;
+            position: sticky;
+            min-height: 999px;
+            display: flex;
+            align-items: end;
+            justify-content: center;
+            top: -300px;
             width: 100%;
             scroll-snap-align: end;
             scroll-snap-stop: always;
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.1);
-            position: relative;
-            pointer-events: auto;
-        }
+            pointer-events: none;
 
-        .sheet::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            height: 100vh;
-            background: inherit;
+
         }
 
         .content {
             position: relative;
             padding: var(--native-sheet-content-padding, 12px 24px 40px);
+            background: var(--native-sheet-bg, #fff);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            width: 100vw;
+            max-width: 700px;
+            pointer-events: auto;
+        }
+
+        .content-bleeding-background {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            bottom: calc(100% * -1);
+            background: inherit;
+            width: 100%;
+            height: calc(100% + 300px);
+            background-color: white;
+            z-index: -1;
         }
       `;
 
@@ -362,7 +383,11 @@
           );
 
           this.observer.observe(this.shim);
-          this.backdrop.addEventListener("click", () => (this.open = false));
+          this.scrollWrapper.addEventListener("click", (event) => {
+            if (!this.sheet.contains(event.target)) {
+              this.open = false;
+            }
+          });
 
           // Handle scroll-based backdrop opacity with requestAnimationFrame for performance
           this._scrollRaf = null;
@@ -457,6 +482,7 @@
                 <div class="shim"></div>
                 <div class="sheet">
                     <div class="content">
+                        <div class="content-bleeding-background"></div>
                         <slot></slot>
                     </div>
                 </div>
@@ -495,10 +521,7 @@
         :open="showRegionSelector ? '' : null"
         @native-sheet-toggle="showRegionSelector = $event.detail.open"
       >
-        <div class="flex justify-center py-4">
-          <div class="w-12 h-1.5 bg-gray-300 rounded-full"></div>
-        </div>
-        <div class="w-full max-w-md mx-auto space-y-6">
+        <div class="w-full max-w-md mx-auto space-y-6 pt-10">
           <div class="flex justify-between items-center">
             <h3 class="text-2xl font-bold text-gray-800">Select Region</h3>
             <button
@@ -524,10 +547,7 @@
 
       <!-- Settings Sheet -->
       <native-sheet :open="showSettings ? '' : null" @native-sheet-toggle="showSettings = $event.detail.open">
-        <div class="flex justify-center py-4">
-          <div class="w-12 h-1.5 bg-gray-300 rounded-full"></div>
-        </div>
-        <div class="w-full max-w-md mx-auto space-y-6">
+        <div class="w-full max-w-md mx-auto space-y-6 pt-10">
           <div class="flex justify-between items-center">
             <h3 class="text-2xl font-bold text-gray-800">Settings</h3>
             <button
@@ -566,10 +586,7 @@
         :open="showMistakesModal ? '' : null"
         @native-sheet-toggle="showMistakesModal = $event.detail.open"
       >
-        <div class="flex justify-center py-4">
-          <div class="w-12 h-1.5 bg-gray-300 rounded-full"></div>
-        </div>
-        <div class="w-full max-w-md mx-auto flex flex-col space-y-4">
+        <div class="w-full max-w-md mx-auto flex flex-col space-y-4 pt-10">
           <div class="flex justify-between items-center">
             <h3 class="text-2xl font-bold text-gray-800">Your Mistakes</h3>
             <button
