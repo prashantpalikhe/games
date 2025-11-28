@@ -1586,7 +1586,7 @@ COUNTRIES.forEach((c) => {
   }
 });
 
-const SIMILAR_FLAGS = {
+export const SIMILAR_FLAGS = {
   ro: ["td", "ad", "md"], // Romania -> Chad, Andorra, Moldova
   td: ["ro", "ad", "md"], // Chad -> Romania...
   id: ["mc", "pl", "sg"], // Indonesia -> Monaco, Poland, Singapore

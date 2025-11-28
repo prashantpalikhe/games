@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { GAME_MODES } from "~/utils/game-data";
+</script>
+
 <template>
   <div class="w-full overflow-x-auto pb-4 px-4 -mx-4 flex space-x-4 snap-x snap-mandatory no-scrollbar">
     <NuxtLink
@@ -13,6 +17,7 @@
         'bg-pink-500 border-pink-700 hover:bg-pink-600': mode.color === 'pink',
       }"
     >
+      <!-- eslint-disable-next-line vue/no-v-html -->
       <div class="text-white opacity-90 transform scale-125 mt-4" v-html="mode.icon"></div>
 
       <div class="text-center text-white">
@@ -20,7 +25,7 @@
         <div class="text-xs font-medium opacity-90 leading-tight">{{ mode.description }}</div>
       </div>
 
-      <div class="w-8 h-1 bg-white/30 rounded-full mb-2"></div>
+      <div class="w-8 h-1 bg-white/30 rounded-full mb-2" />
     </NuxtLink>
   </div>
 </template>
