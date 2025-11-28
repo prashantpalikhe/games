@@ -1,3 +1,4 @@
+import { computed } from 'vue';
 import { COUNTRIES, GAME_MODES } from '~/utils/game-data';
 import { shuffleArray } from '~/utils/game/random';
 import { getGameModeStrategy } from '~/utils/game/modes';
@@ -5,6 +6,7 @@ import { useGameStorage } from './useGameStorage';
 import { useGameAudio } from './useGameAudio';
 import { useGameTimer } from './useGameTimer';
 import { useGameEffects } from './useGameEffects';
+import { useGameSettings } from './useGameSettings';
 import type { GameState, Country, Question } from '~/types/game';
 
 // Define the singleton state outside the function to ensure it's shared
@@ -17,6 +19,7 @@ export const useGame = () => {
   const audio = useGameAudio();
   const timer = useGameTimer();
   const effects = useGameEffects();
+  const { settings } = useGameSettings();
 
   // --- State ---
   const state = useState<GameState>('game_state', () => ({
@@ -35,6 +38,8 @@ export const useGame = () => {
     wrongAnswers: [],
   }));
 
+  let autoAdvanceTimer: NodeJS.Timeout | null = null;
+
   // --- Getters ---
   const currentStrategy = computed(() => getGameModeStrategy(state.value.mode));
   const progress = computed(() => {
@@ -50,12 +55,11 @@ export const useGame = () => {
     audio.initAudio();
 
     // 2. Load Settings & Data
-    const settings = storage.getSettings();
     let pool = [...COUNTRIES];
-    
+
     // Region Filter
-    if (settings.region && settings.region !== 'World') {
-      pool = pool.filter(c => c.continent === settings.region);
+    if (settings.value.region && settings.value.region !== 'World') {
+      pool = pool.filter(c => c.continent === settings.value.region);
     }
 
     // 3. Reset State
@@ -68,6 +72,12 @@ export const useGame = () => {
     state.value.currentIndex = 0;
     state.value.queue = shuffleArray(pool);
     state.value.feedback = null;
+    state.value.lastFeedback = null;
+    state.value.timeLeft = 0;
+    if (autoAdvanceTimer) {
+      clearTimeout(autoAdvanceTimer);
+      autoAdvanceTimer = null;
+    }
     
     // 4. Apply Mode Strategy Init
     const strategy = getGameModeStrategy(modeId);
@@ -88,14 +98,30 @@ export const useGame = () => {
     
     state.value.currentQuestion = strategy.getQuestion(target, state.value.queue, state.value);
     state.value.feedback = null;
+    state.value.lastFeedback = null;
 
-    // Start Timer if Blitz
     if (strategy.timeLimit) {
+      state.value.timeLeft = strategy.timeLimit;
       timer.startTimer(
         strategy.timeLimit,
-        (t) => { state.value.timeLeft = t; if(t <= 3) audio.playSound('tick'); },
+        (time) => {
+          const previousSecond = Math.ceil(state.value.timeLeft);
+          state.value.timeLeft = time;
+          const currentSecond = Math.ceil(time);
+          if (
+            state.value.mode === 'blitz' &&
+            currentSecond < previousSecond &&
+            currentSecond <= 3 &&
+            currentSecond > 0
+          ) {
+            audio.playSound('tick');
+          }
+        },
         () => handleTimeout()
       );
+    } else {
+      timer.stopTimer();
+      state.value.timeLeft = 0;
     }
   };
 
@@ -158,11 +184,11 @@ export const useGame = () => {
       collection[correctCode] = (collection[correctCode] || 0) + 1;
       storage.saveCollection(collection);
 
-      // Auto advance (delay for visual feedback)
-      setTimeout(() => {
-        state.value.currentIndex++;
-        nextQuestion();
-      }, 1000); // 1s delay to see green feedback
+      if (state.value.mode === 'blitz') {
+        autoAdvanceTimer = setTimeout(() => {
+          continueGame();
+        }, 600);
+      }
 
     } else {
       // Incorrect
@@ -198,6 +224,14 @@ export const useGame = () => {
 
   // Called by UI when "Continue" is clicked after error
   const continueGame = () => {
+    if (autoAdvanceTimer) {
+      clearTimeout(autoAdvanceTimer);
+      autoAdvanceTimer = null;
+    }
+
+    state.value.feedback = null;
+    state.value.lastFeedback = null;
+
     if (state.value.lives <= 0) {
       endGame();
     } else {
@@ -216,10 +250,16 @@ export const useGame = () => {
   };
 
   const quitGame = () => {
+    if (autoAdvanceTimer) {
+      clearTimeout(autoAdvanceTimer);
+      autoAdvanceTimer = null;
+    }
     state.value.status = 'idle';
     timer.stopTimer();
     state.value.currentQuestion = null;
     state.value.feedback = null;
+    state.value.lastFeedback = null;
+    state.value.timeLeft = 0;
   };
 
   return {

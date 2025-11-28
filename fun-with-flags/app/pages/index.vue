@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { COUNTRIES } from "~/utils/game-data";
 import { useGameStorage } from "~/composables/game/useGameStorage";
+import { useGameSettings } from "~/composables/game/useGameSettings";
 
 const storage = useGameStorage();
-const settings = storage.getSettings();
+const { settings } = useGameSettings();
 
 const totalCountries = COUNTRIES.length;
 const highScore = storage.getHighScore("normal");
-const selectedRegion = ref(settings.region);
 const showSettings = ref(false);
 </script>
 
@@ -46,7 +46,7 @@ const showSettings = ref(false);
       @click="showSettings = true"
     >
       <Icon name="lucide:globe" class="w-5 h-5 text-blue-500" />
-      Region: {{ selectedRegion }}
+      Region: {{ settings.region }}
     </button>
 
     <!-- Game Modes Carousel -->

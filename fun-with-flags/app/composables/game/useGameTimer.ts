@@ -14,19 +14,18 @@ export const useGameTimer = () => {
     onTick = tickCallback || null;
     onEnd = endCallback || null;
 
+    if (onTick) {
+      onTick(timeLeft.value);
+    }
+
     timerInterval = setInterval(() => {
-      const oldTime = Math.ceil(timeLeft.value);
-      timeLeft.value -= 0.05; // 50ms updates
-      
-      const newTime = Math.ceil(timeLeft.value);
-      
-      // Callback on full second changes (useful for sound effects)
-      if (newTime < oldTime && onTick) {
-        onTick(newTime);
+      timeLeft.value = parseFloat(Math.max(0, timeLeft.value - 0.05).toFixed(2));
+
+      if (onTick) {
+        onTick(timeLeft.value);
       }
 
-      if (timeLeft.value <= 0) {
-        timeLeft.value = 0;
+      if (timeLeft.value === 0) {
         stopTimer();
         if (onEnd) onEnd();
       }
