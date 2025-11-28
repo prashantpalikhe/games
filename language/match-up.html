@@ -37,8 +37,39 @@
         max-width: 500px;
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: flex-start;
         padding: 10px 5px;
+      }
+
+      .meta-panel {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px;
+      }
+
+      .level-cluster {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .streak-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #24181f;
+        color: #ffae42;
+        padding: 4px 12px;
+        border-radius: 18px;
+        border: 2px solid #3b262f;
+        font-weight: 800;
+        font-size: 0.95rem;
+      }
+
+      .streak-pill .flame {
+        font-size: 1rem;
+        line-height: 1;
       }
 
       .controls select {
@@ -61,6 +92,74 @@
         font-weight: 800;
         font-size: 1.1rem;
         border: 2px solid #37464f;
+      }
+
+      .level-pill {
+        background: #19262d;
+        color: #ffe082;
+        padding: 4px 12px;
+        border-radius: 18px;
+        font-weight: 800;
+        font-size: 0.95rem;
+        border: 2px solid #2a3b45;
+      }
+
+      .icon-btn {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 2px solid #2a3b45;
+        background: #17232a;
+        color: white;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.15s ease, border-color 0.15s ease;
+      }
+
+      .icon-btn svg {
+        width: 14px;
+        height: 14px;
+        fill: #7ed4ff;
+      }
+
+      .icon-btn:hover {
+        transform: translateY(-1px);
+        border-color: var(--secondary);
+      }
+
+      #level-gauge {
+        width: 100%;
+        max-width: 500px;
+        background: #152128;
+        border: 1px solid #22343f;
+        border-radius: 16px;
+        padding: 12px 16px;
+        margin-bottom: 16px;
+      }
+
+      .level-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.85rem;
+        color: #d8d8d8;
+        margin-bottom: 8px;
+      }
+
+      .level-progress {
+        width: 100%;
+        height: 10px;
+        background: #0d171d;
+        border-radius: 999px;
+        overflow: hidden;
+      }
+
+      #level-progress-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--secondary), #66d8ff);
+        transition: width 0.3s ease;
       }
 
       #progress-container {
@@ -122,6 +221,45 @@
         user-select: none;
         touch-action: manipulation;
         transition: transform 0.1s, border-bottom 0.1s;
+        padding: 0 12px;
+      }
+
+      .card-label {
+        display: inline-block;
+        width: 100%;
+        padding: 0 18px;
+        font-size: 1rem;
+        text-align: center;
+      }
+      .card .speak-btn {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: 2px solid transparent;
+        background: rgba(20, 32, 38, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.2s ease, border-color 0.2s ease;
+      }
+
+      .card .speak-btn svg {
+        width: 12px;
+        height: 12px;
+        fill: #9bd3ff;
+      }
+
+      .card .speak-btn:hover {
+        background: rgba(28, 176, 246, 0.2);
+        border-color: var(--secondary);
+      }
+
+      .card .speak-btn:focus-visible {
+        outline: 2px solid var(--secondary);
       }
 
       .card:active {
@@ -197,15 +335,27 @@
         margin-top: 10px;
         display: flex;
         justify-content: center;
+        gap: 8px;
+        position: relative;
+        top: -16px;
       }
+
       .reset-btn {
-        background: transparent;
-        color: #555;
-        border: 1px solid #555;
-        padding: 5px 10px;
-        border-radius: 8px;
-        font-size: 0.8rem;
+        background: linear-gradient(135deg, #2b3b45, #1a252c);
+        color: #f4f4f4;
+        border: 2px solid #3b4c56;
+        padding: 8px 18px;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 700;
         cursor: pointer;
+        letter-spacing: 0.5px;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+      }
+
+      .reset-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
       }
     </style>
   </head>
@@ -223,10 +373,36 @@
           <option value="nl">Dutch</option>
         </select>
       </div>
-      <div class="score-pill">
-        <span id="score">0</span>
+      <div class="meta-panel">
+        <div class="score-pill">
+          <span id="score">0</span>
+        </div>
+        <div class="streak-pill">
+          <span class="flame" aria-hidden="true">🔥</span>
+          <span id="streak-value">0</span>d streak
+        </div>
+        <div class="level-cluster">
+          <div class="level-pill">Lvl <span id="level-value">1</span></div>
+          <button class="icon-btn" onclick="shareLevel()" aria-label="Share level">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M18 2a3 3 0 0 0-3 3c0 .2 0 .4.1.6l-6.2 3.1a3 3 0 0 0-2.7-1.7 3 3 0 1 0 2.9 3.8l6.2 3.1A3 3 0 0 0 18 22a3 3 0 1 0-2.9-3.7l-6.2-3.2a3 3 0 0 0 .1-1l6.1-3.1A3 3 0 1 0 18 2Z"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
     </header>
+
+    <div id="level-gauge">
+      <div class="level-meta">
+        <span id="level-label">Level 1</span>
+        <span id="xp-label">0 / 100 XP</span>
+      </div>
+      <div class="level-progress">
+        <div id="level-progress-fill"></div>
+      </div>
+    </div>
 
     <div id="progress-container">
       <div id="progress-fill"></div>
@@ -258,29 +434,88 @@
     <script>
       const SHEET_URL =
         "https://docs.google.com/spreadsheets/d/e/2PACX-1vRjcd53W_88YmFTRYvjNWvR9VPfs00fOUMBKpOj14_peyipfGb7bl5maHlKpLvIEtkv8bDvrMt5Bud6/pub?output=csv";
+      const XP_PER_MATCH = 15;
+      const LANGUAGE_LOCALES = {
+        en: "en-US",
+        fr: "fr-FR",
+        nl: "nl-NL",
+      };
+      const CAN_USE_SPEECH =
+        typeof window !== "undefined" && "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+      let speechSupportWarned = false;
+      let speechVoices = [];
+
+      if (CAN_USE_SPEECH) {
+        const populateVoices = () => {
+          speechVoices = window.speechSynthesis.getVoices() || [];
+        };
+        populateVoices();
+        window.speechSynthesis.addEventListener("voiceschanged", populateVoices);
+      }
 
       // --- NEW: PROGRESS MANAGER (Handles LocalStorage) ---
       class ProgressManager {
         constructor() {
           this.storageKey = "polyglot_mastery";
+          this.metaKey = "__meta";
           this.data = this.load();
           this.masteryThreshold = 4; // Word is "Learned" after 4 consecutive correct answers
+          this.ensureMeta();
         }
 
         load() {
           const stored = localStorage.getItem(this.storageKey);
-          return stored ? JSON.parse(stored) : {};
+          try {
+            return stored ? JSON.parse(stored) : {};
+          } catch (err) {
+            console.warn("Progress data corrupted, resetting.", err);
+            localStorage.removeItem(this.storageKey);
+            return {};
+          }
         }
 
         save() {
           localStorage.setItem(this.storageKey, JSON.stringify(this.data));
         }
 
+        ensureMeta() {
+          let changed = false;
+          if (!this.data[this.metaKey]) {
+            this.data[this.metaKey] = {};
+            changed = true;
+          }
+          const meta = this.data[this.metaKey];
+          if (typeof meta.xp !== "number") {
+            meta.xp = 0;
+            changed = true;
+          }
+          if (typeof meta.streak !== "number") {
+            meta.streak = 0;
+            changed = true;
+          }
+          if (!meta.lastPlayed) {
+            meta.lastPlayed = null;
+            changed = true;
+          }
+          if (changed) this.save();
+        }
+
+        getMeta() {
+          this.ensureMeta();
+          return this.data[this.metaKey];
+        }
+
+        getTodayKey() {
+          return new Date().toISOString().split("T")[0];
+        }
+
         getStrength(id) {
+          if (id === this.metaKey) return 0;
           return this.data[id] || 0;
         }
 
         update(id, isCorrect) {
+          if (id === this.metaKey) return 0;
           if (!this.data[id]) this.data[id] = 0;
 
           if (isCorrect) {
@@ -302,6 +537,76 @@
             localStorage.removeItem(this.storageKey);
             location.reload();
           }
+        }
+
+        addXP(amount = 0) {
+          const meta = this.getMeta();
+          meta.xp = Math.max(0, (meta.xp || 0) + amount);
+          this.save();
+          return meta.xp;
+        }
+
+        getXP() {
+          return this.getMeta().xp || 0;
+        }
+
+        xpToNext(level) {
+          // Slightly increasing requirement so later levels feel harder.
+          return Math.round(100 * Math.pow(1.2, level - 1));
+        }
+
+        getLevelData() {
+          let xp = this.getXP();
+          let level = 1;
+          let xpForNext = this.xpToNext(level);
+
+          while (xp >= xpForNext) {
+            xp -= xpForNext;
+            level++;
+            xpForNext = this.xpToNext(level);
+          }
+
+          const progress = xpForNext === 0 ? 1 : xp / xpForNext;
+
+          return {
+            level,
+            xpIntoLevel: xp,
+            xpForNext,
+            progress,
+            totalXP: this.getXP(),
+          };
+        }
+
+        recordDailyPlay() {
+          const meta = this.getMeta();
+          const today = this.getTodayKey();
+
+          if (meta.lastPlayed === today) {
+            return meta.streak || 0;
+          }
+
+          let newStreak = 1;
+
+          if (meta.lastPlayed) {
+            const prev = new Date(meta.lastPlayed);
+            const now = new Date(today);
+            const diffDays = Math.floor((now - prev) / (1000 * 60 * 60 * 24));
+
+            if (diffDays === 1) {
+              newStreak = (meta.streak || 0) + 1;
+            } else {
+              newStreak = 1;
+            }
+          }
+
+          meta.streak = newStreak;
+          meta.lastPlayed = today;
+          this.save();
+          return newStreak;
+        }
+
+        getStreak() {
+          return this.getMeta().streak || 0;
         }
       }
 
@@ -350,6 +655,11 @@
           this.domRight = document.querySelectorAll("#col-right .card-slot");
           this.scoreEl = document.getElementById("score");
           this.progressFill = document.getElementById("progress-fill");
+          this.levelValueEl = document.getElementById("level-value");
+          this.levelLabelEl = document.getElementById("level-label");
+          this.levelXpEl = document.getElementById("xp-label");
+          this.levelProgressFill = document.getElementById("level-progress-fill");
+          this.streakValueEl = document.getElementById("streak-value");
 
           this.init();
         }
@@ -424,12 +734,29 @@
 
           const lang =
             side === "left" ? document.getElementById("lang-left").value : document.getElementById("lang-right").value;
+          const displayText = wordObj[lang] || wordObj.en || "";
 
           const card = document.createElement("div");
           card.className = "card entry";
-          card.innerText = wordObj[lang];
           card.dataset.id = wordObj.id;
           card.dataset.side = side;
+
+          const label = document.createElement("span");
+          label.className = "card-label";
+          label.innerText = displayText;
+          card.appendChild(label);
+
+          const speakBtn = document.createElement("button");
+          speakBtn.type = "button";
+          speakBtn.className = "speak-btn";
+          speakBtn.innerHTML =
+            '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5.5 8.5 9H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h3.5L12 18.5V5.5Zm4.7-.2a1 1 0 0 0-.9 1.8 5 5 0 0 1 0 9 1 1 0 0 0 .9 1.8 7 7 0 0 0 0-12.6Zm-2 2.6a1 1 0 0 0-.9 1.8 2 2 0 0 1 0 3.6 1 1 0 0 0 .9 1.8 4 4 0 0 0 0-7.2Z"/></svg>';
+          speakBtn.setAttribute("aria-label", "Play pronunciation");
+          speakBtn.addEventListener("click", (event) => {
+            event.stopPropagation();
+            speakText(displayText, lang);
+          });
+          card.appendChild(speakBtn);
 
           card.addEventListener("click", () => this.handleCardClick(card));
           slot.appendChild(card);
@@ -482,6 +809,8 @@
           this.selectedLeft = null;
           this.selectedRight = null;
           this.score += 1;
+          progressManager.addXP(XP_PER_MATCH);
+          progressManager.recordDailyPlay();
           this.updateUI();
 
           setTimeout(() => {
@@ -534,10 +863,89 @@
           // Visual progress bar just for the current "Session"
           const pct = ((this.score % 20) / 20) * 100;
           this.progressFill.style.width = pct + "%";
+
+          const { level, xpIntoLevel, xpForNext, progress } = progressManager.getLevelData();
+          if (this.levelValueEl) this.levelValueEl.innerText = level;
+          if (this.levelLabelEl) this.levelLabelEl.innerText = `Level ${level}`;
+          if (this.levelXpEl) this.levelXpEl.innerText = `${xpIntoLevel} / ${xpForNext} XP`;
+          if (this.levelProgressFill) this.levelProgressFill.style.width = Math.min(progress * 100, 100) + "%";
+          const streak = progressManager.getStreak();
+          if (this.streakValueEl) this.streakValueEl.innerText = streak;
         }
       }
 
       const game = new MatchGame();
+
+      function getVoiceFor(langCode) {
+        if (!CAN_USE_SPEECH) return null;
+        if (!speechVoices.length) {
+          speechVoices = window.speechSynthesis.getVoices() || [];
+        }
+        if (!speechVoices.length) return null;
+
+        const targetLocale = (LANGUAGE_LOCALES[langCode] || langCode || "en-US").toLowerCase();
+        const base = targetLocale.split("-")[0];
+
+        return (
+          speechVoices.find((voice) => voice.lang && voice.lang.toLowerCase() === targetLocale) ||
+          speechVoices.find((voice) => voice.lang && voice.lang.toLowerCase().startsWith(base))
+        );
+      }
+
+      function speakText(text, langCode) {
+        if (!text) return;
+        if (!CAN_USE_SPEECH) {
+          if (!speechSupportWarned) {
+            alert("Text-to-speech is not supported in this browser.");
+            speechSupportWarned = true;
+          }
+          return;
+        }
+
+        const locale = LANGUAGE_LOCALES[langCode] || langCode || "en-US";
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = locale;
+        utterance.rate = 0.95;
+
+        const preferredVoice = getVoiceFor(langCode);
+        if (preferredVoice) {
+          utterance.voice = preferredVoice;
+        }
+
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utterance);
+      }
+
+      window.speakText = speakText;
+
+      function shareLevel() {
+        const { level, xpIntoLevel, xpForNext, totalXP } = progressManager.getLevelData();
+        const streak = progressManager.getStreak();
+        const streakText = streak > 0 ? `🔥 ${streak}-day streak!` : "No streak yet—want to race me?";
+        const shareText = `I'm Level ${level} in Match-Up (${xpIntoLevel}/${xpForNext} XP to next). Total XP: ${totalXP}. ${streakText}`;
+
+        if (navigator.share) {
+          navigator
+            .share({
+              title: "Match-Up Level",
+              text: shareText,
+            })
+            .catch(() => {
+              // Ignore if user cancels share sheet
+            });
+          return;
+        }
+
+        if (navigator.clipboard) {
+          navigator.clipboard
+            .writeText(shareText)
+            .then(() => alert("Level copied! Send it to your partner."))
+            .catch(() => alert(shareText));
+          return;
+        }
+
+        alert(shareText);
+      }
     </script>
   </body>
 </html>
