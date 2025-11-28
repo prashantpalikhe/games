@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Duolingo Style Match - SRS Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --primary: #58cc02;
+        --primary-border: #46a302;
+        --secondary: #1cb0f6;
+        --secondary-border: #1899d6;
+        --wrong: #ff4b4b;
+        --wrong-border: #ea2b2b;
+        --bg: #131f24;
+        --card-bg: #ffffff;
+        --text: #4b4b4b;
+        --border: #e5e5e5;
+      }
+
+      body {
+        font-family: "Nunito", sans-serif;
+        background-color: var(--bg);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        padding: 10px;
+        overflow: hidden;
+      }
+
+      header {
+        width: 100%;
+        max-width: 500px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 5px;
+      }
+
+      .controls select {
+        padding: 8px 12px;
+        border-radius: 12px;
+        border: 2px solid #37464f;
+        background: #131f24;
+        color: #afafaf;
+        font-family: "Nunito", sans-serif;
+        font-weight: 700;
+        cursor: pointer;
+        outline: none;
+      }
+
+      .score-pill {
+        background: #2b3b45;
+        color: var(--primary);
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-weight: 800;
+        font-size: 1.1rem;
+        border: 2px solid #37464f;
+      }
+
+      #progress-container {
+        width: 100%;
+        max-width: 500px;
+        height: 12px;
+        background: #37464f;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        overflow: hidden;
+      }
+
+      #progress-fill {
+        height: 100%;
+        width: 0%;
+        background-color: var(--primary);
+        transition: width 0.3s ease;
+      }
+
+      #game-board {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        width: 100%;
+        max-width: 500px;
+        height: 100%;
+        align-content: center;
+      }
+
+      .column {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .card-slot {
+        height: 60px;
+        position: relative;
+      }
+
+      .card {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--card-bg);
+        border: 2px solid var(--border);
+        border-bottom: 5px solid var(--border);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 800;
+        color: var(--text);
+        user-select: none;
+        touch-action: manipulation;
+        transition: transform 0.1s, border-bottom 0.1s;
+      }
+
+      .card:active {
+        transform: translateY(3px);
+        border-bottom-width: 2px;
+      }
+
+      .card.selected {
+        background-color: #ddf4ff;
+        border-color: var(--secondary);
+        border-bottom-color: var(--secondary-border);
+        color: var(--secondary);
+      }
+
+      .card.correct {
+        background-color: #d7ffb8;
+        border-color: var(--primary);
+        border-bottom-color: var(--primary-border);
+        color: var(--primary-border);
+        transform: scale(0.9);
+        opacity: 0;
+        transition: all 0.3s ease-out;
+        pointer-events: none;
+      }
+
+      .card.wrong {
+        background-color: #ffdfe0;
+        border-color: var(--wrong);
+        border-bottom-color: var(--wrong-border);
+        color: var(--wrong);
+        animation: shake 0.4s;
+      }
+
+      .card.entry {
+        animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      }
+
+      @keyframes popIn {
+        0% {
+          transform: scale(0.5);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        75% {
+          transform: translateX(5px);
+        }
+      }
+
+      #loading {
+        position: absolute;
+        top: 50%;
+        font-size: 1.5rem;
+        color: #afafaf;
+      }
+
+      /* --- Footer for Data Management --- */
+      footer {
+        width: 100%;
+        max-width: 500px;
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+      }
+      .reset-btn {
+        background: transparent;
+        color: #555;
+        border: 1px solid #555;
+        padding: 5px 10px;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="controls">
+        <select id="lang-left" onchange="game.restart()">
+          <option value="en">English</option>
+          <option value="fr" selected>French</option>
+          <option value="nl">Dutch</option>
+        </select>
+        <select id="lang-right" onchange="game.restart()">
+          <option value="en" selected>English</option>
+          <option value="fr">French</option>
+          <option value="nl">Dutch</option>
+        </select>
+      </div>
+      <div class="score-pill">
+        <span id="score">0</span>
+      </div>
+    </header>
+
+    <div id="progress-container">
+      <div id="progress-fill"></div>
+    </div>
+
+    <div id="loading">Loading Vocabulary...</div>
+
+    <div id="game-board" style="display: none">
+      <div class="column" id="col-left">
+        <div class="card-slot"></div>
+        <div class="card-slot"></div>
+        <div class="card-slot"></div>
+        <div class="card-slot"></div>
+        <div class="card-slot"></div>
+      </div>
+      <div class="column" id="col-right">
+        <div class="card-slot"></div>
+        <div class="card-slot"></div>
+        <div class="card-slot"></div>
+        <div class="card-slot"></div>
+        <div class="card-slot"></div>
+      </div>
+    </div>
+
+    <footer>
+      <button class="reset-btn" onclick="progressManager.resetData()">Reset Learning Progress</button>
+    </footer>
+
+    <script>
+      const SHEET_URL =
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vRjcd53W_88YmFTRYvjNWvR9VPfs00fOUMBKpOj14_peyipfGb7bl5maHlKpLvIEtkv8bDvrMt5Bud6/pub?output=csv";
+
+      // --- NEW: PROGRESS MANAGER (Handles LocalStorage) ---
+      class ProgressManager {
+        constructor() {
+          this.storageKey = "polyglot_mastery";
+          this.data = this.load();
+          this.masteryThreshold = 4; // Word is "Learned" after 4 consecutive correct answers
+        }
+
+        load() {
+          const stored = localStorage.getItem(this.storageKey);
+          return stored ? JSON.parse(stored) : {};
+        }
+
+        save() {
+          localStorage.setItem(this.storageKey, JSON.stringify(this.data));
+        }
+
+        getStrength(id) {
+          return this.data[id] || 0;
+        }
+
+        update(id, isCorrect) {
+          if (!this.data[id]) this.data[id] = 0;
+
+          if (isCorrect) {
+            this.data[id]++;
+          } else {
+            // Punishment: If you get it wrong, strength resets to 0 (Leitner system)
+            this.data[id] = 0;
+          }
+          this.save();
+          return this.data[id];
+        }
+
+        isMastered(id) {
+          return (this.data[id] || 0) >= this.masteryThreshold;
+        }
+
+        resetData() {
+          if (confirm("Reset all learning progress?")) {
+            localStorage.removeItem(this.storageKey);
+            location.reload();
+          }
+        }
+      }
+
+      const progressManager = new ProgressManager();
+
+      // --- DATA FETCHER ---
+      class DataFetcher {
+        static async loadGoogleSheet(url) {
+          try {
+            const response = await fetch(url);
+            const text = await response.text();
+            return this.csvToJson(text);
+          } catch (error) {
+            alert("Error loading data! Check your internet or CSV link.");
+            console.error(error);
+            return [];
+          }
+        }
+
+        static csvToJson(csv) {
+          const lines = csv.trim().split("\n");
+          const headers = lines[0].split(",").map((h) => h.trim());
+          const result = [];
+          for (let i = 1; i < lines.length; i++) {
+            const obj = {};
+            const currentline = lines[i].split(",").map((c) => c.trim());
+            if (currentline.length < headers.length) continue;
+            headers.forEach((header, index) => (obj[header] = currentline[index]));
+            if (obj.id && obj.en) result.push(obj);
+          }
+          return result;
+        }
+      }
+
+      // --- GAME ENGINE ---
+      class MatchGame {
+        constructor() {
+          this.fullData = [];
+          this.deck = [];
+          this.score = 0;
+          this.selectedLeft = null;
+          this.selectedRight = null;
+          this.activePairs = 5;
+
+          this.domLeft = document.querySelectorAll("#col-left .card-slot");
+          this.domRight = document.querySelectorAll("#col-right .card-slot");
+          this.scoreEl = document.getElementById("score");
+          this.progressFill = document.getElementById("progress-fill");
+
+          this.init();
+        }
+
+        async init() {
+          this.fullData = await DataFetcher.loadGoogleSheet(SHEET_URL);
+          if (this.fullData.length === 0) return;
+
+          document.getElementById("loading").style.display = "none";
+          document.getElementById("game-board").style.display = "grid";
+
+          this.restart();
+        }
+
+        restart() {
+          this.score = 0;
+          this.updateUI();
+          this.buildDeck();
+
+          this.domLeft.forEach((slot) => (slot.innerHTML = ""));
+          this.domRight.forEach((slot) => (slot.innerHTML = ""));
+
+          // Fill initial board
+          const starterSet = [];
+          for (let i = 0; i < this.activePairs; i++) {
+            if (this.deck.length > 0) starterSet.push(this.deck.pop());
+          }
+
+          const lefts = [...starterSet];
+          const rights = [...starterSet].sort(() => 0.5 - Math.random());
+
+          for (let i = 0; i < lefts.length; i++) {
+            this.renderCard(this.domLeft[i], lefts[i], "left");
+            this.renderCard(this.domRight[i], rights[i], "right");
+          }
+        }
+
+        // --- NEW: INTELLIGENT DECK BUILDER ---
+        buildDeck() {
+          // 1. Separate words into "Mastered" and "Learning/New"
+          const learning = [];
+          const mastered = [];
+
+          this.fullData.forEach((word) => {
+            if (progressManager.isMastered(word.id)) {
+              mastered.push(word);
+            } else {
+              learning.push(word);
+            }
+          });
+
+          // 2. Shuffle both piles
+          learning.sort(() => 0.5 - Math.random());
+          mastered.sort(() => 0.5 - Math.random());
+
+          // 3. Construct Deck Logic
+          // If we have plenty of new/learning words, use those.
+          // If we are running low (< 10), mix in mastered words for review.
+          if (learning.length > 10) {
+            this.deck = learning;
+          } else {
+            // Mix: 70% learning, 30% mastered
+            this.deck = [...learning, ...mastered.slice(0, 10)];
+            this.deck.sort(() => 0.5 - Math.random()); // Shuffle final mix
+          }
+
+          console.log(`Deck built: ${learning.length} new/weak words, ${mastered.length} mastered words hidden.`);
+        }
+
+        renderCard(slot, wordObj, side) {
+          if (!wordObj) return;
+
+          const lang =
+            side === "left" ? document.getElementById("lang-left").value : document.getElementById("lang-right").value;
+
+          const card = document.createElement("div");
+          card.className = "card entry";
+          card.innerText = wordObj[lang];
+          card.dataset.id = wordObj.id;
+          card.dataset.side = side;
+
+          card.addEventListener("click", () => this.handleCardClick(card));
+          slot.appendChild(card);
+
+          setTimeout(() => card.classList.remove("entry"), 300);
+        }
+
+        handleCardClick(card) {
+          if (card.classList.contains("correct")) return;
+
+          if (card.dataset.side === "left") {
+            if (this.selectedLeft) this.selectedLeft.classList.remove("selected");
+            this.selectedLeft = card;
+          } else {
+            if (this.selectedRight) this.selectedRight.classList.remove("selected");
+            this.selectedRight = card;
+          }
+          card.classList.add("selected");
+
+          if (this.selectedLeft && this.selectedRight) {
+            this.checkMatch();
+          }
+        }
+
+        checkMatch() {
+          const id1 = this.selectedLeft.dataset.id;
+          const id2 = this.selectedRight.dataset.id;
+
+          if (id1 === id2) {
+            this.handleCorrect(id1);
+          } else {
+            this.handleWrong(id1, id2);
+          }
+        }
+
+        handleCorrect(id) {
+          // Update Brain
+          progressManager.update(id, true);
+
+          const l = this.selectedLeft;
+          const r = this.selectedRight;
+          const slotL = l.parentElement;
+          const slotR = r.parentElement;
+
+          l.classList.add("correct");
+          r.classList.add("correct");
+          l.classList.remove("selected");
+          r.classList.remove("selected");
+
+          this.selectedLeft = null;
+          this.selectedRight = null;
+          this.score += 1;
+          this.updateUI();
+
+          setTimeout(() => {
+            slotL.innerHTML = "";
+            slotR.innerHTML = "";
+            this.refillSlot(slotL, slotR, l.dataset.id);
+          }, 200);
+        }
+
+        handleWrong(id1, id2) {
+          // Update Brain (Penalty)
+          progressManager.update(id1, false);
+          progressManager.update(id2, false);
+
+          const l = this.selectedLeft;
+          const r = this.selectedRight;
+
+          l.classList.add("wrong");
+          r.classList.add("wrong");
+
+          setTimeout(() => {
+            l.classList.remove("wrong", "selected");
+            r.classList.remove("wrong", "selected");
+          }, 500);
+
+          this.selectedLeft = null;
+          this.selectedRight = null;
+        }
+
+        refillSlot(slotL, slotR, lastMatchedId) {
+          // Get new word
+          let newWord;
+
+          if (this.deck.length > 0) {
+            newWord = this.deck.pop();
+          } else {
+            // ENDLESS MODE FALLBACK
+            // If the deck is empty (all words used in this session),
+            // we recycle the word that was just matched so play continues.
+            // Or we fetch a random word from fullData to keep it spicy.
+            newWord = this.fullData.find((w) => w.id === lastMatchedId);
+          }
+
+          this.renderCard(slotL, newWord, "left");
+          this.renderCard(slotR, newWord, "right");
+        }
+
+        updateUI() {
+          this.scoreEl.innerText = this.score;
+          // Visual progress bar just for the current "Session"
+          const pct = ((this.score % 20) / 20) * 100;
+          this.progressFill.style.width = pct + "%";
+        }
+      }
+
+      const game = new MatchGame();
+    </script>
+  </body>
+</html>
