@@ -84,6 +84,69 @@
         background: rgba(255, 75, 75, 0.1);
       }
 
+      .sheet-btn {
+        padding: 8px 12px;
+        border-radius: 12px;
+        border: 2px solid #37464f;
+        background: #131f24;
+        color: #afafaf;
+        font-family: "Nunito", sans-serif;
+        font-weight: 700;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.2s;
+      }
+
+      .sheet-btn:hover {
+        border-color: var(--secondary);
+        color: var(--secondary);
+        background: rgba(28, 176, 246, 0.1);
+      }
+
+      /* Toggle Switch */
+      .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 52px;
+        height: 28px;
+        flex-shrink: 0;
+      }
+
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        inset: 0;
+        background: #37464f;
+        border-radius: 28px;
+        transition: 0.3s;
+      }
+
+      .toggle-slider::before {
+        position: absolute;
+        content: "";
+        height: 22px;
+        width: 22px;
+        left: 3px;
+        bottom: 3px;
+        background: white;
+        border-radius: 50%;
+        transition: 0.3s;
+      }
+
+      .toggle-switch input:checked + .toggle-slider {
+        background: var(--primary);
+      }
+
+      .toggle-switch input:checked + .toggle-slider::before {
+        transform: translateX(24px);
+      }
+
       #category-select {
         border-color: var(--secondary-dark);
         color: var(--secondary);
@@ -310,6 +373,7 @@
           <option value="nl">Dutch</option>
         </select>
         <button class="reset-btn" onclick="game.resetProgress()">Reset</button>
+        <button class="sheet-btn" onclick="document.querySelector('bottom-sheet').open()">☰ Menu</button>
       </div>
     </header>
 
@@ -331,6 +395,342 @@
       <div class="column" id="col-left"></div>
       <div class="column" id="col-right"></div>
     </div>
+
+    <!-- Bottom Sheet Settings -->
+    <bottom-sheet id="menu-sheet">
+      <div style="padding: 8px 0">
+        <h2 style="margin: 0 0 16px; color: white; font-size: 1.3rem">Settings</h2>
+
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: 16px;
+              background: rgba(255, 255, 255, 0.05);
+              border-radius: 12px;
+            "
+          >
+            <div>
+              <div style="color: #fff; font-weight: 700; margin-bottom: 4px">Auto Sound</div>
+              <div style="color: #888; font-size: 0.85rem">Read words aloud when clicking left cards</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="sound-toggle" onchange="Settings.setSound(this.checked)" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.1)">
+          <p style="color: #666; font-size: 0.85rem; line-height: 1.5; margin: 0">
+            💡 Tip: You can always tap the speaker icon on any card to hear it read aloud.
+          </p>
+        </div>
+
+        <button
+          onclick="document.querySelector('bottom-sheet').close()"
+          style="
+            width: 100%;
+            margin-top: 24px;
+            padding: 14px;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            font-family: inherit;
+          "
+        >
+          Done
+        </button>
+      </div>
+    </bottom-sheet>
+
+    <!-- BottomSheet Custom Element -->
+    <script>
+      class BottomSheet extends HTMLElement {
+        static get observedAttributes() {
+          return ["open"];
+        }
+
+        constructor() {
+          super();
+          this.attachShadow({ mode: "open" });
+          this._isOpen = false;
+          this._sheetHeight = 0;
+        }
+
+        connectedCallback() {
+          this.render();
+          this.setupEventListeners();
+          // Initial scroll position (closed)
+          requestAnimationFrame(() => {
+            this._scroller.scrollTop = 0;
+          });
+        }
+
+        get isOpen() {
+          return this._isOpen;
+        }
+
+        render() {
+          this.shadowRoot.innerHTML = `
+            <style>
+              :host {
+                --sheet-bg: #1e2a31;
+                --sheet-handle: #4a5a64;
+                --sheet-radius: 20px;
+                --backdrop-color: rgba(0, 0, 0, 0.6);
+                --sheet-max-height: 70vh;
+                --sheet-transition: 0.3s;
+                
+                position: fixed;
+                inset: 0;
+                z-index: 1000;
+                pointer-events: none;
+              }
+
+              /* Backdrop - fades with open state */
+              .backdrop {
+                position: fixed;
+                inset: 0;
+                background: var(--backdrop-color);
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.35s ease;
+                z-index: -1;
+              }
+
+              /* When sheet is open, show backdrop */
+              :host(.open) .backdrop {
+                opacity: 1;
+                pointer-events: auto;
+              }
+
+              /* Main scroller - the scroll snap container */
+              .scroller {
+                position: absolute;
+                inset: 0;
+                overflow-y: scroll;
+                overflow-x: hidden;
+                scroll-snap-type: y mandatory;
+                overscroll-behavior: contain;
+                pointer-events: none;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+              }
+
+              .scroller::-webkit-scrollbar {
+                display: none;
+              }
+
+              /* Top snap point (closed state) - transparent to clicks */
+              .snap-top {
+                height: 100dvh;
+                scroll-snap-align: start;
+                scroll-snap-stop: always;
+                pointer-events: none;
+              }
+
+              /* The actual sheet */
+              .sheet {
+                position: relative;
+                background: var(--sheet-bg);
+                border-radius: var(--sheet-radius) var(--sheet-radius) 0 0;
+                min-height: var(--sheet-max-height);
+                max-height: var(--sheet-max-height);
+                scroll-snap-align: start;
+                scroll-snap-stop: always;
+                display: flex;
+                flex-direction: column;
+                box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.3);
+                pointer-events: auto;
+              }
+
+              /* Drag handle */
+              .handle-area {
+                padding: 12px 16px 8px;
+                cursor: grab;
+                flex-shrink: 0;
+              }
+
+              .handle-area:active {
+                cursor: grabbing;
+              }
+
+              .handle {
+                width: 40px;
+                height: 4px;
+                background: var(--sheet-handle);
+                border-radius: 2px;
+                margin: 0 auto;
+              }
+
+              /* Content area */
+              .content {
+                flex: 1;
+                overflow-y: auto;
+                overflow-x: hidden;
+                overscroll-behavior: contain;
+                padding: 0 16px 16px;
+              }
+
+              /* iOS Safari rubber banding fix */
+              @supports (-webkit-touch-callout: none) {
+                .content {
+                  overflow-x: scroll;
+                  overscroll-behavior-x: none;
+                  scrollbar-width: none;
+                  -webkit-overflow-scrolling: touch;
+                }
+
+                .content::-webkit-scrollbar {
+                  display: none;
+                }
+
+                /* Tiny horizontal scroll to absorb rubber band */
+                .content::after {
+                  display: block;
+                  width: calc(100% + 1px);
+                  height: 1px;
+                  content: "";
+                  flex-shrink: 0;
+                }
+              }
+
+              /* Slot styling */
+              ::slotted(*) {
+                color: #e0e0e0;
+              }
+            </style>
+
+            <div class="backdrop" part="backdrop"></div>
+            <div class="scroller" part="scroller">
+              <div class="snap-top" part="snap-top"></div>
+              <div class="sheet" part="sheet">
+                <div class="handle-area" part="handle-area">
+                  <div class="handle" part="handle"></div>
+                </div>
+                <div class="content" part="content">
+                  <slot></slot>
+                </div>
+              </div>
+            </div>
+          `;
+
+          this._scroller = this.shadowRoot.querySelector(".scroller");
+          this._sheet = this.shadowRoot.querySelector(".sheet");
+          this._backdrop = this.shadowRoot.querySelector(".backdrop");
+          this._snapTop = this.shadowRoot.querySelector(".snap-top");
+        }
+
+        setupEventListeners() {
+          // Close on backdrop click
+          this._backdrop.addEventListener("click", () => this.close());
+
+          // Track scroll position to update state
+          this._scroller.addEventListener("scrollend", () => {
+            this._updateOpenState();
+          });
+
+          // Fallback for browsers without scrollend
+          this._scroller.addEventListener("scroll", () => {
+            clearTimeout(this._scrollTimeout);
+            this._scrollTimeout = setTimeout(() => {
+              this._updateOpenState();
+            }, 150);
+          });
+
+          // Handle escape key
+          document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && this._isOpen) {
+              this.close();
+            }
+          });
+        }
+
+        _updateOpenState() {
+          const scrollTop = this._scroller.scrollTop;
+          const threshold = this._snapTop.offsetHeight * 0.5;
+          const wasOpen = this._isOpen;
+          this._isOpen = scrollTop > threshold;
+
+          if (wasOpen !== this._isOpen) {
+            // Update pointer events and class based on state
+            if (this._isOpen) {
+              this.classList.add("open");
+            } else {
+              this.classList.remove("open");
+              this._scroller.style.pointerEvents = "none";
+            }
+
+            this.dispatchEvent(
+              new CustomEvent(this._isOpen ? "open" : "close", {
+                bubbles: true,
+                composed: true,
+              })
+            );
+          }
+        }
+
+        open() {
+          if (!this._scroller) return;
+
+          // Enable scrolling interaction and show backdrop
+          this._scroller.style.pointerEvents = "auto";
+          this.classList.add("open");
+
+          const targetScroll = this._snapTop.offsetHeight;
+          this._scroller.scrollTo({
+            top: targetScroll,
+            behavior: "smooth",
+          });
+          this._isOpen = true;
+        }
+
+        close() {
+          if (!this._scroller) return;
+
+          this._scroller.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+          this._isOpen = false;
+          this.classList.remove("open");
+
+          // Disable scrolling interaction after animation
+          setTimeout(() => {
+            if (!this._isOpen) {
+              this._scroller.style.pointerEvents = "none";
+            }
+          }, 350);
+        }
+
+        toggle() {
+          if (this._isOpen) {
+            this.close();
+          } else {
+            this.open();
+          }
+        }
+
+        attributeChangedCallback(name, oldValue, newValue) {
+          if (name === "open") {
+            if (newValue !== null) {
+              this.open();
+            } else {
+              this.close();
+            }
+          }
+        }
+      }
+
+      customElements.define("bottom-sheet", BottomSheet);
+    </script>
 
     <script>
       const DATA_URL = "./a1.csv";
@@ -362,6 +762,44 @@
         // Clear all progress
         clear() {
           localStorage.removeItem(this.KEY);
+        },
+      };
+
+      // --- SETTINGS ---
+      const Settings = {
+        KEY: "matchup_settings",
+        _cache: null,
+
+        load() {
+          if (this._cache) return this._cache;
+          try {
+            const raw = localStorage.getItem(this.KEY);
+            this._cache = raw ? JSON.parse(raw) : { sound: true };
+          } catch (e) {
+            this._cache = { sound: true };
+          }
+          return this._cache;
+        },
+
+        save() {
+          localStorage.setItem(this.KEY, JSON.stringify(this._cache));
+        },
+
+        getSound() {
+          return this.load().sound;
+        },
+
+        setSound(value) {
+          this.load().sound = value;
+          this.save();
+        },
+
+        init() {
+          const settings = this.load();
+          const toggle = document.getElementById("sound-toggle");
+          if (toggle) {
+            toggle.checked = settings.sound;
+          }
         },
       };
 
@@ -454,6 +892,9 @@
         async init() {
           this.fullData = await DataFetcher.loadData(DATA_URL);
           if (!this.fullData.length) return;
+
+          // Initialize Settings
+          Settings.init();
 
           // Setup Categories
           this.fullData.forEach((item) => this.categories.add(item.category));
@@ -618,8 +1059,17 @@
           if (current) current.classList.remove("selected");
           card.classList.add("selected");
 
-          if (isLeft) this.selectedLeft = card;
-          else this.selectedRight = card;
+          if (isLeft) {
+            this.selectedLeft = card;
+            // Auto-speak left cards when sound is enabled
+            if (Settings.getSound()) {
+              const text = card.querySelector(".card-label").textContent;
+              const lang = document.getElementById("lang-left").value;
+              speakText(text, lang);
+            }
+          } else {
+            this.selectedRight = card;
+          }
 
           if (this.selectedLeft && this.selectedRight) this.checkMatch();
         }
