@@ -1,0 +1,1352 @@
+id,en,fr,nl
+basics_1,Yes,Oui,Ja
+basics_2,No,Non,Nee
+basics_3,Please (informal),S'il te plaît,Alsjeblieft
+basics_4,Please (formal),S'il vous plaît,Alstublieft
+basics_5,Thank you,Merci,Dank je
+basics_6,Thank you very much,Merc beaucoup,Hartelijk dank
+basics_7,You’re welcome,De rien,Graag gedaan
+basics_8,Hello (general),Bonjour,Hallo
+basics_9,Hi (informal),Salut,Hoi
+basics_10,Goodbye,Au revoir,Tot ziens
+basics_11,See you soon,À bientôt,Tot snel
+basics_12,Good morning,Buongiorno,Goedemorgen
+basics_13,Good afternoon,Bon après-midi,Goedemiddag
+basics_14,Good evening,Bonsoir,Goedenavond
+basics_15,Good night,Bonne nuit,Welterusten
+basics_16,Excuse me (attention),Excusez-moi,Excuseer
+basics_17,Excuse me (passing),Pardon,Pardon
+basics_18,Sorry,Désolé,Sorry
+basics_19,Okay,D'accord,Oké
+basics_20,No problem,Pas de problème,Geen probleem
+pronoun_subj_1,I,Je,Ik
+pronoun_subj_2,You (informal),Tu,Jij
+pronoun_subj_3,He,Il,Hij
+pronoun_subj_4,She,Elle,Zij
+pronoun_subj_5,We,Nous,Wij
+pronoun_subj_6,You (plural / formal),Vous,Jullie / U
+pronoun_subj_7,They (masc),Ils,Zij
+pronoun_subj_8,They (fem),Elles,Zij
+pronoun_obj_1,Me,Me,Mij
+pronoun_obj_2,You (informal object),Te,Jou
+pronoun_obj_3,Him,Lui,Hem
+pronoun_obj_4,Her,Elle,Haar
+pronoun_obj_5,Us,Nous,Ons
+pronoun_obj_6,You (plural object),Vous,Jullie
+pronoun_obj_7,Them,Eux,Hen
+pronoun_poss_1,My,Mon / Ma,Mijn
+pronoun_poss_2,Your (informal),Ton / Ta,Jouw
+pronoun_poss_3,His,Son,Zijn
+pronoun_poss_4,Her,Sa,Haar
+pronoun_poss_5,Our,Notre,Onze
+pronoun_poss_6,Your (plural / formal),Votre,Jullie / Uw
+pronoun_poss_7,Their,Leur,Hun
+pronoun_demo_1,This (masc),Ce,Ces
+pronoun_demo_2,This (fem),Cette,Deze
+pronoun_demo_3,That (masc),Ce…-là,Die
+pronoun_demo_4,That (fem),Cette…-là,Die
+pronoun_demo_5,These,Ces,Deze
+pronoun_demo_6,Those,Ceux-là,Die daar
+question_1,Who?,Qui ?,Wie?
+question_2,What?,Quoi ? / Que ?,Wat?
+question_3,Where?,Où ?,Waar?
+question_4,When?,Quand ?,Wanneer?
+question_5,Why?,Pourquoi ?,Waarom?
+question_6,How?,Comment ?,Hoe?
+question_7,How much?,Combien ?,Hoeveel?
+question_8,How many?,Combien ?,Hoeveel?
+question_9,Which?,Quel / Quelle ?,Welke?
+question_10,What time is it?,Il est quelle heure ?,Hoe laat is het?
+verb_core_1,To be,Être,Zijn
+verb_core_2,To have,Avoir,Hebben
+verb_core_3,To go,Aller,Gaan
+verb_core_4,To do / make,Faire,Doen / maken
+verb_core_5,To say,Dire,Zeggen
+verb_core_6,To want,Vouloir,Willen
+verb_core_7,To can / be able to,Pouvoir,Kunnen
+verb_core_8,To must / have to,Devoir,Moeten
+verb_core_9,To come,Venir,Komen
+verb_core_10,To take,Prendre,Nemen
+verb_core_11,To put,Mettre,Zetten / leggen
+verb_core_12,To see,Voir,Zien
+verb_core_13,To know (a fact),Savoir,Weten
+verb_core_14,To know (someone / place),Connaître,Kennen
+verb_core_15,To think,Penser,Denken
+verb_core_16,To like,Aimer bien,Leuk vinden
+verb_core_17,To love,Aimer,Houden van
+verb_core_18,To give,Donner,Geven
+verb_core_19,To find,Trouver,Vinden
+verb_core_20,To ask,Demander,Vragen
+connectors_1,And,Et,En
+connectors_2,Or,Ou,Of
+connectors_3,But,Mais,Maar
+connectors_4,Because,Parce que,Omdat
+connectors_5,So,Alors,Dus
+connectors_6,Also,Aussi,Ook
+connectors_7,Very,Très,Erg / heel
+connectors_8,Too (too much),Trop,Te (veel)
+connectors_9,More,Plus,Meer
+connectors_10,Less,Moins,Minder
+connectors_11,Here,Ici,Hier
+connectors_12,There,Là,Daar
+connectors_13,Today,Aujourd'hui,Vandaag
+connectors_14,Tomorrow,Demain,Morgen
+connectors_15,Yesterday,Hier,Gisteren
+connectors_16,Before,Avant,Voor
+connectors_17,After,Après,Na
+connectors_18,Now,Maintenant,Nu
+connectors_19,Soon,Bientôt,Binnenkort
+connectors_20,Always,Toujours,Altijd
+connectors_21,Often,Souvent,Vaak
+connectors_22,Sometimes,Parfois,Soms
+connectors_23,Never,Jamais,Nooit
+connectors_24,Maybe,Peut-être,Misschien
+connectors_25,Of course,Bien sûr,Natuurlijk
+number_0,Zero,Zéro,Nul
+number_1,One,Un,Één
+number_2,Two,Deux,Twee
+number_3,Three,Trois,Drie
+number_4,Four,Quatre,Vier
+number_5,Five,Cinq,Vijf
+number_6,Six,Six,Zes
+number_7,Seven,Sept,Zeven
+number_8,Eight,Huit,Acht
+number_9,Nine,Neuf,Negen
+number_10,Ten,Dix,Tien
+number_11,Eleven,Onze,Elf
+number_12,Twelve,Douze,Twaalf
+number_13,Thirteen,Treize,Dertien
+number_14,Fourteen,Quatorze,Veertien
+number_15,Fifteen,Quinze,Vijftien
+number_16,Sixteen,Seize,Zestien
+number_17,Seventeen,Dix-sept,Zeventien
+number_18,Eighteen,Dix-huit,Achttien
+number_19,Nineteen,Dix-neuf,Negentien
+number_20,Twenty,Vingt,Twintig
+number_21,Twenty-one,Vingt et un,Eenentwintig
+number_22,Twenty-two,Vingt-deux,Tweeëntwintig
+number_23,Twenty-three,Vingt-trois,Drieëntwintig
+number_24,Twenty-four,Vingt-quatre,Vierentwintig
+number_25,Twenty-five,Vingt-cinq,Vijfentwintig
+number_26,Twenty-six,Vingt-six,Zesentwintig
+number_27,Twenty-seven,Vingt-sept,Zevenentwintig
+number_28,Twenty-eight,Vingt-huit,Achtentwintig
+number_29,Twenty-nine,Vingt-neuf,Negenentwintig
+number_30,Thirty,Trente,Dertig
+number_31,Thirty-one,Trente et un,Eenendertig
+number_32,Thirty-two,Trente-deux,Tweeëndertig
+number_40,Forty,Quarante,Veertig
+number_41,Forty-one,Quarante et un,Eenenveertig
+number_50,Fifty,Cinquante,Vijftig
+number_51,Fifty-one,Cinquante et un,Eenenvijftig
+number_60,Sixty,Soixante,Zestig
+number_61,Sixty-one,Soixante et un,Eenenzestig
+number_70,Seventy,Soixante-dix,Zeventig
+number_71,Seventy-one,Soixante et onze,Eenenzeventig
+number_72,Seventy-two,Soixante-douze,Tweeënzeventig
+number_80,Eighty,Quatre-vingts,Tachtig
+number_81,Eighty-one,Quatre-vingt-un,Eenentachtig
+number_90,Ninety,Quatre-vingt-dix,Negentig
+number_91,Ninety-one,Quatre-vingt-onze,Eenennegentig
+number_100,One hundred,Cent,Honderd
+number_101,One hundred and one,Cent un,Honderdéén
+number_200,Two hundred,Deux cents,Tweehonderd
+number_500,Five hundred,Cinq cents,Vijfhonderd
+number_1000,One thousand,Mille,Duizend
+day_1,Monday,Lundi,Maandag
+day_2,Tuesday,Mardi,Dinsdag
+day_3,Wednesday,Mercredi,Woensdag
+day_4,Thursday,Jeudi,Donderdag
+day_5,Friday,Vendredi,Vrijdag
+day_6,Saturday,Samedi,Zaterdag
+day_7,Sunday,Dimanche,Zondag
+month_1,January,Janvier,Januari
+month_2,February,Février,Februari
+month_3,March,Mars,Maart
+month_4,April,Avril,April
+month_5,May,Mai,Mei
+month_6,June,Juin,Juni
+month_7,July,Juillet,Juli
+month_8,August,Août,Augustus
+month_9,September,Septembre,September
+month_10,October,Octobre,Oktober
+month_11,November,Novembre,November
+month_12,December,Décembre,December
+time_word_1,Hour,L'Heure,Het uur
+time_word_2,Minute,La Minute,De minuut
+time_word_3,Second,La Seconde,De seconde
+time_word_4,Morning,Le Matin,De ochtend
+time_word_5,Afternoon,L'Après-midi,De middag
+time_word_6,Evening,Le Soir,De avond
+time_word_7,Night,La Nuit,De nacht
+time_word_8,Weekend,Le Week-end,Het weekend
+time_word_9,Week,La Semaine,De week
+time_word_10,Year,L'Année,Het jaar
+time_phrase_1,What time is it?,Il est quelle heure ?,Hoe laat is het?
+time_phrase_2,It is one o'clock,Il est une heure,Het is één uur
+time_phrase_3,It is two o'clock,Il est deux heures,Het is twee uur
+time_phrase_4,It is half past three,Il est trois heures et demie,Het is halfvier
+time_phrase_5,It is quarter past four,Il est quatre heures et quart,Het is kwart over vier
+time_phrase_6,It is quarter to five,Il est cinq heures moins le quart,Het is kwart voor vijf
+time_phrase_7,In the morning,Le matin,In de ochtend
+time_phrase_8,In the evening,Le soir,In de avond
+time_phrase_9,Today,Aujourd'hui,Vandaag
+time_phrase_10,Tomorrow,Demain,Morgen
+time_phrase_11,Yesterday,Hier,Gisteren
+time_phrase_12,This week,Cette semaine,Deze week
+time_phrase_13,Next week,La semaine prochaine,Volgende week
+time_phrase_14,Last week,La semaine dernière,Vorige week
+time_phrase_15,This year,Cette année,Dit jaar
+time_phrase_16,Next year,L'année prochaine,Volgend jaar
+time_phrase_17,Last year,L'année dernière,Vorig jaar
+family_1,Family,La famille,De familie
+family_2,Father,Le père,De vader
+family_3,Mother,La mère,De moeder
+family_4,Parents,Les parents,De ouders
+family_5,Son,Le fils,De zoon
+family_6,Daughter,La fille,De dochter
+family_7,Brother,Le frère,De broer
+family_8,Sister,La sœur,De zus
+family_9,Children,Les enfants,De kinderen
+family_10,Baby,Le bébé,De baby
+family_11,Husband,Le mari,De echtgenoot / man
+family_12,Wife,La femme,De echtgenote / vrouw
+family_13,Grandfather,Le grand-père,De opa
+family_14,Grandmother,La grand-mère,De oma
+family_15,Grandparents,Les grands-parents,De grootouders
+family_16,Uncle,L'oncle,De oom
+family_17,Aunt,La tante,De tante
+family_18,Cousin (m),Le cousin,De neef
+family_19,Cousin (f),La cousine,De nicht
+family_20,Relative,Le parent,Het familielid
+people_1,Friend,L'ami,De vriend
+people_2,Friend (female),L'amie,De vriendin
+people_3,Neighbor,Le voisin,De buurman
+people_4,Colleague,Le collègue,De collega
+people_5,Boss,Le patron,De baas
+people_6,Teacher,Le professeur,De leraar
+people_7,Student,L'étudiant,De student
+people_8,Man,L'homme,De man
+people_9,Woman,La femme,De vrouw
+people_10,Person,La personne,De persoon
+people_11,People,Les gens,De mensen
+people_12,Guest,L'invité,De gast
+people_13,Stranger,L'inconnu,De onbekende
+people_14,Group,Le groupe,De groep
+people_15,Child,L'enfant,Het kind
+people_16,Teenager,L'adolescent,De tiener
+people_17,Adult,L'adulte,De volwassene
+people_18,Elderly person,La personne âgée,De oudere
+people_19,Couple,Le couple,Het koppel
+people_20,Family member,Un membre de la famille,Een familielid
+adjective_appearance_1,Tall,Grand,Lang
+adjective_appearance_2,Short,Petit,Klein
+adjective_appearance_3,Young,Jeune,Jong
+adjective_appearance_4,Old,Vieux,Oud
+adjective_appearance_5,Beautiful,Belle / Beau,Mooie
+adjective_appearance_6,Ugly,Moche,Lelijk
+adjective_appearance_7,Thin,Mince,Dun / slank
+adjective_appearance_8,Fat,Gros,Dik
+adjective_appearance_9,Strong,Fort,Sterk
+adjective_appearance_10,Weak,Faible,Zwak
+adjective_appearance_11,Clean,Propre,Schoon
+adjective_appearance_12,Dirty,Sale,Vies
+adjective_appearance_13,Healthy,En bonne santé,Gezond
+adjective_appearance_14,Sick,Malade,Ziek
+adjective_appearance_15,Handsome (man),Beau,Knap
+adjective_personality_1,Nice,Gentil,Lief
+adjective_personality_2,Kind,Sympa,Aardig
+adjective_personality_3,Friendly,Aimable,Vriendelijk
+adjective_personality_4,Funny,Drôle,Grapig
+adjective_personality_5,Serious,Sérieux,Serieus
+adjective_personality_6,Smart,Intelligent,Intelligent
+adjective_personality_7,Shy,Timide,Verlegen
+adjective_personality_8,Lazy,Paresseux,Lui
+adjective_personality_9,Hardworking,Travailleur,Hardwerkend
+adjective_personality_10,Honest,Honnête,Eerlijk
+adjective_personality_11,Polite,Poli,Beleefd
+adjective_personality_12,Rude,Impoli,Onbeleefd
+adjective_personality_13,Brave,Courageux,Moedig
+adjective_personality_14,Worried,Inquiet,Bezorgd
+adjective_personality_15,Calm,Calme,Kalm
+adjective_emotion_1,Happy,Heureux,Blij
+adjective_emotion_2,Sad,Triste,Verdrietig
+adjective_emotion_3,Angry,Fâché,Boos
+adjective_emotion_4,Tired,Fatigué,Moe
+adjective_emotion_5,Excited,Excité,Enthousiast
+adjective_emotion_6,Nervous,Nerveux,Zenuwachtig
+adjective_emotion_7,Relaxed,Détendu,Ontspannen
+adjective_emotion_8,Afraid,Avoir peur,Bang
+adjective_emotion_9,Bored,Ennuyé,Vervelend
+adjective_emotion_10,Surprised,Surpris,Verrast
+home_1,House,La maison,Het huis
+home_2,Apartment,L'appartement,Het appartement
+home_3,Room,La pièce,De kamer
+home_4,Living room,Le salon,De woonkamer
+home_5,Bedroom,La chambre,De slaapkamer
+home_6,Kitchen,La cuisine,De keuken
+home_7,Bathroom,La salle de bain,De badkamer
+home_8,Toilet,Les toilettes,Het toilet
+home_9,Hallway,Le couloir,De gang
+home_10,Balcony,Le balcon,Het balkon
+furniture_1,Bed,Le lit,Het bed
+furniture_2,Sofa,Le canapé,De bank
+furniture_3,Table,La table,De tafel
+furniture_4,Chair,La chaise,De stoel
+furniture_5,Desk,Le bureau,Het bureau
+furniture_6,Closet,Le placard,De kast
+furniture_7,Dresser,La commode,De ladekast
+furniture_8,Bookshelf,La bibliothèque,De boekenkast
+furniture_9,Carpet,Le tapis,Het tapijt
+furniture_10,Mirror,Le miroir,De spiegel
+household_1,Light,La lumière,Het licht
+household_2,Lamp,La lampe,De lamp
+household_3,Window,La fenêtre,Het raam
+household_4,Door,La porte,De deur
+household_5,Key,La clé,De sleutel
+household_6,Fridge,Le frigo,De koelkast
+household_7,Oven,Le four,De oven
+household_8,Stove,La cuisinière,Het fornuis
+household_9,Sink,L'évier,De gootsteen
+household_10,Washing machine,La machine à laver,De wasmachine
+household_11,Trash bin,La poubelle,De prullenbak
+household_12,TV,La télé,De tv
+household_13,Remote control,La télécommande,De afstandsbediening
+household_14,Heater,Le chauffage,De verwarming
+household_15,Fan,Le ventilateur,De ventilator
+kitchen_1,Knife,Le couteau,Het mes
+kitchen_2,Fork,La fourchette,De vork
+kitchen_3,Spoon,La cuillère,De lepel
+kitchen_4,Plate,L'assiette,Het bord
+kitchen_5,Bowl,Le bol,De kom
+kitchen_6,Cup,La tasse,Het kopje
+kitchen_7,Glass,Le verre,Het glas
+kitchen_8,Pan,La poêle,De pan
+kitchen_9,Pot,La casserole,De pot
+kitchen_10,Fridge,Le réfrigérateur,De koelkast
+bathroom_1,Shower,La douche,De douche
+bathroom_2,Bath,Le bain,Het bad
+bathroom_3,Soap,Le savon,De zeep
+bathroom_4,Shampoo,Le shampooing,De shampoo
+bathroom_5,Towel,La serviette,De handdoek
+bathroom_6,Toothbrush,La brosse à dents,De tandenborstel
+bathroom_7,Toothpaste,Le dentifrice,De tandpasta
+bathroom_8,Toilet paper,Le papier toilette,Het wc-papier
+bathroom_9,Mirror,Le miroir,De spiegel
+bathroom_10,Hairdryer,Le sèche-cheveux,De haardroger
+daily_routine_1,To wake up,Se réveiller,Opstaan
+daily_routine_2,To get up,Se lever,Opstaan
+daily_routine_3,To take a shower,Prendre une douche,Douchen
+daily_routine_4,To brush teeth,Se brosser les dents,Tanden poetsen
+daily_routine_5,To get dressed,S'habiller,Aankleden
+daily_routine_6,To have breakfast,Prendre le petit-déjeuner,Ontbijten
+daily_routine_7,To go to work,Aller au travail,Naar werk gaan
+daily_routine_8,To go to school,Aller à l'école,Naar school gaan
+daily_routine_9,To study,Étudier,Studeren
+daily_routine_10,To clean,Nettoyer,Schoonmaken
+daily_routine_11,To cook,Cuisiner,Koken
+daily_routine_12,To wash dishes,Faire la vaisselle,Afwassen
+daily_routine_13,To do laundry,Faire la lessive,De was doen
+daily_routine_14,To rest,Se reposer,Rusten
+daily_routine_15,To go to bed,Aller au lit,Naar bed gaan
+daily_phrase_1,I am at home,Je suis à la maison,Ik ben thuis
+daily_phrase_2,I am in the kitchen,Je suis dans la cuisine,Ik ben in de keuken
+daily_phrase_3,Close the door,Ferme la porte,Sluit de deur
+daily_phrase_4,Open the window,Ouvre la fenêtre,Open het raam
+daily_phrase_5,Turn on the light,Allume la lumière,Doe het licht aan
+daily_phrase_6,Turn off the light,Éteins la lumière,Doe het licht uit
+daily_phrase_7,The house is clean,La maison est propre,Het huis is schoon
+daily_phrase_8,The house is dirty,La maison est sale,Het huis is vies
+daily_phrase_9,I need to cook,Je dois cuisiner,Ik moet koken
+daily_phrase_10,We are eating,Nous mangeons,Wij eten
+food_1,Bread,Le pain,Het brood
+food_2,Water,L'eau,Het water
+food_3,Milk,Le lait,De melk
+food_4,Cheese,Le fromage,De kaas
+food_5,Butter,Le beurre,De boter
+food_6,Yogurt,Le yaourt,De yoghurt
+food_7,Rice,Le riz,De rijst
+food_8,Pasta,Les pâtes,De pasta
+food_9,Egg,Un œuf,Het ei
+food_10,Chicken,Le poulet,De kip
+food_11,Beef,Le bœuf,Het rundvlees
+food_12,Pork,Le porc,Het varkensvlees
+food_13,Fish,Le poisson,De vis
+food_14,Vegetable,Le légume,De groente
+food_15,Fruit,Le fruit,Het fruit
+food_16,Apple,La pomme,De appel
+food_17,Banana,La banane,De banaan
+food_18,Orange,L'orange,De sinaasappel
+food_19,Grape,Le raisin,De druif
+food_20,Strawberry,La fraise,De aardbei
+food_21,Carrot,La carotte,De wortel
+food_22,Potato,La pomme de terre,De aardappel
+food_23,Onion,L'oignon,De ui
+food_24,Garlic,L'ail,De knoflook
+food_25,Tomato,La tomate,De tomaat
+food_26,Broccoli,Le brocoli,De broccoli
+food_27,Spinach,Les épinards,De spinazie
+food_28,Cucumber,Le concombre,De komkommer
+food_29,Pepper (bell),Le poivron,De paprika
+food_30,Mushroom,Le champignon,De champignon
+food_31,Salt,Le sel,Het zout
+food_32,Pepper,Le poivre,De peper
+food_33,Sugar,Le sucre,De suiker
+food_34,Oil,L'huile,De olie
+food_35,Vinegar,Le vinaigre,De azijn
+food_36,Flour,La farine,Het meel
+food_37,Sauce,La sauce,De saus
+food_38,Soup,La soupe,De soep
+food_39,Salad,La salade,De salade
+food_40,Dessert,Le dessert,Het dessert
+drink_1,Tea,Le thé,De thee
+drink_2,Coffee,Le café,De koffie
+drink_3,Juice,Le jus,Het sap
+drink_4,Beer,La bière,Het bier
+drink_5,Wine,Le vin,De wijn
+drink_6,Sparkling water,L'eau gazeuse,Het bruiswater
+drink_7,Still water,L'eau plate,Het plat water
+drink_8,Milkshake,Le milk-shake,De milkshake
+drink_9,Lemonade,La limonade,De limonade
+drink_10,Hot chocolate,Le chocolat chaud,De warme chocolademelk
+grocery_1,Supermarket,Le supermarché,De supermarkt
+grocery_2,Market,Le marché,De markt
+grocery_3,Bakery,La boulangerie,De bakkerij
+grocery_4,Butcher,La boucherie,De slagerij
+grocery_5,Fish shop,La poissonnerie,De viswinkel
+grocery_6,Vegetable shop,Le primeur,De groentewinkel
+grocery_7,Shopping cart,Le chariot,Het winkelwagentje
+grocery_8,Bag,Le sac,De tas
+grocery_9,Price,Le prix,De prijs
+grocery_10,Sale,La promotion,De aanbieding
+cooking_1,To cook,Cuisiner,Koken
+cooking_2,To boil,Bouillir,Koken
+cooking_3,To fry,Frire,Bakken
+cooking_4,To bake,Cuire au four,In de oven bakken
+cooking_5,To cut,Couper,Snijden
+cooking_6,To mix,Mélanger,Mengen
+cooking_7,To taste,Goûter,Proeven
+cooking_8,To season,Assaisonner,Kruiden
+cooking_9,To wash,Laver,Wassen
+cooking_10,To heat up,Chauffer,Verwarmen
+restaurant_1,Restaurant,Le restaurant,Het restaurant
+restaurant_2,Menu,Le menu,Het menu
+restaurant_3,Waiter,Le serveur,De ober
+restaurant_4,Waitress,La serveuse,De serveerster
+restaurant_5,Reservation,La réservation,De reservering
+restaurant_6,Table,La table,De tafel
+restaurant_7,Drink,La boisson,Het drankje
+restaurant_8,Meal,Le repas,De maaltijd
+restaurant_9,Bill,La facture,De rekening
+restaurant_10,Tip,Le pourboire,De fooi
+restaurant_phrase_1,I would like…,Je voudrais…,Ik wil graag…
+restaurant_phrase_2,Can I order?,Je peux commander ?,Kan ik bestellen?
+restaurant_phrase_3,Do you have…?,Avez-vous… ?,Heeft u…?
+restaurant_phrase_4,What do you recommend?,Que recommandez-vous ?,Wat raadt u aan?
+restaurant_phrase_5,Water without ice,De l'eau sans glace,Water zonder ijs
+restaurant_phrase_6,For here or to go?,Sur place ou à emporter ?,Hier of meenemen?
+restaurant_phrase_7,The food is delicious,La nourriture est délicieuse,Het eten is lekker
+restaurant_phrase_8,Can I pay?,Je peux payer ?,Kan ik betalen?
+restaurant_phrase_9,Separate bill please,L'addition séparée s'il vous plaît,Gesplitste rekening aub
+restaurant_phrase_10,Thank you for the meal,Merci pour le repas,Bedankt voor het eten
+city_1,City,La ville,De stad
+city_2,Street,La rue,De straat
+city_3,Road,La route,De weg
+city_4,Square,La place,Het plein
+city_5,Park,Le parc,Het park
+city_6,Bridge,Le pont,De brug
+city_7,Shop,Le magasin,De winkel
+city_8,Supermarket,Le supermarché,De supermarkt
+city_9,Bakery,La boulangerie,De bakkerij
+city_10,Café,Le café,Het café
+city_11,Restaurant,Le restaurant,Het restaurant
+city_12,Hospital,L'hôpital,Het ziekenhuis
+city_13,Pharmacy,La pharmacie,De apotheek
+city_14,School,L'école,De school
+city_15,University,La université,De universiteit
+city_16,Bank,La banque,De bank
+city_17,Post office,La poste,Het postkantoor
+city_18,Museum,Le musée,Het museum
+city_19,Hotel,L'hôtel,Het hotel
+city_20,Station,La gare,Het station
+transport_1,Car,La voiture,De auto
+transport_2,Bike,Le vélo,De fiets
+transport_3,Bus,Le bus,De bus
+transport_4,Train,Le train,De trein
+transport_5,Tram,Le tram,De tram
+transport_6,Metro,Le métro,De metro
+transport_7,Taxi,Le taxi,De taxi
+transport_8,Plane,L'avion,Het vliegtuig
+transport_9,Boat,Le bateau,De boot
+transport_10,Ticket,Le billet,Het ticket
+transport_11,Bus stop,L'arrêt de bus,De bushalte
+transport_12,Train station,La gare,Het treinstation
+transport_13,Airport,L'aéroport,De luchthaven
+transport_14,Platform,Le quai,Het perron
+transport_15,Line (metro),La ligne,De lijn
+transport_16,Map,Le plan,De kaart
+transport_17,Schedule,L'horaire,De dienstregeling
+transport_18,Traffic,La circulation,Het verkeer
+transport_19,Parking,Le parking,De parking
+transport_20,Helmet,Le casque,De helm
+directions_1,Left,Gauche,Links
+directions_2,Right,Droite,Rechts
+directions_3,Straight ahead,Tout droit,Rechtdoor
+directions_4,Behind,Derrière,Achter
+directions_5,In front of,Devant,Vóór
+directions_6,Near,Près de,Dicht bij
+directions_7,Far,Loin de,Ver van
+directions_8,Next to,À côté de,Naast
+directions_9,Across from,En face de,Tegenover
+directions_10,At the corner,Au coin,Op de hoek
+travel_1,Passport,Le passeport,Het paspoort
+travel_2,Luggage,Les bagages,De bagage
+travel_3,Bag,Le sac,De tas
+travel_4,Reservation,La réservation,De reservering
+travel_5,Check-in,Enregistrement,Inchecken
+travel_6,Boarding,Embarquement,Boarding
+travel_7,Seat,Le siège,De stoel
+travel_8,Gate,La porte d'embarquement,De gate
+travel_9,Flight,Le vol,De vlucht
+travel_10,Delay,Le retard,De vertraging
+travel_phrase_1,Where is the station?,Où est la gare ?,Waar is het station?
+travel_phrase_2,Where is the bus stop?,Où est l'arrêt de bus ?,Waar is de bushalte?
+travel_phrase_3,I need a ticket,Il me faut un billet,Ik heb een ticket nodig
+travel_phrase_4,Which direction?,Dans quelle direction ?,Welke richting?
+travel_phrase_5,How long does it take?,Ça prend combien de temps ?,Hoe lang duurt het?
+travel_phrase_6,Is it far?,C'est loin ?,Is het ver?
+travel_phrase_7,I am lost,Je suis perdu,Ik ben verdwaald
+travel_phrase_8,Can you help me?,Vous pouvez m'aider ?,Kunt u me helpen?
+travel_phrase_9,Can you show me on the map?,Vous pouvez me montrer sur la carte ?,Kunt u het op de kaart aanwijzen?
+travel_phrase_10,At what time does it leave?,Ça part à quelle heure ?,Hoe laat vertrekt het?
+hotel_1,Hotel,L'hôtel,Het hotel
+hotel_2,Room,La chambre,De kamer
+hotel_3,Bed,Le lit,Het bed
+hotel_4,Bathroom,La salle de bain,De badkamer
+hotel_5,Reception,La réception,De receptie
+hotel_6,Key card,La clé magnétique,De pas
+hotel_7,Booking,La réservation,De boeking
+hotel_8,Night,La nuit,De nacht
+hotel_9,Breakfast,Le petit-déjeuner,Het ontbijt
+hotel_10,Check-out,Départ,Uitchecken
+hotel_phrase_1,Do you have a room?,Vous avez une chambre ?,Heeft u een kamer?
+hotel_phrase_2,I have a reservation,J'ai une réservation,Ik heb een reservering
+hotel_phrase_3,How much per night?,C'est combien par nuit ?,Hoeveel per nacht?
+hotel_phrase_4,For two people,Pour deux personnes,Voor twee personen
+hotel_phrase_5,I need towels,Il me faut des serviettes,Ik heb handdoeken nodig
+hotel_phrase_6,The wifi password?,Le mot de passe du wifi ?,Het wifi-wachtwoord?
+hotel_phrase_7,Hot water doesn't work,L'eau chaude ne marche pas,Het warme water werkt niet
+hotel_phrase_8,Can I change rooms?,Je peux changer de chambre ?,Kan ik van kamer wisselen?
+hotel_phrase_9,What time is breakfast?,Le petit-déjeuner est à quelle heure ?,Hoe laat is het ontbijt?
+hotel_phrase_10,I am checking out,Je fais le check-out,Ik check uit
+nature_1,Nature,La nature,De natuur
+nature_2,Tree,L'arbre,De boom
+nature_3,Forest,La forêt,Het bos
+nature_4,Flower,La fleur,De bloem
+nature_5,Grass,Le gazon,Het gras
+nature_6,Plant,La plante,De plant
+nature_7,Mountain,La montagne,De berg
+nature_8,Hill,La colline,De heuvel
+nature_9,River,La rivière,De rivier
+nature_10,Lake,Le lac,Het meer
+nature_11,Sea,La mer,De zee
+nature_12,Beach,La plage,Het strand
+nature_13,Island,L'île,Het eiland
+nature_14,Valley,La vallée,De vallei
+nature_15,Desert,Le désert,De woestijn
+nature_16,Rock,La roche,De rots
+nature_17,Stone,La pierre,De steen
+nature_18,Path,Le chemin,Het pad
+nature_19,Field,Le champ,Het veld
+nature_20,Garden,Le jardin,De tuin
+weather_1,Weather,Le temps,Het weer
+weather_2,It is hot,Il fait chaud,Het is warm
+weather_3,It is cold,Il fait froid,Het is koud
+weather_4,It is sunny,Il fait du soleil,Het is zonnig
+weather_5,It is cloudy,Il y a des nuages,Het is bewolkt
+weather_6,It is raining,Il pleut,Het regent
+weather_7,It is snowing,Il neige,Het sneeuwt
+weather_8,It is windy,Il y a du vent,Het waait
+weather_9,It is stormy,Il y a une tempête,Het stormt
+weather_10,The weather is good,Le temps est bon,Het weer is goed
+season_1,Season,La saison,Het seizoen
+season_2,Spring,Le printemps,De lente
+season_3,Summer,L'été,De zomer
+season_4,Autumn,L'automne,De herfst
+season_5,Winter,L'hiver,De winter
+outdoor_1,Walk,La promenade,De wandeling
+outdoor_2,Hike,La randonnée,De hike / wandeltocht
+outdoor_3,Trail,Le sentier,Het pad
+outdoor_4,Picnic,Le pique-nique,De picknick
+outdoor_5,Camping,Le camping,Het kamperen
+outdoor_6,Tent,La tente,De tent
+outdoor_7,Fire,Le feu,Het vuur
+outdoor_8,Sunset,Le coucher de soleil,De zonsondergang
+outdoor_9,Sunrise,Le lever du soleil,De zonsopgang
+outdoor_10,View,La vue,Het uitzicht
+animals_1,Animal,L'animal,Het dier
+animals_2,Dog,Le chien,De hond
+animals_3,Cat,Le chat,De kat
+animals_4,Bird,L'oiseau,De vogel
+animals_5,Fish,Le poisson,De vis
+animals_6,Horse,Le cheval,Het paard
+animals_7,Cow,La vache,De koe
+animals_8,Sheep,Le mouton,Het schaap
+animals_9,Pig,Le cochon,Het varken
+animals_10,Goat,La chèvre,De geit
+animals_11,Chicken,La poule,De kip
+animals_12,Butterfly,Le papillon,De vlinder
+animals_13,Bee,L'abeille,De bij
+animals_14,Frog,La grenouille,De kikker
+animals_15,Snake,Le serpent,De slang
+animals_16,Bear,L'ours,De beer
+animals_17,Lion,Le lion,De leeuw
+animals_18,Monkey,Le singe,De aap
+animals_19,Elephant,L'éléphant,De olifant
+animals_20,Shark,Le requin,De haai
+clothes_1,Clothes,Les vêtements,De kleding
+clothes_2,Shirt,La chemise,Het hemd
+clothes_3,T-shirt,Le t-shirt,Het t-shirt
+clothes_4,Pants,Le pantalon,De broek
+clothes_5,Shorts,Le short,De korte broek
+clothes_6,Skirt,La jupe,De rok
+clothes_7,Dress,La robe,De jurk
+clothes_8,Sweater,Le pull,De trui
+clothes_9,Coat,Le manteau,De jas
+clothes_10,Jacket,La veste,De jas
+clothes_11,Socks,Les chaussettes,De sokken
+clothes_12,Shoes,Les chaussures,De schoenen
+clothes_13,Hat,Le chapeau,De hoed
+clothes_14,Cap,La casquette,De pet
+clothes_15,Gloves,Les gants,De handschoenen
+clothes_16,Scarf,L'écharpe,De sjaal
+clothes_17,Belt,La ceinture,De riem
+clothes_18,Boots,Les bottes,De laarzen
+clothes_19,Underwear,Les sous-vêtements,Het ondergoed
+clothes_20,Swimsuit,Le maillot de bain,Het badpak / de zwembroek
+fashion_1,Fashion,La mode,De mode
+fashion_2,Style,Le style,De stijl
+fashion_3,Outfit,La tenue,De outfit
+fashion_4,Size,La taille,De maat
+fashion_5,Fitting room,La cabine d'essayage,De paskamer
+fashion_6,Brand,La marque,Het merk
+fashion_7,Pattern,Le motif,Het patroon
+fashion_8,Price,Le prix,De prijs
+fashion_9,Sale,La promotion,De aanbieding
+fashion_10,Receipt,Le reçu,Het bonnetje
+color_1,Red,Rouge,Rood
+color_2,Blue,Bleu,Blauw
+color_3,Green,Vert,Groen
+color_4,Yellow,Jaune,Geel
+color_5,Black,Noir,Zwart
+color_6,White,Blanc,Wit
+color_7,Grey,Gris,Grijs
+color_8,Brown,Marron,Bruin
+color_9,Pink,Rose,Roze
+color_10,Orange,Orange,Oranje
+color_11,Light blue,Bleu clair,Lichtblauw
+color_12,Dark blue,Bleu foncé,Donkerblauw
+color_13,Light green,Vert clair,Lichtgroen
+color_14,Dark green,Vert foncé,Donkergroen
+color_15,Purple,Violet,Paars
+materials_1,Cotton,Le coton,Katoen
+materials_2,Wool,La laine,Wol
+materials_3,Leather,Le cuir,Leder
+materials_4,Linen,Le lin,Linnen
+materials_5,Polyester,Le polyester,Polyester
+materials_6,Silk,La soie,Zijde
+materials_7,Metal,Le métal,Metaal
+materials_8,Plastic,Le plastique,Plastic
+materials_9,Glass,Le verre,Glas
+materials_10,Wood,Le bois,Hout
+sizes_1,Small,Petit,Klein
+sizes_2,Medium,Moyen,Middel
+sizes_3,Large,Grand,Groot
+sizes_4,Extra large,Très grand,Extra groot
+sizes_5,Too small,Trop petit,Te klein
+sizes_6,Too big,Trop grand,Te groot
+sizes_7,Fits well,Ça va bien,Past goed
+sizes_8,Does not fit,Ça ne va pas,Past niet
+sizes_9,Tight,Serré,Strak
+sizes_10,Loose,Large,Los
+shopping_phrase_1,I am looking for…,Je cherche…,Ik zoek…
+shopping_phrase_2,Do you have this in size M?,Vous l'avez en taille M ?,Heeft u dit in maat M?
+shopping_phrase_3,Can I try it on?,Je peux l'essayer ?,Mag ik het passen?
+shopping_phrase_4,It fits well,Ça me va bien,Het past goed
+shopping_phrase_5,It’s too expensive,C'est trop cher,Het is te duur
+shopping_phrase_6,Do you have another color?,Vous avez une autre couleur ?,Heeft u een andere kleur?
+shopping_phrase_7,Where is the fitting room?,Où est la cabine d'essayage ?,Waar is de paskamer?
+shopping_phrase_8,I’ll take it,Je le prends,Ik neem het
+shopping_phrase_9,Do you accept card?,Vous acceptez la carte ?,Accepteert u pin?
+shopping_phrase_10,I want a receipt,Je veux un reçu,Ik wil een bonnetje
+body_1,Body,Le corps,Het lichaam
+body_2,Head,La tête,Het hoofd
+body_3,Face,Le visage,Het gezicht
+body_4,Hair,Les cheveux,Het haar
+body_5,Eye,L'œil,Het oog
+body_6,Ear,L'oreille,Het oor
+body_7,Nose,Le nez,De neus
+body_8,Mouth,La bouche,De mond
+body_9,Tooth,La dent,De tand
+body_10,Tongue,La langue,De tong
+
+body_11,Neck,Le cou,De nek
+body_12,Shoulder,L'épaule,De schouder
+body_13,Arm,Le bras,De arm
+body_14,Hand,La main,De hand
+body_15,Finger,Le doigt,De vinger
+body_16,Chest,La poitrine,De borst
+body_17,Back,Le dos,De rug
+body_18,Stomach,Le ventre,De buik
+body_19,Leg,La jambe,Het been
+body_20,Foot,Le pied,De voet
+
+health_1,Health,La santé,De gezondheid
+health_2,Doctor,Le médecin,De dokter
+health_3,Nurse,L'infirmier,De verpleegkundige
+health_4,Hospital,L'hôpital,Het ziekenhuis
+health_5,Clinic,La clinique,De kliniek
+health_6,Pharmacy,La pharmacie,De apotheek
+health_7,Appointment,Le rendez-vous,De afspraak
+health_8,Medicine,Le médicament,Het medicijn
+health_9,Prescription,L'ordonnance,Het recept
+health_10,Insurance,L'assurance,De verzekering
+
+symptom_1,Pain,La douleur,De pijn
+symptom_2,Headache,Le mal de tête,De hoofdpijn
+symptom_3,Stomach ache,Le mal de ventre,Buikpijn
+symptom_4,Back pain,Le mal de dos,Rugpijn
+symptom_5,Cough,La toux,De hoest
+symptom_6,Cold (illness),Le rhume,De verkoudheid
+symptom_7,Fever,La fièvre,Koorts
+symptom_8,Tired,Fatigué,Moe
+symptom_9,Dizzy,Avoir le vertige,Draaierig
+symptom_10,Sick,Malade,Ziek
+
+doctor_phrase_1,I am not feeling well,Je ne me sens pas bien,Ik voel me niet goed
+doctor_phrase_2,I have pain here,J'ai mal ici,Ik heb hier pijn
+doctor_phrase_3,I feel weak,Je me sens faible,Ik voel me zwak
+doctor_phrase_4,I have a fever,J'ai de la fièvre,Ik heb koorts
+doctor_phrase_5,How long have you been sick?,Depuis quand êtes-vous malade ?,Hoelang bent u ziek?
+doctor_phrase_6,I need a doctor,Il me faut un médecin,Ik heb een dokter nodig
+doctor_phrase_7,Do I need medicine?,J'ai besoin de médicaments ?,Heb ik medicijnen nodig?
+doctor_phrase_8,Is it serious?,C'est grave ?,Is het ernstig?
+doctor_phrase_9,I am allergic to…,Je suis allergique à…,Ik ben allergisch voor…
+doctor_phrase_10,I need a prescription,Il me faut une ordonnance,Ik heb een recept nodig
+
+pharmacy_1,Pharmacy,La pharmacie,De apotheek
+pharmacy_2,Pill,La pilule,De pil
+pharmacy_3,Tablet,Le comprimé,Het tablet
+pharmacy_4,Syrup,Le sirop,De siroop
+pharmacy_5,Cream,La crème,De crème
+pharmacy_6,Antibiotic,L'antibiotique,Het antibioticum
+pharmacy_7,Vitamins,Les vitamines,De vitaminen
+pharmacy_8,Bandage,Le bandage,Het verband
+pharmacy_9,Disinfectant,Le désinfectant,Het ontsmettingsmiddel
+pharmacy_10,Pharmacist,Le pharmacien,De apotheker
+
+emergency_1,Help!,À l'aide !,Help!
+emergency_2,Call an ambulance!,Appelez une ambulance !,Bel een ambulance!
+emergency_3,Call the police!,Appelez la police !,Bel de politie!
+emergency_4,Fire!,Au feu !,Brand!
+emergency_5,I lost my bag,J'ai perdu mon sac,Ik ben mijn tas kwijt
+emergency_6,I lost my passport,J'ai perdu mon passeport,Ik ben mijn paspoort kwijt
+emergency_7,I was robbed,On m'a volé,Ik ben beroofd
+emergency_8,I need help,Il me faut de l'aide,Ik heb hulp nodig
+emergency_9,Where is the hospital?,Où est l'hôpital ?,Waar is het ziekenhuis?
+emergency_10,I can’t breathe,Je n'arrive pas à respirer,Ik kan niet ademen
+
+school_1,School,L'école,De school
+school_2,Classroom,La salle de classe,Het klaslokaal
+school_3,Teacher,Le professeur,De leraar
+school_4,Student,L'étudiant,De student
+school_5,Lesson,La leçon,De les
+school_6,Homework,Les devoirs,Het huiswerk
+school_7,Exam,L'examen,Het examen
+school_8,Subject,La matière,Het vak
+school_9,Library,La bibliothèque,De bibliotheek
+school_10,University,L'université,De universiteit
+
+school_object_1,Notebook,Le cahier,Het schrift
+school_object_2,Book,Le livre,Het boek
+school_object_3,Pencil,Le crayon,Het potlood
+school_object_4,Pen,Le stylo,De pen
+school_object_5,Eraser,La gomme,De gum
+school_object_6,Ruler,La règle,De liniaal
+school_object_7,Backpack,Le sac à dos,De rugzak
+school_object_8,Desk,Le pupitre,Het bureau
+school_object_9,Chair,La chaise,De stoel
+school_object_10,Marker,Le feutre,De markeerstift
+
+work_1,Work,Le travail,Het werk
+work_2,Job,Le métier,De baan
+work_3,Office,Le bureau,Het kantoor
+work_4,Colleague,Le collègue,De collega
+work_5,Boss,Le patron,De baas
+work_6,Meeting,La réunion,De vergadering
+work_7,Email,Le mail,De e-mail
+work_8,Project,Le projet,Het project
+work_9,Schedule,L'emploi du temps,Het rooster
+work_10,Salary,Le salaire,Het salaris
+
+office_1,Computer,L'ordinateur,De computer
+office_2,Laptop,L'ordinateur portable,De laptop
+office_3,Keyboard,Le clavier,Het toetsenbord
+office_4,Mouse,La souris,De muis
+office_5,Screen,Écran,Het scherm
+office_6,Printer,Imprimante,De printer
+office_7,Document,Le document,Het document
+office_8,Folder,Le dossier,De map
+office_9,Paper,Le papier,Het papier
+office_10,Pen,Le stylo,De pen
+
+tech_1,Phone,Le téléphone,De telefoon
+tech_2,Smartphone,Le smartphone,De smartphone
+tech_3,Tablet,La tablette,De tablet
+tech_4,Headphones,Les écouteurs,De koptelefoon
+tech_5,Charger,Le chargeur,De oplader
+tech_6,USB cable,Le câble USB,De USB-kabel
+tech_7,Battery,La batterie,De batterij
+tech_8,Internet,L'internet,Het internet
+tech_9,WiFi,Le wifi,De wifi
+tech_10,App,L'application,De app
+
+internet_1,Website,Le site web,De website
+internet_2,Account,Le compte,Het account
+internet_3,Password,Le mot de passe,Het wachtwoord
+internet_4,Login,Connexion,Inloggen
+internet_5,Logout,Déconnexion,Uitloggen
+internet_6,Download,Télécharger,Downloaden
+internet_7,Upload,Téléverser,Uploaden
+internet_8,Search,Rechercher,Zoeken
+internet_9,Message,Le message,Het bericht
+internet_10,Video call,L'appel vidéo,Het videogesprek
+
+tools_1,Tool,L'outil,Het gereedschap
+tools_2,Hammer,Le marteau,De hamer
+tools_3,Screwdriver,Le tournevis,De schroevendraaier
+tools_4,Wrench,La clé,De sleutel
+tools_5,Saw,La scie,De zaag
+tools_6,Drill,La perceuse,De boormachine
+tools_7,Knife,Le couteau,Het mes
+tools_8,Scissors,Les ciseaux,De schaar
+tools_9,Tape measure,Le mètre,De rolmaat
+tools_10,Flashlight,La lampe de poche,De zaklamp
+
+activity_1,Activity,L'activité,De activiteit
+activity_2,To play, Jouer,Spelen
+activity_3,To watch,Regarder,Kijken
+activity_4,To listen,Écouter,Luisteren
+activity_5,To read,Lire,Lezen
+activity_6,To write,Écrire,Schrijven
+activity_7,To learn,Apprendre,Leren
+activity_8,To travel,Voyager,Reizen
+activity_9,To visit,Visiter,Bezoeken
+activity_10,To relax,Se détendre,Ontspannen
+
+hobby_1,Hobby,Le hobby,De hobby
+hobby_2,Music,La musique,De muziek
+hobby_3,Playing music,Jouer de la musique,Muziek spelen
+hobby_4,Singing,Chanter,Zingen
+hobby_5,Dancing,Danser,Dansen
+hobby_6,Drawing,Dessiner,Tekenen
+hobby_7,Painting,Peindre,Schilderen
+hobby_8,Photography,La photographie,De fotografie
+hobby_9,Gaming,Le jeu vidéo,Gamen
+hobby_10,Cooking,Cuisiner,Koken
+
+sports_1,Sport,Le sport,De sport
+sports_2,Football,Le football,Voetbal
+sports_3,Basketball,Le basket,Basketbal
+sports_4,Tennis,Le tennis,Tennis
+sports_5,Running,La course,Lopen
+sports_6,Cycling,Le cyclisme,Fietsen
+sports_7,Swimming,La natation,Zwemmen
+sports_8,Gym,La salle de sport,De sportschool
+sports_9,Yoga,Le yoga,De yoga
+sports_10,Hiking,La randonnée,Hiken
+
+free_time_1,Free time,Le temps libre,De vrije tijd
+free_time_2,Going out,Sortir,Uitgaan
+free_time_3,Going to the cinema,Aller au cinéma,Naar de bioscoop gaan
+free_time_4,Going to a restaurant,Aller au restaurant,Naar een restaurant gaan
+free_time_5,Going shopping,Faire du shopping,Winkelen
+free_time_6,Staying home,Rester à la maison,Thuis blijven
+free_time_7,Meeting friends,Rencontrer des amis,Vrienden ontmoeten
+free_time_8,Playing games,Jouer à des jeux,Spellen spelen
+free_time_9,Learning a language,Apprendre une langue,Een taal leren
+free_time_10,Watching a show,Regarder un spectacle,Een show kijken
+
+entertainment_1,Movie,Le film,De film
+entertainment_2,Series,La série,De serie
+entertainment_3,Music,La musique,De muziek
+entertainment_4,Concert,Le concert,Het concert
+entertainment_5,Theater,Le théâtre,Het theater
+entertainment_6,Book,Le livre,Het boek
+entertainment_7,Game,Le jeu,Het spel
+entertainment_8,Party,La fête,Het feest
+entertainment_9,Festival,Le festival,Het festival
+entertainment_10,Story,L'histoire,Het verhaal
+
+chore_1,To clean,Nettoyer,Schoonmaken
+chore_2,To wash dishes,Faire la vaisselle,Afwassen
+chore_3,To do laundry,Faire la lessive,De was doen
+chore_4,To fold clothes,Plier les vêtements,Kleren vouwen
+chore_5,To iron,Repasser,Strijken
+chore_6,To sweep,Balayer,Vegen
+chore_7,To mop,Passer la serpillière,Dweil
+chore_8,To vacuum,Passer l'aspirateur,Stofzuigen
+chore_9,To throw out garbage,Jeter les déchets,Afval weggooien
+chore_10,To tidy up,Ranger,Opruimen
+
+chore_11,To make the bed,Faire le lit,Het bed opmaken
+chore_12,To cook,Cuisiner,Koken
+chore_13,To bake,Cuire au four,Bakken
+chore_14,To scrub,Frotter,Schrobben
+chore_15,To polish,Lustrer,Poetsen
+chore_16,To wash windows,Laver les vitres,Ramen wassen
+chore_17,To dust,Épousseter,Stoffen
+chore_18,To water plants,Arroser les plantes,Planten water geven
+chore_19,To fix,Reparer,Repareren
+chore_20,To check,Verifier,Controleren
+
+repair_1,Repair,La réparation,De reparatie
+repair_2,To hammer,Marteler,Hameren
+repair_3,To screw,Visser,Vastschroeven
+repair_4,To unscrew,Dévisser,Losschroeven
+repair_5,To drill,Perceer,Boren
+repair_6,To measure,Mesurer,Maten
+repair_7,To cut,Scierr,Snijden/zaag
+repair_8,To sand,Poncer,Schuren
+repair_9,To paint,Peindre,Schilderen
+repair_10,To assemble,Assembler,Monteren
+
+maintenance_1,Maintenance,L'entretien,Het onderhoud
+maintenance_2,To replace,Remplacer,Vervangen
+maintenance_3,To install,Installer,Installeren
+maintenance_4,To unplug,Débrancher,Uitpluggen
+maintenance_5,To plug in,Brancher,Inpluggen
+maintenance_6,To test,Tester,Testen
+maintenance_7,To reset,Réinitialiser,Resetten
+maintenance_8,To turn on,Allumer,Aanzetten
+maintenance_9,To turn off,Éteindre,Uitzetten
+maintenance_10,To adjust,Ajuster,Aanpassen
+
+utilities_1,Electricity,L'électricité,De elektriciteit
+utilities_2,Water,L'eau,Het water
+utilities_3,Gas,Le gaz,Het gas
+utilities_4,Heating,Le chauffage,De verwarming
+utilities_5,Air conditioning,La climatisation,De airconditioning
+utilities_6,Internet,L'internet,Het internet
+utilities_7,Light bulb,L'ampoule,De gloeilamp
+utilities_8,Switch,L'interrupteur,De schakelaar
+utilities_9,Outlet,La prise,Het stopcontact
+utilities_10,Circuit breaker,Le disjoncteur,De zekeringkast
+
+home_phrase_1,The light is broken,La lumière est cassée,Het licht is kapot
+home_phrase_2,The heater is not working,Le chauffage ne marche pas,De verwarming werkt niet
+home_phrase_3,The water is cold,L'eau est froide,Het water is koud
+home_phrase_4,The internet is down,Internet ne fonctionne pas,Internet ligt eruit
+home_phrase_5,I cleaned the house,J'ai nettoyé la maison,Ik heb het huis schoongemaakt
+home_phrase_6,I need to fix this,Je dois réparer ça,Ik moet dit repareren
+home_phrase_7,The trash is full,La poubelle est pleine,De vuilnisbak zit vol
+home_phrase_8,Can you help me clean?,Tu peux m'aider à nettoyer ?,Kun je me helpen schoonmaken?
+home_phrase_9,I need tools,Il me faut des outils,Ik heb gereedschap nodig
+home_phrase_10,Everything is done,Tout est fait,Alles is gedaan
+
+chore_1,To clean,Nettoyer,Schoonmaken
+chore_2,To wash dishes,Faire la vaisselle,Afwassen
+chore_3,To do laundry,Faire la lessive,De was doen
+chore_4,To fold clothes,Plier les vêtements,Kleren vouwen
+chore_5,To iron,Repasser,Strijken
+chore_6,To sweep,Balayer,Vegen
+chore_7,To mop,Passer la serpillière,Dweil
+chore_8,To vacuum,Passer l'aspirateur,Stofzuigen
+chore_9,To throw out garbage,Jeter les déchets,Afval weggooien
+chore_10,To tidy up,Ranger,Opruimen
+
+chore_11,To make the bed,Faire le lit,Het bed opmaken
+chore_12,To cook,Cuisiner,Koken
+chore_13,To bake,Cuire au four,Bakken
+chore_14,To scrub,Frotter,Schrobben
+chore_15,To polish,Lustrer,Poetsen
+chore_16,To wash windows,Laver les vitres,Ramen wassen
+chore_17,To dust,Épousseter,Stoffen
+chore_18,To water plants,Arroser les plantes,Planten water geven
+chore_19,To fix,Reparer,Repareren
+chore_20,To check,Verifier,Controleren
+
+repair_1,Repair,La réparation,De reparatie
+repair_2,To hammer,Marteler,Hameren
+repair_3,To screw,Visser,Vastschroeven
+repair_4,To unscrew,Dévisser,Losschroeven
+repair_5,To drill,Perceer,Boren
+repair_6,To measure,Mesurer,Maten
+repair_7,To cut,Scierr,Snijden/zaag
+repair_8,To sand,Poncer,Schuren
+repair_9,To paint,Peindre,Schilderen
+repair_10,To assemble,Assembler,Monteren
+
+maintenance_1,Maintenance,L'entretien,Het onderhoud
+maintenance_2,To replace,Remplacer,Vervangen
+maintenance_3,To install,Installer,Installeren
+maintenance_4,To unplug,Débrancher,Uitpluggen
+maintenance_5,To plug in,Brancher,Inpluggen
+maintenance_6,To test,Tester,Testen
+maintenance_7,To reset,Réinitialiser,Resetten
+maintenance_8,To turn on,Allumer,Aanzetten
+maintenance_9,To turn off,Éteindre,Uitzetten
+maintenance_10,To adjust,Ajuster,Aanpassen
+
+utilities_1,Electricity,L'électricité,De elektriciteit
+utilities_2,Water,L'eau,Het water
+utilities_3,Gas,Le gaz,Het gas
+utilities_4,Heating,Le chauffage,De verwarming
+utilities_5,Air conditioning,La climatisation,De airconditioning
+utilities_6,Internet,L'internet,Het internet
+utilities_7,Light bulb,L'ampoule,De gloeilamp
+utilities_8,Switch,L'interrupteur,De schakelaar
+utilities_9,Outlet,La prise,Het stopcontact
+utilities_10,Circuit breaker,Le disjoncteur,De zekeringkast
+
+home_phrase_1,The light is broken,La lumière est cassée,Het licht is kapot
+home_phrase_2,The heater is not working,Le chauffage ne marche pas,De verwarming werkt niet
+home_phrase_3,The water is cold,L'eau est froide,Het water is koud
+home_phrase_4,The internet is down,Internet ne fonctionne pas,Internet ligt eruit
+home_phrase_5,I cleaned the house,J'ai nettoyé la maison,Ik heb het huis schoongemaakt
+home_phrase_6,I need to fix this,Je dois réparer ça,Ik moet dit repareren
+home_phrase_7,The trash is full,La poubelle est pleine,De vuilnisbak zit vol
+home_phrase_8,Can you help me clean?,Tu peux m'aider à nettoyer ?,Kun je me helpen schoonmaken?
+home_phrase_9,I need tools,Il me faut des outils,Ik heb gereedschap nodig
+home_phrase_10,Everything is done,Tout est fait,Alles is gedaan
+
+verb_1,To be,Être,Zijn
+verb_2,To have,Avoir,Hebben
+verb_3,To go,Aller,Gaan
+verb_4,To do / make,Faire,Doen
+verb_5,To say,Dire,Zeggen
+verb_6,To speak,Parler,Spreken
+verb_7,To call,Appeler,Bellen
+verb_8,To listen,Écouter,Luisteren
+verb_9,To hear,Entendre,Horen
+verb_10,To ask,Demander,Vragen
+
+verb_11,To answer,Répondre,Antwoorden
+verb_12,To think,Penser,Denken
+verb_13,To know (facts),Savoir,Weten
+verb_14,To know (people),Connaître,Kennen
+verb_15,To understand,Comprendre,Begrijpen
+verb_16,To learn,Apprendre,Leren
+verb_17,To study,Étudier,Studeren
+verb_18,To read,Lire,Lezen
+verb_19,To write,Écrire,Schrijven
+verb_20,To believe,Croire,Geloven
+
+verb_21,To see,Voir,Zien
+verb_22,To watch,Regarder,Kijken
+verb_23,To look for,Chercher,Zoeken
+verb_24,To find,Trouver,Vinden
+verb_25,To lose,Perdre,Verliezen
+verb_26,To take,Prendre,Nemen
+verb_27,To put,Mettre,Zetten
+verb_28,To bring,Apporter,Brengen
+verb_29,To carry,Porter,Dragen
+verb_30,To hold,Tenir,Vasthouden
+
+verb_31,To come,Venir,Komen
+verb_32,To return,Rentrer,Terugkeren
+verb_33,To enter,Entrer,Binnenkomen
+verb_34,To leave,Partir,Vertrekken
+verb_35,To arrive,Arriver,Aankomen
+verb_36,To walk,Marcher,Lopen
+verb_37,To run,Courir,Rennen
+verb_38,To swim,Nager,Zwemmen
+verb_39,To drive,Conduire,Rijden
+verb_40,To ride (bike),Faire du vélo,Fietsen
+
+verb_41,To stop,Arrêter,Stoppen
+verb_42,To continue,Continuer,Doorgaan
+verb_43,To start,Commencer,Beginnen
+verb_44,To finish,Finir,Eindigen
+verb_45,To try,Essayer,Proberen
+verb_46,To need,Avoir besoin,Nodig hebben
+verb_47,To want,Vouloir,Willen
+verb_48,To can / be able to,Pouvoir,Kunnen
+verb_49,To must / have to,Devoir,Moeten
+verb_50,To allow,Permettre,Toestaan
+
+verb_51,To prefer,Préférer,Voorkeur geven
+verb_52,To choose,Choisir,Kiezen
+verb_53,To decide,Décider,Beslissen
+verb_54,To help,Aider,Helpen
+verb_55,To use,Utiliser,Gebruiken
+verb_56,To try on,Essayer (un vêtement),Passen
+verb_57,To buy,Acheter,Kopen
+verb_58,To pay,Payer,Betalen
+verb_59,To sell,Vendre,Verkopen
+verb_60,To cost,Coûter,Kosten
+
+verb_61,To cook,Cuisiner,Koken
+verb_62,To boil,Bouillir,Koken
+verb_63,To fry,Frire,Bakken
+verb_64,To bake,Cuire au four,Bakken
+verb_65,To cut,Couper,Snijden
+verb_66,To mix,Mélanger,Mengen
+verb_67,To clean,Nettoyer,Schoonmaken
+verb_68,To wash,Laver,Wassen
+verb_69,To sweep,Balayer,Vegen
+verb_70,To vacuum,Passer l'aspirateur,Stofzuigen
+
+verb_71,To fix,Réparer,Repareren
+verb_72,To break,Casser,Breken
+verb_73,To open,Ouvrir,Openen
+verb_74,To close,Fermer,Sluiten
+verb_75,To turn on,Allumer,Aanzetten
+verb_76,To turn off,Éteindre,Uitzetten
+verb_77,To charge,Charger,Opladen
+verb_78,To download,Télécharger,Downloaden
+verb_79,To upload,Téléverser,Uploaden
+verb_80,To send,Envoyer,Sturen
+
+verb_81,To receive,Recevoir,Ontvangen
+verb_82,To show,Montrer,Tonen
+verb_83,To explain,Expliquer,Uitleggen
+verb_84,To describe,Décrire,Beschrijven
+verb_85,To repeat,Répéter,Herhalen
+verb_86,To answer,Répondre,Antwoorden
+verb_87,To correct,Corriger,Verbeteren
+verb_88,To wait,Attendre,Wachten
+verb_89,To hope,Espérer,Hopen
+verb_90,To imagine,Imaginer,Voorstellen
+
+verb_91,To sleep,Dormir,Slapen
+verb_92,To wake up,Se réveiller,Opstaan
+verb_93,To get up,Se lever,Opstaan
+verb_94,To sit down,S'asseoir,Gaan zitten
+verb_95,To lie down,S'allonger,Gaan liggen
+verb_96,To relax,Se détendre,Ontspannen
+verb_97,To rest,Se reposer,Rusten
+verb_98,To shower,Se doucher,Douchen
+verb_99,To dress,S'habiller,Aankleden
+verb_100,To undress,Se déshabiller,Uitkleden
+
+verb_101,To feel (emotion),Se sentir,Zich voelen
+verb_102,To be happy,Être heureux,Blij zijn
+verb_103,To be sad,Être triste,Verdrietig zijn
+verb_104,To cry,Pleurer,Huilen
+verb_105,To smile,Sourire,Glimlachen
+verb_106,To laugh,Rire,Lachen
+verb_107,To love,Aimer,Houden van
+verb_108,To like,Aimer bien,Leuk vinden
+verb_109,To hate,Détester,Haten
+verb_110,To worry,S'inquiéter,Zich zorgen maken
+
+verb_111,To wash hands,Se laver les mains,Handen wassen
+verb_112,To brush teeth,Se brosser les dents,Tanden poetsen
+verb_113,To comb hair,Se coiffer,Haren kammen
+verb_114,To shave,Se raser,Scheren
+verb_115,To put on makeup,Se maquiller,Zich opmaken
+verb_116,To get ready,Se préparer,Zich klaarmaken
+verb_117,To hurry,Se dépêcher,Haasten
+verb_118,To wait for,Attendre,Op iemand wachten
+verb_119,To join,Rejoindre,Aansluiten
+verb_120,To meet,Rencontrer,Ontmoeten
+
+verb_121,To stay,Rester,Blijven
+verb_122,To visit,Visiter,Bezoeken
+verb_123,To travel,Voyager,Reizen
+verb_124,To book,Réserver,Boeken
+verb_125,To check in,S'enregistrer,Inchecken
+verb_126,To check out,Quitter la chambre,Uitchecken
+verb_127,To pack,Faire sa valise,Inpakken
+verb_128,To unpack,Défaire sa valise,Uitpakken
+verb_129,To rent,Louer,Huren
+verb_130,To park,Se garer,Parkeren
+
+verb_131,To work,Travailler,Werken
+verb_132,To earn,Gagner,Verdienen
+verb_133,To spend (money),Dépenser,Uitgeven
+verb_134,To organize,Organiser,Organiseren
+verb_135,To plan,Planifier,Plannen
+verb_136,To manage,Gérer,Beheren
+verb_137,To prepare,Préparer,Voorbereiden
+verb_138,To send an email,Envoyer un mail,Een e-mail sturen
+verb_139,To open a file,Ouvrir un fichier,Een bestand openen
+verb_140,To save,Sauvegarder,Opslaan
+
+verb_141,To win,Gagner,Winnen
+verb_142,To lose,Perdre,Verliezen
+verb_143,To play,Jouer,Spelen
+verb_144,To practice,S'entraîner,Trainen
+verb_145,To try out,Essayer,Uitproberen
+verb_146,To improve,Améliorer,Verbeteren
+verb_147,To begin,Commencer,Beginnen
+verb_148,To finish,Terminer,Beëindigen
+verb_149,To join in,Participer,Deelnemen
+verb_150,To celebrate,Célébrer,Vieren
+
+
+sentence_1,I am at home,Je suis à la maison,Ik ben thuis
+sentence_2,I am tired,Je suis fatigué,Ik ben moe
+sentence_3,I am hungry,J'ai faim,Ik heb honger
+sentence_4,I am thirsty,J'ai soif,Ik heb dorst
+sentence_5,I am ready,Je suis prêt,Ik ben klaar
+sentence_6,I am not ready,Je ne suis pas prêt,Ik ben niet klaar
+sentence_7,I am busy,Je suis occupé,Ik ben bezig
+sentence_8,I feel good,Je me sens bien,Ik voel me goed
+sentence_9,I feel sick,Je me sens malade,Ik voel me ziek
+sentence_10,I am cold,J'ai froid,Ik heb het koud
+
+sentence_11,It is cold today,Il fait froid aujourd'hui,Het is koud vandaag
+sentence_12,It is hot today,Il fait chaud aujourd'hui,Het is warm vandaag
+sentence_13,It is sunny today,Il fait soleil aujourd'hui,Het is zonnig vandaag
+sentence_14,It is raining,Il pleut,Het regent
+sentence_15,It is snowing,Il neige,Het sneeuwt
+sentence_16,The weather is nice,Il fait beau,Het is mooi weer
+sentence_17,I love this weather,J'adore ce temps,Ik hou van dit weer
+sentence_18,Where are you?,Tu es où ?,Waar ben je?
+sentence_19,I am coming, j'arrive,Ik kom eraan
+sentence_20,I am almost there,Je suis presque là,Ik ben er bijna
+
+sentence_21,I live in the Netherlands,J'habite aux Pays-Bas,Ik woon in Nederland
+sentence_22,My house is small,Ma maison est petite,Mijn huis is klein
+sentence_23,The room is clean,La chambre est propre,De kamer is schoon
+sentence_24,The water is hot,L'eau est chaude,Het water is warm
+sentence_25,The internet does not work,Internet ne marche pas,Internet werkt niet
+sentence_26,I need help,Il me faut de l'aide,Ik heb hulp nodig
+sentence_27,Can you help me?,Tu peux m'aider ?,Kan je me helpen?
+sentence_28,Wait a moment,Attends un moment,Wacht even
+sentence_29,Let's go!,On y va !,Laten we gaan!
+sentence_30,I am leaving now,Je pars maintenant,Ik ga nu weg
+
+sentence_31,I don’t know,Je ne sais pas,Ik weet het niet
+sentence_32,I don’t understand,Je ne comprends pas,Ik begrijp het niet
+sentence_33,Can you repeat?,Tu peux répéter ?,Kan je het herhalen?
+sentence_34,Speak slowly please,Parle lentement s'il te plaît,Spreek langzaam alsjeblieft
+sentence_35,Do you speak English?,Tu parles anglais ?,Spreek je Engels?
+sentence_36,I speak a little French,Je parle un peu français,Ik spreek een beetje Frans
+sentence_37,I like this, J'aime ça,Ik vind dit leuk
+sentence_38,I don’t like this,Je n'aime pas ça,Ik vind dit niet leuk
+sentence_39,That is interesting,C'est intéressant,Dat is interessant
+sentence_40,That is funny,C'est drôle,Dat is grappig
+
+sentence_81,Where is the station?,Où est la gare ?,Waar is het station?
+sentence_82,Where is the bus stop?,Où est l'arrêt de bus ?,Waar is de bushalte?
+sentence_83,I need a ticket,Il me faut un billet,Ik heb een ticket nodig
+sentence_84,How much is the ticket?,C'est combien le billet ?,Hoeveel kost het ticket?
+sentence_85,Which line is it?,C'est quelle ligne ?,Welke lijn is het?
+sentence_86,Where is the center?,Où est le centre ?,Waar is het centrum?
+sentence_87,Is it far?,C'est loin ?,Is het ver?
+sentence_88,Is it near?,C'est près ?,Is het dichtbij?
+sentence_89,Go straight ahead,Allez tout droit,Ga rechtdoor
+sentence_90,Turn left,Tournez à gauche,Ga links
+
+sentence_91,Turn right,Tournez à droite,Ga rechts
+sentence_92,Stop here,Arrêtez ici,Stop hier
+sentence_93,Please take me there,Amenez-moi là-bas s'il vous plaît,Breng me daarheen
+sentence_94,I am lost,Je suis perdu,Ik ben verdwaald
+sentence_95,I need a taxi,Il me faut un taxi,Ik heb een taxi nodig
+sentence_96,The flight is delayed,Le vol est en retard,De vlucht is vertraagd
+sentence_97,What time does it leave?,Ça part à quelle heure ?,Hoe laat vertrekt het?
+sentence_98,I am checking in,Je m'enregistre,Ik check in
+sentence_99,Where is the gate?,Où est la porte ?,Waar is de gate?
+sentence_100,Where is my seat?,Où est mon siège ?,Waar is mijn stoel?
+
+sentence_101,I am traveling tomorrow,Je voyage demain,Ik reis morgen
+sentence_102,I arrive tonight,J'arrive ce soir,Ik kom vanavond aan
+sentence_103,I leave in the morning,Je pars le matin,Ik vertrek in de ochtend
+sentence_104,I am staying here,Je reste ici,Ik blijf hier
+sentence_105,Can you show me on the map?,Vous pouvez me montrer sur la carte ?,Kunt u het op de kaart tonen?
+sentence_106,At what time?,À quelle heure ?,Hoe laat?
+sentence_107,Where should I go?,Je dois aller où ?,Waar moet ik heen?
+sentence_108,Is there a bus?,Il y a un bus ?,Is er een bus?
+sentence_109,When is the next train?,C'est quand le prochain train ?,Wanneer is de volgende trein?
+sentence_110,I missed my train,J'ai raté mon train,Ik heb mijn trein gemist
+
+sentence_111,The hotel is full,L'hôtel est complet,Het hotel zit vol
+sentence_112,I have a reservation,J'ai une réservation,Ik heb een reservering
+sentence_113,For two nights,Pour deux nuits,Voor twee nachten
+sentence_114,For two people,Pour deux personnes,Voor twee personen
+sentence_115,Where is my room?,Où est ma chambre ?,Waar is mijn kamer?
+sentence_116,The key doesn’t work,La clé ne marche pas,De sleutel werkt niet
+sentence_117,I need towels,Il me faut des serviettes,Ik heb handdoeken nodig
+sentence_118,What time is breakfast?,Le petit-déjeuner est à quelle heure ?,Hoe laat is het ontbijt?
+sentence_119,Can I change rooms?,Je peux changer de chambre ?,Kan ik van kamer wisselen?
+sentence_120,I am checking out,Je fais le check-out,Ik check uit
+
+sentence_121,What is your name?,Tu t'appelles comment ?,Hoe heet je?
+sentence_122,My name is…,Je m'appelle…,Ik heet…
+sentence_123,How old are you?,Tu as quel âge ?,Hoe oud ben je?
+sentence_124,I am 20 years old,J'ai 20 ans,Ik ben 20 jaar
+sentence_125,Where do you live?,Tu habites où ?,Waar woon je?
+sentence_126,Where are you from?,Tu viens d'où ?,Waar kom je vandaan?
+sentence_127,I am from Nepal,Je viens du Népal,Ik kom uit Nepal
+sentence_128,I live with my family,Je vis avec ma famille,Ik woon met mijn familie
+sentence_129,I have two sisters,J'ai deux sœurs,Ik heb twee zussen
+sentence_130,I don’t have brothers,Je n'ai pas de frères,Ik heb geen broers
+
+sentence_131,I like your style,J'aime ton style,Ik vind je stijl leuk
+sentence_132,You are kind,Tu es gentil,Je bent aardig
+sentence_133,You are funny,Tu es drôle,Je bent grappig
+sentence_134,You are beautiful,Tu es beau / belle,Je bent mooi
+sentence_135,You are strong,Tu es fort,Je bent sterk
+sentence_136,You are tired,Tu es fatigué,Je bent moe
+sentence_137,I am happy today,Je suis heureux aujourd'hui,Ik ben vandaag blij
+sentence_138,I am sad today,Je suis triste aujourd'hui,Ik ben vandaag verdrietig
+sentence_139,I am stressed,Je suis stressé,Ik ben gestrest
+sentence_140,I am excited,Je suis excité,Ik ben enthousiast
+
+sentence_141,I like my friends,J'aime mes amis,Ik hou van mijn vrienden
+sentence_142,We are together,Nous sommes ensemble,Wij zijn samen
+sentence_143,I miss you,Tu me manques,Ik mis je
+sentence_144,See you tomorrow,À demain,Tot morgen
+sentence_145,See you soon,À bientôt,Tot snel
+sentence_146,Nice to meet you,Enchanté,Aangenaam
+sentence_147,Welcome!,Bienvenue !,Welkom!
+sentence_148,Come in!,Entrez !,Kom binnen!
+sentence_149,Make yourself at home,Fais comme chez toi,Voel je thuis
+sentence_150,Good luck!,Bonne chance !,Veel succes!
+
+sentence_161,I am working,Je travaille,Ik ben aan het werk
+sentence_162,I have a meeting,J'ai une réunion,Ik heb een vergadering
+sentence_163,I need to study,Je dois étudier,Ik moet studeren
+sentence_164,I am learning French,J'apprends le français,Ik leer Frans
+sentence_165,Can you help me with this?,Tu peux m'aider avec ça ?,Kan je me hiermee helpen?
+sentence_166,I don’t have time,Je n'ai pas le temps,Ik heb geen tijd
+sentence_167,I have time, J'ai le temps,Ik heb tijd
+sentence_168,I am late,Je suis en retard,Ik ben te laat
+sentence_169,I am early,Je suis en avance,Ik ben vroeg
+sentence_170,Everything is ready,Tout est prêt,Alles is klaar
+
+sentence_171,I need to clean,Je dois nettoyer,Ik moet schoonmaken
+sentence_172,I need to cook,Je dois cuisiner,Ik moet koken
+sentence_173,I need to wash clothes,Je dois laver les vêtements,Ik moet de was doen
+sentence_174,The room is dirty,La chambre est sale,De kamer is vies
+sentence_175,The house is clean,La maison est propre,Het huis is schoon
+sentence_176,I finished my work,J'ai fini mon travail,Ik heb mijn werk afgemaakt
+sentence_177,I am starting now,Je commence maintenant,Ik begin nu
+sentence_178,I need a break,J'ai besoin d'une pause,Ik heb een pauze nodig
+sentence_179,This is difficult,C'est difficile,Dit is moeilijk
+sentence_180,This is easy,C'est facile,Dit is makkelijk
+
+sentence_181,Can I try?,Je peux essayer ?,Mag ik proberen?
+sentence_182,I don’t want to do this,Je ne veux pas faire ça,Ik wil dit niet doen
+sentence_183,I need to think,Je dois réfléchir,Ik moet nadenken
+sentence_184,I forgot, J'ai oublié,Ik ben het vergeten
+sentence_185,I remember,Je me souviens,Ik herinner me
+sentence_186,I understand,Je comprends,Ik begrijp het
+sentence_187,I don’t understand,Je ne comprends pas,Ik begrijp het niet
+sentence_188,I will do it later,Je le ferai plus tard,Ik doe het later
+sentence_189,I can help you,Je peux t'aider,Ik kan je helpen
+sentence_190,I can’t help you,Je ne peux pas t'aider,Ik kan je niet helpen
+
+sentence_191,I hear something,J'entends quelque chose,Ik hoor iets
+sentence_192,I see something,Je vois quelque chose,Ik zie iets
+sentence_193,It works,Ça marche,Het werkt
+sentence_194,It doesn’t work,Ça ne marche pas,Het werkt niet
+sentence_195,I need this,Il me faut ça,Ik heb dit nodig
+sentence_196,I don’t need this,Je n'ai pas besoin de ça,Ik heb dit niet nodig
+sentence_197,Let me see,Laisse-moi voir,Laat me kijken
+sentence_198,Let’s try,Essayons,Laten we proberen
+sentence_199,I’m almost done,J'ai presque fini,Ik ben bijna klaar
+sentence_200,I finished,Fini,Ik ben klaar
