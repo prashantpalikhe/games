@@ -333,8 +333,7 @@
     </div>
 
     <script>
-      const SHEET_URL =
-        "https://docs.google.com/spreadsheets/d/e/2PACX-1vRjcd53W_88YmFTRYvjNWvR9VPfs00fOUMBKpOj14_peyipfGb7bl5maHlKpLvIEtkv8bDvrMt5Bud6/pub?output=csv";
+      const DATA_URL = "./a1.csv";
 
       const LANGUAGE_LOCALES = {
         en: "en-US",
@@ -418,11 +417,13 @@
               obj[header] = currentline[index] ? currentline[index].trim() : "";
             });
 
-            if (obj.id && obj.en) {
-              // Categorize by first part of ID (e.g. 'food_item_1' -> 'food')
-              obj.category = obj.id.split("_")[0];
-              result.push(obj);
+            if (!obj.id || obj.id.toLowerCase() === "id" || !obj.en) {
+              continue;
             }
+
+            // Categorize by first part of ID (e.g. 'food_item_1' -> 'food')
+            obj.category = obj.id.split("_")[0];
+            result.push(obj);
           }
           return result;
         }
@@ -451,7 +452,7 @@
         }
 
         async init() {
-          this.fullData = await DataFetcher.loadData(SHEET_URL);
+          this.fullData = await DataFetcher.loadData(DATA_URL);
           if (!this.fullData.length) return;
 
           // Setup Categories
