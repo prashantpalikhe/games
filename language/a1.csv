@@ -135,19 +135,73 @@ number_29,Twenty-nine,Vingt-neuf,Negenentwintig
 number_30,Thirty,Trente,Dertig
 number_31,Thirty-one,Trente et un,Eenendertig
 number_32,Thirty-two,Trente-deux,Tweeëndertig
+number_33,Thirty-three,Trente-trois,Drieëndertig
+number_34,Thirty-four,Trente-quatre,Vierendertig
+number_35,Thirty-five,Trente-cinq,Vijfendertig
+number_36,Thirty-six,Trente-six,Zesendertig
+number_37,Thirty-seven,Trente-sept,Zevenendertig
+number_38,Thirty-eight,Trente-huit,Achtendertig
+number_39,Thirty-nine,Trente-neuf,Negenendertig
 number_40,Forty,Quarante,Veertig
 number_41,Forty-one,Quarante et un,Eenenveertig
+number_42,Forty-two,Quarante-deux,Tweeënveertig
+number_43,Forty-three,Quarante-trois,Drieënveertig
+number_44,Forty-four,Quarante-quatre,Vierenveertig
+number_45,Forty-five,Quarante-cinq,Vijfenveertig
+number_46,Forty-six,Quarante-six,Zesenveertig
+number_47,Forty-seven,Quarante-sept,Zevenenveertig
+number_48,Forty-eight,Quarante-huit,Achtenveertig
+number_49,Forty-nine,Quarante-neuf,Negenenveertig
 number_50,Fifty,Cinquante,Vijftig
 number_51,Fifty-one,Cinquante et un,Eenenvijftig
+number_52,Fifty-two,Cinquante-deux,Tweeënvijftig
+number_53,Fifty-three,Cinquante-trois,Drieënvijftig
+number_54,Fifty-four,Cinquante-quatre,Vierenvijftig
+number_55,Fifty-five,Cinquante-cinq,Vijfenvijftig
+number_56,Fifty-six,Cinquante-six,Zesenvijftig
+number_57,Fifty-seven,Cinquante-sept,Zevenenvijftig
+number_58,Fifty-eight,Cinquante-huit,Achtenvijftig
+number_59,Fifty-nine,Cinquante-neuf,Negenenvijftig
 number_60,Sixty,Soixante,Zestig
 number_61,Sixty-one,Soixante et un,Eenenzestig
+number_62,Sixty-two,Soixante-deux,Tweeënzestig
+number_63,Sixty-three,Soixante-trois,Drieënzestig
+number_64,Sixty-four,Soixante-quatre,Vierenzestig
+number_65,Sixty-five,Soixante-cinq,Vijfenzestig
+number_66,Sixty-six,Soixante-six,Zesenzestig
+number_67,Sixty-seven,Soixante-sept,Zevenenzestig
+number_68,Sixty-eight,Soixante-huit,Achtenzestig
+number_69,Sixty-nine,Soixante-neuf,Negenenzestig
 number_70,Seventy,Soixante-dix,Zeventig
 number_71,Seventy-one,Soixante et onze,Eenenzeventig
 number_72,Seventy-two,Soixante-douze,Tweeënzeventig
+number_73,Seventy-three,Soixante-treize,Drieënzeventig
+number_74,Seventy-four,Soixante-quatorze,Vierenzeventig
+number_75,Seventy-five,Soixante-quinze,Vijfenzeventig
+number_76,Seventy-six,Soixante-seize,Zesenzeventig
+number_77,Seventy-seven,Soixante-dix-sept,Zevenenzeventig
+number_78,Seventy-eight,Soixante-dix-huit,Achtenzeventig
+number_79,Seventy-nine,Soixante-dix-neuf,Negenenzeventig
 number_80,Eighty,Quatre-vingts,Tachtig
 number_81,Eighty-one,Quatre-vingt-un,Eenentachtig
+number_82,Eighty-two,Quatre-vingt-deux,Tweeëntachtig
+number_83,Eighty-three,Quatre-vingt-trois,Drieëntachtig
+number_84,Eighty-four,Quatre-vingt-quatre,Vierentachtig
+number_85,Eighty-five,Quatre-vingt-cinq,Vijfentachtig
+number_86,Eighty-six,Quatre-vingt-six,Zesentachtig
+number_87,Eighty-seven,Quatre-vingt-sept,Zevenentachtig
+number_88,Eighty-eight,Quatre-vingt-huit,Achtentachtig
+number_89,Eighty-nine,Quatre-vingt-neuf,Negenentachtig
 number_90,Ninety,Quatre-vingt-dix,Negentig
 number_91,Ninety-one,Quatre-vingt-onze,Eenennegentig
+number_92,Ninety-two,Quatre-vingt-douze,Tweeënnegentig
+number_93,Ninety-three,Quatre-vingt-treize,Drieënnegentig
+number_94,Ninety-four,Quatre-vingt-quatorze,Vierennegentig
+number_95,Ninety-five,Quatre-vingt-quinze,Vijfennegentig
+number_96,Ninety-six,Quatre-vingt-seize,Zesennegentig
+number_97,Ninety-seven,Quatre-vingt-dix-sept,Zevenennegentig
+number_98,Ninety-eight,Quatre-vingt-dix-huit,Achtennegentig
+number_99,Ninety-nine,Quatre-vingt-dix-neuf,Negenennegentig
 number_100,One hundred,Cent,Honderd
 number_101,One hundred and one,Cent un,Honderdéén
 number_200,Two hundred,Deux cents,Tweehonderd
