@@ -494,21 +494,15 @@
                 pointer-events: none;
               }
 
-              /* Backdrop - fades with open state */
+              /* Backdrop - opacity controlled by scroll position */
               .backdrop {
                 position: fixed;
                 inset: 0;
                 background: var(--backdrop-color);
                 opacity: 0;
+                will-change: opacity;
                 pointer-events: none;
-                transition: opacity 0.35s ease;
                 z-index: -1;
-              }
-
-              /* When sheet is open, show backdrop */
-              :host(.open) .backdrop {
-                opacity: 1;
-                pointer-events: auto;
               }
 
               /* Main scroller - the scroll snap container */
@@ -580,7 +574,7 @@
               }
 
               /* iOS Safari rubber banding fix */
-              @supports (-webkit-touch-callout: none) {
+              
                 .content {
                   overflow-x: scroll;
                   overscroll-behavior-x: none;
@@ -600,7 +594,7 @@
                   content: "";
                   flex-shrink: 0;
                 }
-              }
+              
 
               /* Slot styling */
               ::slotted(*) {
@@ -632,17 +626,20 @@
           // Close on backdrop click
           this._backdrop.addEventListener("click", () => this.close());
 
-          // Track scroll position to update state
-          this._scroller.addEventListener("scrollend", () => {
-            this._updateOpenState();
-          });
-
-          // Fallback for browsers without scrollend
+          // Update backdrop opacity on scroll
           this._scroller.addEventListener("scroll", () => {
+            this._updateBackdropOpacity();
+
+            // Debounced state update
             clearTimeout(this._scrollTimeout);
             this._scrollTimeout = setTimeout(() => {
               this._updateOpenState();
             }, 150);
+          });
+
+          // Final state check on scroll end
+          this._scroller.addEventListener("scrollend", () => {
+            this._updateOpenState();
           });
 
           // Handle escape key
@@ -653,6 +650,15 @@
           });
         }
 
+        _updateBackdropOpacity() {
+          const scrollTop = this._scroller.scrollTop;
+          const maxScroll = this._snapTop.offsetHeight;
+          const progress = Math.min(scrollTop / maxScroll, 1);
+
+          this._backdrop.style.opacity = progress;
+          this._backdrop.style.pointerEvents = progress > 0.1 ? "auto" : "none";
+        }
+
         _updateOpenState() {
           const scrollTop = this._scroller.scrollTop;
           const threshold = this._snapTop.offsetHeight * 0.5;
@@ -660,11 +666,8 @@
           this._isOpen = scrollTop > threshold;
 
           if (wasOpen !== this._isOpen) {
-            // Update pointer events and class based on state
-            if (this._isOpen) {
-              this.classList.add("open");
-            } else {
-              this.classList.remove("open");
+            // Update pointer events based on state
+            if (!this._isOpen) {
               this._scroller.style.pointerEvents = "none";
             }
 
@@ -680,9 +683,8 @@
         open() {
           if (!this._scroller) return;
 
-          // Enable scrolling interaction and show backdrop
+          // Enable scrolling interaction
           this._scroller.style.pointerEvents = "auto";
-          this.classList.add("open");
 
           const targetScroll = this._snapTop.offsetHeight;
           this._scroller.scrollTo({
@@ -700,7 +702,6 @@
             behavior: "smooth",
           });
           this._isOpen = false;
-          this.classList.remove("open");
 
           // Disable scrolling interaction after animation
           setTimeout(() => {
