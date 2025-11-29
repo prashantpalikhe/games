@@ -3,16 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Match-Up: Rounds Edition</title>
+    <title>Match-Up: Mastery</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800&display=swap" rel="stylesheet" />
     <style>
       :root {
         --primary: #58cc02;
-        --primary-border: #46a302;
+        --primary-dark: #46a302;
         --secondary: #1cb0f6;
-        --secondary-border: #1899d6;
+        --secondary-dark: #1899d6;
         --wrong: #ff4b4b;
-        --wrong-border: #ea2b2b;
         --bg: #131f24;
         --card-bg: #ffffff;
         --text: #4b4b4b;
@@ -32,74 +31,24 @@
         overflow: hidden;
       }
 
-      .loading-overlay {
-        position: fixed;
-        inset: 0;
-        background: var(--bg);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        z-index: 999;
-        gap: 12px;
-      }
-
-      .spinner {
-        width: 64px;
-        height: 64px;
-        border: 6px solid rgba(255, 255, 255, 0.1);
-        border-top-color: var(--secondary);
-        border-radius: 50%;
-        animation: spin 0.9s linear infinite;
-      }
-
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
+      /* --- Header & Controls --- */
       header {
         width: 100%;
-        max-width: 500px;
+        max-width: 600px;
         display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
         padding: 10px 5px;
       }
 
-      .meta-panel {
+      .controls-row {
         display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 6px;
+        justify-content: center;
+        gap: 8px;
+        flex-wrap: wrap;
       }
 
-      .level-cluster {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-
-      .streak-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: #24181f;
-        color: #ffae42;
-        padding: 4px 12px;
-        border-radius: 18px;
-        border: 2px solid #3b262f;
-        font-weight: 800;
-        font-size: 0.95rem;
-      }
-
-      .streak-pill .flame {
-        font-size: 1rem;
-        line-height: 1;
-      }
-
-      .controls select {
+      select {
         padding: 8px 12px;
         border-radius: 12px;
         border: 2px solid #37464f;
@@ -111,102 +60,73 @@
         outline: none;
       }
 
-      .score-pill {
-        display: none;
-        background: #2b3b45;
-        color: var(--primary);
-        padding: 6px 16px;
-        border-radius: 20px;
-        font-weight: 800;
-        font-size: 1.1rem;
-        border: 2px solid #37464f;
-      }
-
-      .level-pill {
-        background: #19262d;
-        color: #ffe082;
-        padding: 4px 12px;
-        border-radius: 18px;
-        font-weight: 800;
-        font-size: 0.95rem;
-        border: 2px solid #2a3b45;
-      }
-
-      .icon-btn {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        border: 2px solid #2a3b45;
-        background: #17232a;
+      select:hover {
+        border-color: #52656d;
         color: white;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
+      }
+
+      .reset-btn {
+        padding: 8px 12px;
+        border-radius: 12px;
+        border: 2px solid #5c3a3a;
+        background: #131f24;
+        color: #c47070;
+        font-family: "Nunito", sans-serif;
+        font-weight: 700;
         cursor: pointer;
-        transition: transform 0.15s ease, border-color 0.15s ease;
+        outline: none;
+        transition: all 0.2s;
       }
 
-      .icon-btn svg {
-        width: 14px;
-        height: 14px;
-        fill: #7ed4ff;
+      .reset-btn:hover {
+        border-color: var(--wrong);
+        color: var(--wrong);
+        background: rgba(255, 75, 75, 0.1);
       }
 
-      .icon-btn:hover {
-        transform: translateY(-1px);
-        border-color: var(--secondary);
+      #category-select {
+        border-color: var(--secondary-dark);
+        color: var(--secondary);
+        min-width: 160px;
       }
 
-      #level-gauge {
-        width: 100%;
-        max-width: 500px;
-        background: #152128;
-        border: 1px solid #22343f;
-        padding: 12px 16px;
-        margin-bottom: 16px;
-      }
-
-      .level-meta {
+      /* --- Progress Section --- */
+      .stats-bar {
         display: flex;
         justify-content: space-between;
-        font-size: 0.85rem;
-        color: #d8d8d8;
-        margin-bottom: 8px;
-      }
-
-      .level-progress {
+        align-items: flex-end;
         width: 100%;
-        height: 10px;
-        background: #0d171d;
-        border-radius: 999px;
-        overflow: hidden;
+        max-width: 500px;
+        margin: 0 auto;
+        font-size: 0.9rem;
+        color: #b0bec5;
+        margin-bottom: 4px;
       }
 
-      #level-progress-fill {
-        height: 100%;
-        width: 0%;
-        background: linear-gradient(90deg, var(--secondary), #66d8ff);
-        transition: width 0.3s ease;
+      .stats-left strong {
+        color: var(--primary);
       }
 
       #progress-container {
-        display: none;
         width: 100%;
         max-width: 500px;
-        height: 12px;
+        height: 14px;
         background: #37464f;
-        border-radius: 6px;
-        margin-bottom: 20px;
+        border-radius: 99px;
+        margin: 0 auto 15px auto;
         overflow: hidden;
+        border: 2px solid #263238;
       }
 
       #progress-fill {
         height: 100%;
         width: 0%;
-        background-color: var(--primary);
-        transition: width 0.3s ease;
+        background: linear-gradient(90deg, var(--primary), #82e827);
+        transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        box-shadow: 0 0 10px rgba(88, 204, 2, 0.4);
       }
 
+      /* --- Game Board --- */
       #game-board {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -214,7 +134,8 @@
         width: 100%;
         max-width: 500px;
         height: 100%;
-        align-content: center;
+        align-content: start;
+        padding-bottom: 20px;
       }
 
       .column {
@@ -230,10 +151,7 @@
 
       .card {
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        inset: 0;
         background-color: var(--card-bg);
         border: 2px solid var(--border);
         border-bottom: 5px solid var(--border);
@@ -249,46 +167,43 @@
         user-select: none;
         touch-action: manipulation;
         transition: transform 0.1s, border-bottom 0.1s;
-        padding: 0 12px;
-        opacity: 1; /* Ensure opacity is reset */
+        padding: 0 34px 0 12px; /* Space for speaker icon */
+        z-index: 10;
       }
 
       .card-label {
-        display: inline-block;
         width: 100%;
-        padding: 0 18px;
-        font-size: 1rem;
-        text-align: center;
+        line-height: 1.2;
       }
+
+      /* Speaker Icon */
       .card .speak-btn {
         position: absolute;
-        top: 6px;
-        right: 6px;
-        width: 26px;
-        height: 26px;
+        top: 50%;
+        right: 8px;
+        transform: translateY(-50%);
+        width: 28px;
+        height: 28px;
         border-radius: 50%;
-        border: 2px solid transparent;
-        background: rgba(20, 32, 38, 0.9);
+        border: none;
+        background: transparent;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        transition: background 0.2s ease, border-color 0.2s ease;
+        opacity: 0.3;
+        transition: opacity 0.2s;
       }
 
       .card .speak-btn svg {
-        width: 12px;
-        height: 12px;
-        fill: #9bd3ff;
+        width: 16px;
+        height: 16px;
+        fill: #333;
       }
 
       .card .speak-btn:hover {
-        background: rgba(28, 176, 246, 0.2);
-        border-color: var(--secondary);
-      }
-
-      .card .speak-btn:focus-visible {
-        outline: 2px solid var(--secondary);
+        opacity: 1;
+        background: rgba(0, 0, 0, 0.05);
       }
 
       .card:active {
@@ -299,25 +214,25 @@
       .card.selected {
         background-color: #ddf4ff;
         border-color: var(--secondary);
-        border-bottom-color: var(--secondary-border);
+        border-bottom-color: var(--secondary-dark);
         color: var(--secondary);
       }
 
       .card.correct {
         background-color: #d7ffb8;
         border-color: var(--primary);
-        border-bottom-color: var(--primary-border);
-        color: var(--primary-border);
-        transform: scale(0.9);
+        border-bottom-color: var(--primary-dark);
+        color: var(--primary-dark);
+        transform: scale(0.95);
         opacity: 0;
-        transition: all 0.3s ease-out;
         pointer-events: none;
+        transition: all 0.4s ease;
       }
 
       .card.wrong {
         background-color: #ffdfe0;
         border-color: var(--wrong);
-        border-bottom-color: var(--wrong-border);
+        border-bottom-color: #d32f2f;
         color: var(--wrong);
         animation: shake 0.4s;
       }
@@ -350,47 +265,40 @@
         }
       }
 
-      #loading {
-        position: absolute;
-        top: 50%;
-        font-size: 1.5rem;
-        color: #afafaf;
-      }
-
-      /* --- Footer for Data Management --- */
-      footer {
-        width: 100%;
-        max-width: 500px;
-        margin-top: 10px;
+      /* Loading */
+      .loading-overlay {
+        position: fixed;
+        inset: 0;
+        background: var(--bg);
         display: flex;
+        flex-direction: column;
+        align-items: center;
         justify-content: center;
-        gap: 8px;
-        position: relative;
-        top: -16px;
+        z-index: 999;
+        gap: 12px;
+        color: #888;
       }
-
-      .reset-btn {
-        background: linear-gradient(135deg, #2b3b45, #1a252c);
-        color: #f4f4f4;
-        border: 2px solid #3b4c56;
-        padding: 8px 18px;
-        border-radius: 999px;
-        font-size: 0.85rem;
-        font-weight: 700;
-        cursor: pointer;
-        letter-spacing: 0.5px;
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid rgba(255, 255, 255, 0.1);
+        border-top-color: var(--secondary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
       }
-
-      .reset-btn:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
       }
     </style>
   </head>
   <body>
     <header>
-      <div class="controls">
+      <div class="controls-row">
+        <select id="category-select" onchange="game.changeCategory(this.value)">
+          <option value="all">All Categories</option>
+        </select>
         <select id="lang-left" onchange="game.restart()">
           <option value="en">English</option>
           <option value="fr" selected>French</option>
@@ -401,36 +309,13 @@
           <option value="fr">French</option>
           <option value="nl">Dutch</option>
         </select>
-      </div>
-      <div class="meta-panel">
-        <div class="score-pill">
-          <span id="score">0</span>
-        </div>
-        <div class="streak-pill">
-          <span class="flame" aria-hidden="true">🔥</span>
-          <span id="streak-value">0</span>d streak
-        </div>
-        <div class="level-cluster">
-          <div class="level-pill">Lvl <span id="level-value">1</span></div>
-          <button class="icon-btn" onclick="shareLevel()" aria-label="Share level">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                d="M18 2a3 3 0 0 0-3 3c0 .2 0 .4.1.6l-6.2 3.1a3 3 0 0 0-2.7-1.7 3 3 0 1 0 2.9 3.8l6.2 3.1A3 3 0 0 0 18 22a3 3 0 1 0-2.9-3.7l-6.2-3.2a3 3 0 0 0 .1-1l6.1-3.1A3 3 0 1 0 18 2Z"
-              />
-            </svg>
-          </button>
-        </div>
+        <button class="reset-btn" onclick="game.resetProgress()">Reset</button>
       </div>
     </header>
 
-    <div id="level-gauge">
-      <div class="level-meta">
-        <span id="level-label">Level 1</span>
-        <span id="xp-label">0 / 100 XP</span>
-      </div>
-      <div class="level-progress">
-        <div id="level-progress-fill"></div>
-      </div>
+    <div class="stats-bar">
+      <div class="stats-left">Mastery: <strong id="mastery-count">0</strong> / <span id="total-count">0</span></div>
+      <div class="stats-right" id="percent-label">0%</div>
     </div>
 
     <div id="progress-container">
@@ -438,220 +323,83 @@
     </div>
 
     <div id="loading-overlay" class="loading-overlay">
-      <div class="spinner" role="status" aria-live="polite"></div>
-      <div aria-hidden="true">Warming up your vocab...</div>
+      <div class="spinner"></div>
+      <div>Loading Library...</div>
     </div>
 
     <div id="game-board" style="display: none">
-      <div class="column" id="col-left">
-        <div class="card-slot"></div>
-        <div class="card-slot"></div>
-        <div class="card-slot"></div>
-        <div class="card-slot"></div>
-        <div class="card-slot"></div>
-      </div>
-      <div class="column" id="col-right">
-        <div class="card-slot"></div>
-        <div class="card-slot"></div>
-        <div class="card-slot"></div>
-        <div class="card-slot"></div>
-        <div class="card-slot"></div>
-      </div>
+      <div class="column" id="col-left"></div>
+      <div class="column" id="col-right"></div>
     </div>
-
-    <footer>
-      <button class="reset-btn" onclick="progressManager.resetData()">Reset Learning Progress</button>
-    </footer>
 
     <script>
       const SHEET_URL =
         "https://docs.google.com/spreadsheets/d/e/2PACX-1vRjcd53W_88YmFTRYvjNWvR9VPfs00fOUMBKpOj14_peyipfGb7bl5maHlKpLvIEtkv8bDvrMt5Bud6/pub?output=csv";
-      const XP_PER_MATCH = 15;
+
       const LANGUAGE_LOCALES = {
         en: "en-US",
         fr: "fr-FR",
         nl: "nl-NL",
       };
-      const CAN_USE_SPEECH =
-        typeof window !== "undefined" && "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
-      let speechSupportWarned = false;
-      let speechVoices = [];
 
-      if (CAN_USE_SPEECH) {
-        const populateVoices = () => {
-          speechVoices = window.speechSynthesis.getVoices() || [];
-        };
-        populateVoices();
-        window.speechSynthesis.addEventListener("voiceschanged", populateVoices);
-      }
-
-      // --- PROGRESS MANAGER ---
-      class ProgressManager {
-        constructor() {
-          this.storageKey = "polyglot_mastery";
-          this.metaKey = "__meta";
-          this.data = this.load();
-          this.masteryThreshold = 4;
-          this.ensureMeta();
-        }
-
+      // --- PERSISTENCE ---
+      const Storage = {
+        KEY: "matchup_mastered_ids",
+        // Get Set of mastered IDs
         load() {
-          const stored = localStorage.getItem(this.storageKey);
           try {
-            return stored ? JSON.parse(stored) : {};
-          } catch (err) {
-            console.warn("Progress data corrupted, resetting.", err);
-            localStorage.removeItem(this.storageKey);
-            return {};
+            const raw = localStorage.getItem(this.KEY);
+            return new Set(raw ? JSON.parse(raw) : []);
+          } catch (e) {
+            return new Set();
           }
-        }
+        },
+        // Save ID
+        add(id) {
+          const s = this.load();
+          s.add(id);
+          localStorage.setItem(this.KEY, JSON.stringify([...s]));
+        },
+        // Clear all progress
+        clear() {
+          localStorage.removeItem(this.KEY);
+        },
+      };
 
-        save() {
-          localStorage.setItem(this.storageKey, JSON.stringify(this.data));
-        }
-
-        ensureMeta() {
-          let changed = false;
-          if (!this.data[this.metaKey]) {
-            this.data[this.metaKey] = {};
-            changed = true;
-          }
-          const meta = this.data[this.metaKey];
-          if (typeof meta.xp !== "number") {
-            meta.xp = 0;
-            changed = true;
-          }
-          if (typeof meta.streak !== "number") {
-            meta.streak = 0;
-            changed = true;
-          }
-          if (!meta.lastPlayed) {
-            meta.lastPlayed = null;
-            changed = true;
-          }
-          if (changed) this.save();
-        }
-
-        getMeta() {
-          this.ensureMeta();
-          return this.data[this.metaKey];
-        }
-
-        getTodayKey() {
-          return new Date().toISOString().split("T")[0];
-        }
-
-        getStrength(id) {
-          if (id === this.metaKey) return 0;
-          return this.data[id] || 0;
-        }
-
-        update(id, isCorrect) {
-          if (id === this.metaKey) return 0;
-          if (!this.data[id]) this.data[id] = 0;
-
-          if (isCorrect) {
-            this.data[id]++;
-          } else {
-            this.data[id] = 0;
-          }
-          this.save();
-          return this.data[id];
-        }
-
-        isMastered(id) {
-          return (this.data[id] || 0) >= this.masteryThreshold;
-        }
-
-        resetData() {
-          if (confirm("Reset all learning progress?")) {
-            localStorage.removeItem(this.storageKey);
-            location.reload();
-          }
-        }
-
-        addXP(amount = 0) {
-          const meta = this.getMeta();
-          meta.xp = Math.max(0, (meta.xp || 0) + amount);
-          this.save();
-          return meta.xp;
-        }
-
-        getXP() {
-          return this.getMeta().xp || 0;
-        }
-
-        xpToNext(level) {
-          return Math.round(100 * Math.pow(1.2, level - 1));
-        }
-
-        getLevelData() {
-          let xp = this.getXP();
-          let level = 1;
-          let xpForNext = this.xpToNext(level);
-
-          while (xp >= xpForNext) {
-            xp -= xpForNext;
-            level++;
-            xpForNext = this.xpToNext(level);
-          }
-
-          const progress = xpForNext === 0 ? 1 : xp / xpForNext;
-
-          return {
-            level,
-            xpIntoLevel: xp,
-            xpForNext,
-            progress,
-            totalXP: this.getXP(),
-          };
-        }
-
-        recordDailyPlay() {
-          const meta = this.getMeta();
-          const today = this.getTodayKey();
-
-          if (meta.lastPlayed === today) {
-            return meta.streak || 0;
-          }
-
-          let newStreak = 1;
-
-          if (meta.lastPlayed) {
-            const prev = new Date(meta.lastPlayed);
-            const now = new Date(today);
-            const diffDays = Math.floor((now - prev) / (1000 * 60 * 60 * 24));
-
-            if (diffDays === 1) {
-              newStreak = (meta.streak || 0) + 1;
-            } else {
-              newStreak = 1;
-            }
-          }
-
-          meta.streak = newStreak;
-          meta.lastPlayed = today;
-          this.save();
-          return newStreak;
-        }
-
-        getStreak() {
-          return this.getMeta().streak || 0;
-        }
+      // --- TTS ---
+      const CAN_USE_SPEECH = typeof window !== "undefined" && "speechSynthesis" in window;
+      let speechVoices = [];
+      if (CAN_USE_SPEECH) {
+        window.speechSynthesis.onvoiceschanged = () => {
+          speechVoices = window.speechSynthesis.getVoices();
+        };
       }
 
-      const progressManager = new ProgressManager();
+      function speakText(text, langCode) {
+        if (!text || !CAN_USE_SPEECH) return;
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        const locale = LANGUAGE_LOCALES[langCode] || langCode;
+        utterance.lang = locale;
+        utterance.rate = 0.9; // Slightly slower for learning
 
-      // --- DATA FETCHER ---
+        // Voice selection heuristics
+        const voice = speechVoices.find((v) => v.lang.startsWith(locale.split("-")[0]));
+        if (voice) utterance.voice = voice;
+
+        window.speechSynthesis.speak(utterance);
+      }
+
+      // --- FETCH ---
       class DataFetcher {
-        static async loadGoogleSheet(url) {
+        static async loadData(url) {
           try {
             const response = await fetch(url);
             const text = await response.text();
             return this.csvToJson(text);
           } catch (error) {
-            alert("Error loading data! Check your internet or CSV link.");
             console.error(error);
+            alert("Connection error. Using offline mode if available.");
             return [];
           }
         }
@@ -660,315 +408,262 @@
           const lines = csv.trim().split("\n");
           const headers = lines[0].split(",").map((h) => h.trim());
           const result = [];
+
           for (let i = 1; i < lines.length; i++) {
-            const obj = {};
-            const currentline = lines[i].split(",").map((c) => c.trim());
+            const currentline = lines[i].split(",");
             if (currentline.length < headers.length) continue;
-            headers.forEach((header, index) => (obj[header] = currentline[index]));
-            if (obj.id && obj.en) result.push(obj);
+
+            const obj = {};
+            headers.forEach((header, index) => {
+              obj[header] = currentline[index] ? currentline[index].trim() : "";
+            });
+
+            if (obj.id && obj.en) {
+              // Categorize by first part of ID (e.g. 'food_item_1' -> 'food')
+              obj.category = obj.id.split("_")[0];
+              result.push(obj);
+            }
           }
           return result;
         }
       }
 
-      // --- GAME ENGINE ---
+      // --- GAME CLASS ---
       class MatchGame {
         constructor() {
           this.fullData = [];
-          this.deck = [];
-          this.score = 0;
+          this.activeData = [];
+          this.categories = new Set();
+          this.masteredSet = Storage.load(); // Load mastery from memory
+
           this.selectedLeft = null;
           this.selectedRight = null;
+          this.maxPairs = 5;
+          this.pairsOnBoard = 0;
 
-          // GAMEPLAY SETTINGS
-          this.maxPairsPerRound = 5;
-          this.currentPairsOnBoard = 0; // Track how many left on screen
-
-          this.domLeft = document.querySelectorAll("#col-left .card-slot");
-          this.domRight = document.querySelectorAll("#col-right .card-slot");
-          this.scoreEl = document.getElementById("score");
-          this.progressFill = document.getElementById("progress-fill");
-          this.levelValueEl = document.getElementById("level-value");
-          this.levelLabelEl = document.getElementById("level-label");
-          this.levelXpEl = document.getElementById("xp-label");
-          this.levelProgressFill = document.getElementById("level-progress-fill");
-          this.streakValueEl = document.getElementById("streak-value");
+          // UI Refs
+          this.elMastery = document.getElementById("mastery-count");
+          this.elTotal = document.getElementById("total-count");
+          this.elPercent = document.getElementById("percent-label");
+          this.elProgressFill = document.getElementById("progress-fill");
 
           this.init();
         }
 
         async init() {
-          this.fullData = await DataFetcher.loadGoogleSheet(SHEET_URL);
-          if (this.fullData.length === 0) return;
+          this.fullData = await DataFetcher.loadData(SHEET_URL);
+          if (!this.fullData.length) return;
 
+          // Setup Categories
+          this.fullData.forEach((item) => this.categories.add(item.category));
+          this.populateCategorySelect();
+
+          // Prepare Board
+          this.createSlots();
           document.getElementById("loading-overlay").style.display = "none";
           document.getElementById("game-board").style.display = "grid";
 
-          this.restart();
+          // Start
+          this.activeData = [...this.fullData];
+          this.updateGlobalProgress();
+          this.startRound();
+        }
+
+        createSlots() {
+          const leftCol = document.getElementById("col-left");
+          const rightCol = document.getElementById("col-right");
+          for (let i = 0; i < this.maxPairs; i++) {
+            const l = document.createElement("div");
+            l.className = "card-slot";
+            leftCol.appendChild(l);
+            const r = document.createElement("div");
+            r.className = "card-slot";
+            rightCol.appendChild(r);
+          }
+          this.elLeft = document.querySelectorAll("#col-left .card-slot");
+          this.elRight = document.querySelectorAll("#col-right .card-slot");
+        }
+
+        populateCategorySelect() {
+          const select = document.getElementById("category-select");
+          const sorted = Array.from(this.categories).sort();
+          sorted.forEach((cat) => {
+            const opt = document.createElement("option");
+            opt.value = cat;
+            opt.innerText = cat
+              .split("_")
+              .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+              .join(" ");
+            select.appendChild(opt);
+          });
+        }
+
+        changeCategory(cat) {
+          if (cat === "all") {
+            this.activeData = [...this.fullData];
+          } else {
+            this.activeData = this.fullData.filter((item) => item.category === cat);
+          }
+          this.updateGlobalProgress();
+          this.startRound();
         }
 
         restart() {
-          this.score = 0;
-          this.updateUI();
-          this.buildDeck(); // Prepare the deck logic
-          this.startRound(); // Start the first round
+          this.startRound();
         }
 
-        // --- NEW ROUND LOGIC ---
+        resetProgress() {
+          if (!confirm("Are you sure you want to reset all progress? This cannot be undone.")) {
+            return;
+          }
+          Storage.clear();
+          this.masteredSet = new Set();
+          this.updateGlobalProgress();
+          this.startRound();
+        }
+
+        updateGlobalProgress() {
+          // Calculate stats based on Active Data (Category)
+          const totalItems = this.activeData.length;
+          // Count how many of the active items are in the mastered set
+          const masteredCount = this.activeData.filter((item) => this.masteredSet.has(item.id)).length;
+
+          const percent = totalItems === 0 ? 0 : Math.round((masteredCount / totalItems) * 100);
+
+          this.elMastery.innerText = masteredCount;
+          this.elTotal.innerText = totalItems;
+          this.elPercent.innerText = percent + "%";
+          this.elProgressFill.style.width = percent + "%";
+        }
+
         startRound() {
-          // 1. Clear DOM
-          this.domLeft.forEach((slot) => (slot.innerHTML = ""));
-          this.domRight.forEach((slot) => (slot.innerHTML = ""));
+          // Clear slots
+          this.elLeft.forEach((s) => (s.innerHTML = ""));
+          this.elRight.forEach((s) => (s.innerHTML = ""));
+          this.selectedLeft = null;
+          this.selectedRight = null;
 
-          // 2. Ensure Deck has enough words
-          if (this.deck.length < this.maxPairsPerRound) {
-            // If deck running low, rebuild it (recycle words)
-            this.buildDeck();
-          }
+          if (this.activeData.length === 0) return;
 
-          // 3. Pull 5 words
-          const roundCards = [];
-          for (let i = 0; i < this.maxPairsPerRound; i++) {
-            if (this.deck.length > 0) roundCards.push(this.deck.pop());
-          }
+          // Deck Building Strategy:
+          // 1. Prioritize unmastered words (Learning)
+          // 2. Fill rest with mastered words (Review)
+          const unmastered = this.activeData.filter((w) => !this.masteredSet.has(w.id));
+          const mastered = this.activeData.filter((w) => this.masteredSet.has(w.id));
 
-          // 4. Update State
-          this.currentPairsOnBoard = roundCards.length;
-
-          // 5. Render
-          const lefts = [...roundCards];
-          const rights = [...roundCards].sort(() => 0.5 - Math.random());
-
-          for (let i = 0; i < lefts.length; i++) {
-            this.renderCard(this.domLeft[i], lefts[i], "left");
-            this.renderCard(this.domRight[i], rights[i], "right");
-          }
-        }
-
-        buildDeck() {
-          const learning = [];
-          const mastered = [];
-
-          this.fullData.forEach((word) => {
-            if (progressManager.isMastered(word.id)) {
-              mastered.push(word);
-            } else {
-              learning.push(word);
-            }
-          });
-
-          learning.sort(() => 0.5 - Math.random());
+          // Shuffle both
+          unmastered.sort(() => 0.5 - Math.random());
           mastered.sort(() => 0.5 - Math.random());
 
-          if (learning.length > 10) {
-            this.deck = learning;
+          let deck = [];
+
+          // Try to take 3 new words and 2 review words (or whatever is available)
+          if (unmastered.length > 0) {
+            deck.push(...unmastered.slice(0, 5));
+            // If we didn't fill 5, add from mastered
+            if (deck.length < 5) {
+              deck.push(...mastered.slice(0, 5 - deck.length));
+            }
           } else {
-            this.deck = [...learning, ...mastered.slice(0, 10)];
-            this.deck.sort(() => 0.5 - Math.random());
+            // Mastery 100% -> Just review random cards
+            deck = mastered.slice(0, 5);
           }
+
+          // Randomize the final hand
+          deck.sort(() => 0.5 - Math.random());
+
+          this.pairsOnBoard = deck.length;
+
+          const lefts = [...deck];
+          const rights = [...deck].sort(() => 0.5 - Math.random()); // Shuffle right side
+
+          lefts.forEach((item, i) => this.renderCard(this.elLeft[i], item, "left"));
+          rights.forEach((item, i) => this.renderCard(this.elRight[i], item, "right"));
         }
 
-        renderCard(slot, wordObj, side) {
-          if (!wordObj) return;
-
+        renderCard(slot, word, side) {
+          if (!slot || !word) return;
           const lang =
             side === "left" ? document.getElementById("lang-left").value : document.getElementById("lang-right").value;
-          const displayText = wordObj[lang] || wordObj.en || "";
+          const text = word[lang] || word.en;
 
           const card = document.createElement("div");
           card.className = "card entry";
-          card.dataset.id = wordObj.id;
+          card.dataset.id = word.id;
           card.dataset.side = side;
 
-          const label = document.createElement("span");
-          label.className = "card-label";
-          label.innerText = displayText;
-          card.appendChild(label);
+          card.innerHTML = `<span class="card-label">${text}</span>`;
 
-          const speakBtn = document.createElement("button");
-          speakBtn.type = "button";
-          speakBtn.className = "speak-btn";
-          speakBtn.innerHTML =
-            '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5.5 8.5 9H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h3.5L12 18.5V5.5Zm4.7-.2a1 1 0 0 0-.9 1.8 5 5 0 0 1 0 9 1 1 0 0 0 .9 1.8 7 7 0 0 0 0-12.6Zm-2 2.6a1 1 0 0 0-.9 1.8 2 2 0 0 1 0 3.6 1 1 0 0 0 .9 1.8 4 4 0 0 0 0-7.2Z"/></svg>';
+          const btn = document.createElement("button");
+          btn.className = "speak-btn";
+          btn.innerHTML =
+            '<svg viewBox="0 0 24 24"><path d="M12 4L7 9H3v6h4l5 5V4zm4.5 9c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 4.45v.2c0 .38.25.71.6.85C17.18 6.53 19 9.06 19 12s-1.82 5.47-4.4 6.5c-.36.14-.6.47-.6.85v.2c0 .63.63 1.07 1.21.85C18.6 19.11 21 15.84 21 12s-2.4-7.11-5.79-8.4c-.58-.23-1.21.22-1.21.85z"/></svg>';
+          btn.onclick = (e) => {
+            e.stopPropagation();
+            speakText(text, lang);
+          };
+          card.appendChild(btn);
 
-          speakBtn.addEventListener("click", (event) => {
-            event.stopPropagation();
-            speakText(displayText, lang);
-          });
-          card.appendChild(speakBtn);
-
-          card.addEventListener("click", () => this.handleCardClick(card));
+          card.onclick = () => this.handleCardClick(card);
           slot.appendChild(card);
-
-          setTimeout(() => card.classList.remove("entry"), 300);
         }
 
         handleCardClick(card) {
-          if (card.classList.contains("correct")) return;
+          if (card.classList.contains("correct") || card.classList.contains("wrong")) return;
 
-          if (card.dataset.side === "left") {
-            if (this.selectedLeft) this.selectedLeft.classList.remove("selected");
-            this.selectedLeft = card;
-          } else {
-            if (this.selectedRight) this.selectedRight.classList.remove("selected");
-            this.selectedRight = card;
-          }
+          const isLeft = card.dataset.side === "left";
+          const current = isLeft ? this.selectedLeft : this.selectedRight;
+
+          if (current) current.classList.remove("selected");
           card.classList.add("selected");
 
-          if (this.selectedLeft && this.selectedRight) {
-            this.checkMatch();
-          }
+          if (isLeft) this.selectedLeft = card;
+          else this.selectedRight = card;
+
+          if (this.selectedLeft && this.selectedRight) this.checkMatch();
         }
 
         checkMatch() {
-          const id1 = this.selectedLeft.dataset.id;
-          const id2 = this.selectedRight.dataset.id;
+          const l = this.selectedLeft;
+          const r = this.selectedRight;
+          const id = l.dataset.id;
 
-          if (id1 === id2) {
-            this.handleCorrect(id1);
+          if (l.dataset.id === r.dataset.id) {
+            // Correct
+            l.classList.add("correct");
+            r.classList.add("correct");
+            l.classList.remove("selected");
+            r.classList.remove("selected");
+
+            // --- PROGRESS UPDATE ---
+            if (!this.masteredSet.has(id)) {
+              Storage.add(id); // Save to local storage
+              this.masteredSet.add(id); // Update memory
+              this.updateGlobalProgress(); // Update Bar
+            }
+
+            this.pairsOnBoard--;
+            this.selectedLeft = null;
+            this.selectedRight = null;
+
+            if (this.pairsOnBoard === 0) {
+              setTimeout(() => this.startRound(), 600);
+            }
           } else {
-            this.handleWrong(id1, id2);
-          }
-        }
-
-        handleCorrect(id) {
-          progressManager.update(id, true);
-
-          const l = this.selectedLeft;
-          const r = this.selectedRight;
-
-          l.classList.add("correct");
-          r.classList.add("correct");
-          l.classList.remove("selected");
-          r.classList.remove("selected");
-
-          this.selectedLeft = null;
-          this.selectedRight = null;
-          this.score += 1;
-          this.currentPairsOnBoard -= 1; // Decrement counter
-
-          progressManager.addXP(XP_PER_MATCH);
-          progressManager.recordDailyPlay();
-          this.updateUI();
-
-          // CHECK IF BOARD IS EMPTY
-          if (this.currentPairsOnBoard <= 0) {
+            // Wrong
+            l.classList.add("wrong");
+            r.classList.add("wrong");
             setTimeout(() => {
-              this.startRound(); // Load next round
-            }, 600); // Slight delay for satisfaction
+              l.classList.remove("wrong", "selected");
+              r.classList.remove("wrong", "selected");
+              this.selectedLeft = null;
+              this.selectedRight = null;
+            }, 500);
           }
-        }
-
-        handleWrong(id1, id2) {
-          progressManager.update(id1, false);
-          progressManager.update(id2, false);
-
-          const l = this.selectedLeft;
-          const r = this.selectedRight;
-
-          l.classList.add("wrong");
-          r.classList.add("wrong");
-
-          setTimeout(() => {
-            l.classList.remove("wrong", "selected");
-            r.classList.remove("wrong", "selected");
-          }, 500);
-
-          this.selectedLeft = null;
-          this.selectedRight = null;
-        }
-
-        updateUI() {
-          this.scoreEl.innerText = this.score;
-          // Progress bar now shows % of Current Round cleared
-          const totalPairs = this.maxPairsPerRound;
-          const completed = totalPairs - this.currentPairsOnBoard;
-          const pct = Math.min((completed / totalPairs) * 100, 100);
-          this.progressFill.style.width = pct + "%";
-
-          const { level, xpIntoLevel, xpForNext, progress } = progressManager.getLevelData();
-          if (this.levelValueEl) this.levelValueEl.innerText = level;
-          if (this.levelLabelEl) this.levelLabelEl.innerText = `Level ${level}`;
-          if (this.levelXpEl) this.levelXpEl.innerText = `${xpIntoLevel} / ${xpForNext} XP`;
-          if (this.levelProgressFill) this.levelProgressFill.style.width = Math.min(progress * 100, 100) + "%";
-          const streak = progressManager.getStreak();
-          if (this.streakValueEl) this.streakValueEl.innerText = streak;
         }
       }
 
       const game = new MatchGame();
-
-      function getVoiceFor(langCode) {
-        if (!CAN_USE_SPEECH) return null;
-        if (!speechVoices.length) {
-          speechVoices = window.speechSynthesis.getVoices() || [];
-        }
-        if (!speechVoices.length) return null;
-
-        const targetLocale = (LANGUAGE_LOCALES[langCode] || langCode || "en-US").toLowerCase();
-        const base = targetLocale.split("-")[0];
-
-        return (
-          speechVoices.find((voice) => voice.lang && voice.lang.toLowerCase() === targetLocale) ||
-          speechVoices.find((voice) => voice.lang && voice.lang.toLowerCase().startsWith(base))
-        );
-      }
-
-      function speakText(text, langCode) {
-        if (!text) return;
-        if (!CAN_USE_SPEECH) {
-          if (!speechSupportWarned) {
-            alert("Text-to-speech is not supported in this browser.");
-            speechSupportWarned = true;
-          }
-          return;
-        }
-
-        const locale = LANGUAGE_LOCALES[langCode] || langCode || "en-US";
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = locale;
-        utterance.rate = 0.95;
-
-        const preferredVoice = getVoiceFor(langCode);
-        if (preferredVoice) {
-          utterance.voice = preferredVoice;
-        }
-
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(utterance);
-      }
-
-      window.speakText = speakText;
-
-      function shareLevel() {
-        const { level, xpIntoLevel, xpForNext, totalXP } = progressManager.getLevelData();
-        const streak = progressManager.getStreak();
-        const streakText = streak > 0 ? `🔥 ${streak}-day streak!` : "No streak yet—want to race me?";
-        const shareText = `I'm Level ${level} in Match-Up (${xpIntoLevel}/${xpForNext} XP to next). Total XP: ${totalXP}. ${streakText}`;
-
-        if (navigator.share) {
-          navigator
-            .share({
-              title: "Match-Up Level",
-              text: shareText,
-              url: window.location.href,
-            })
-            .catch(() => {
-              // Ignore if user cancels share sheet
-            });
-          return;
-        }
-
-        if (navigator.clipboard) {
-          navigator.clipboard
-            .writeText(shareText)
-            .then(() => alert("Level copied! Send it to your partner."))
-            .catch(() => alert(shareText));
-          return;
-        }
-
-        alert(shareText);
-      }
     </script>
   </body>
 </html>
