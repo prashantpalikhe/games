@@ -27,26 +27,26 @@ pronoun_subj_5,We,Nous,Wij,noo,vay,Nous sommes contents,Wij zijn blij,We are hap
 pronoun_subj_6,You (plural / formal),Vous,Jullie / U,voo,yul-lee / oo,Vous êtes les bienvenus,Jullie zijn welkom,You are welcome,Vous = formal or plural
 pronoun_subj_7,They (masc),Ils,Zij,eel,zay,Ils sont là,Zij zijn daar,They are there,Use for groups with men
 pronoun_subj_8,They (fem),Elles,Zij,el,zay,Elles sont parties,Zij zijn vertrokken,They have left,Use for all-female groups
-pronoun_obj_1,Me,Me,Mij
-pronoun_obj_2,You (informal object),Te,Jou
-pronoun_obj_3,Him,Lui,Hem
-pronoun_obj_4,Her,Elle,Haar
-pronoun_obj_5,Us,Nous,Ons
-pronoun_obj_6,You (plural object),Vous,Jullie
-pronoun_obj_7,Them,Eux,Hen
-pronoun_poss_1,My,Mon / Ma,Mijn
-pronoun_poss_2,Your (informal),Ton / Ta,Jouw
-pronoun_poss_3,His,Son,Zijn
-pronoun_poss_4,Her,Sa,Haar
-pronoun_poss_5,Our,Notre,Onze
-pronoun_poss_6,Your (plural / formal),Votre,Jullie / Uw
-pronoun_poss_7,Their,Leur,Hun
-pronoun_demo_1,This (masc),Ce,Ces
-pronoun_demo_2,This (fem),Cette,Deze
-pronoun_demo_3,That (masc),Ce…-là,Die
-pronoun_demo_4,That (fem),Cette…-là,Die
-pronoun_demo_5,These,Ces,Deze
-pronoun_demo_6,Those,Ceux-là,Die daar
+pronoun_obj_1,Me,Me,Mij,muh,may,Il me voit,Hij ziet mij,He sees me,Me becomes m' before vowels
+pronoun_obj_2,You (informal object),Te,Jou,tuh,yow,Je te parle,Ik spreek met jou,I speak to you,Te becomes t' before vowels
+pronoun_obj_3,Him,Lui,Hem,lwee,hehm,Je lui donne le livre,Ik geef hem het boek,I give him the book,Lui = to him (indirect)
+pronoun_obj_4,Her,Elle,Haar,el,hahr,Je la vois / Je lui parle,Ik zie haar,I see her / I speak to her,La = her (direct) Lui = to her
+pronoun_obj_5,Us,Nous,Ons,noo,ons,Il nous aide,Hij helpt ons,He helps us,
+pronoun_obj_6,You (plural object),Vous,Jullie,voo,yul-lee,Je vous remercie,Ik bedank jullie,I thank you (all),
+pronoun_obj_7,Them,Eux,Hen,uh,hen,Je les vois / Je leur parle,Ik zie hen,I see them / I speak to them,Les = them (direct) Leur = to them
+pronoun_poss_1,My,Mon / Ma,Mijn,mohn / mah,mayn,Mon livre / Ma maison,Mijn boek / Mijn huis,My book / My house,Mon (masc) Ma (fem) Mes (plural)
+pronoun_poss_2,Your (informal),Ton / Ta,Jouw,tohn / tah,yow,Ton chat / Ta voiture,Jouw kat / Jouw auto,Your cat / Your car,Ton (masc) Ta (fem) Tes (plural)
+pronoun_poss_3,His,Son,Zijn,sohn,zayn,Son père / Sa mère,Zijn vader / Zijn moeder,His father / His mother,Son/Sa based on noun gender not owner
+pronoun_poss_4,Her,Sa,Haar,sah,hahr,Sa maison / Son livre,Haar huis / Haar boek,Her house / Her book,Son/Sa based on noun gender not owner
+pronoun_poss_5,Our,Notre,Onze,nohtr,on-zuh,Notre maison / Nos enfants,Ons huis / Onze kinderen,Our house / Our children,Notre (sing) Nos (plural)
+pronoun_poss_6,Your (plural / formal),Votre,Jullie / Uw,vohtr,yul-lee / oo,Votre voiture / Vos livres,Uw auto / Jullie boeken,Your car / Your books,Votre (sing) Vos (plural)
+pronoun_poss_7,Their,Leur,Hun,luhr,hun,Leur maison / Leurs enfants,Hun huis / Hun kinderen,Their house / Their children,Leur (sing) Leurs (plural)
+pronoun_demo_1,This (masc),Ce,Dit,suh,dit,Ce livre est bon,Dit boek is goed,This book is good,Ce becomes Cet before vowel
+pronoun_demo_2,This (fem),Cette,Deze,set,day-zuh,Cette maison est grande,Deze huis is groot,This house is big,
+pronoun_demo_3,That (masc),Ce…-là,Die,suh...lah,dee,Ce livre-là est vieux,Die boek is oud,That book is old,Add -là for emphasis/distance
+pronoun_demo_4,That (fem),Cette…-là,Die,set...lah,dee,Cette maison-là est belle,Die huis is mooi,That house is beautiful,Add -là for emphasis/distance
+pronoun_demo_5,These,Ces,Deze,say,day-zuh,Ces livres sont neufs,Deze boeken zijn nieuw,These books are new,Ces for all plural (m/f)
+pronoun_demo_6,Those,Ceux-là,Die daar,suh-lah,dee dahr,Ceux-là sont meilleurs,Die daar zijn beter,Those are better,Ceux (masc) Celles (fem)
 question_1,Who?,Qui ?,Wie?,kee,vee,Qui est-ce ?,Wie is dat?,Who is that?,
 question_2,What?,Quoi ? / Que ?,Wat?,kwah / kuh,vaht,Qu'est-ce que c'est ?,Wat is dat?,What is that?,Que before verb / Quoi alone
 question_3,Where?,Où ?,Waar?,oo,vahr,Où est la gare ?,Waar is het station?,Where is the station?,
