@@ -1107,9 +1107,13 @@
           const headers = lines[0].split(",").map((h) => h.trim());
           const result = [];
 
+          // Required columns (must have at least these)
+          const requiredCount = 4; // id, en, fr, nl
+
           for (let i = 1; i < lines.length; i++) {
             const currentline = lines[i].split(",");
-            if (currentline.length < headers.length) continue;
+            // Only require the first 4 columns (id, en, fr, nl), rest are optional
+            if (currentline.length < requiredCount) continue;
 
             const obj = {};
             headers.forEach((header, index) => {
@@ -1152,6 +1156,7 @@
 
         async init() {
           this.fullData = await DataFetcher.loadData(DATA_URL);
+
           if (!this.fullData.length) return;
 
           // Initialize Settings

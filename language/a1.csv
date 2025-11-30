@@ -398,16 +398,36 @@ kitchen_27,Measuring cup,Le verre doseur,De maatbeker,luh vehr doh-zuhr,duh maht
 kitchen_28,Baking tray,La plaque de cuisson,De bakplaat,lah plahk duh kwee-sohn,duh bahk-plaht,Mets les biscuits sur la plaque,Leg de koekjes op de bakplaat,Put the cookies on the baking tray,
 kitchen_29,Dish towel,Le torchon,De theedoek,luh tor-shohn,duh tay-dook,Sèche avec le torchon,Droog af met de theedoek,Dry with the dish towel,
 kitchen_30,Apron,Le tablier,De schort,luh tahb-lyay,duh skhort,Mets ton tablier,Doe je schort aan,Put on your apron,
-bathroom_1,Shower,La douche,De douche
-bathroom_2,Bath,Le bain,Het bad
-bathroom_3,Soap,Le savon,De zeep
-bathroom_4,Shampoo,Le shampooing,De shampoo
-bathroom_5,Towel,La serviette,De handdoek
-bathroom_6,Toothbrush,La brosse à dents,De tandenborstel
-bathroom_7,Toothpaste,Le dentifrice,De tandpasta
-bathroom_8,Toilet paper,Le papier toilette,Het wc-papier
-bathroom_9,Mirror,Le miroir,De spiegel
-bathroom_10,Hairdryer,Le sèche-cheveux,De haardroger
+bathroom_1,Shower,La douche,De douche,lah doosh,duh doosh,Je prends une douche,Ik neem een douche,I take a shower,
+bathroom_2,Bath,Le bain,Het bad,luh bahn,uht baht,Je prends un bain chaud,Ik neem een warm bad,I take a hot bath,Prendre un bain = to take a bath
+bathroom_3,Soap,Le savon,De zeep,luh sah-vohn,duh zayp,Lave-toi les mains avec du savon,Was je handen met zeep,Wash your hands with soap,
+bathroom_4,Shampoo,Le shampooing,De shampoo,luh shahm-pwahn,duh shahm-poo,J'ai besoin de shampooing,Ik heb shampoo nodig,I need shampoo,
+bathroom_5,Towel,La serviette,De handdoek,lah sehr-vyet,duh hahnd-dook,Passe-moi la serviette,Geef me de handdoek,Pass me the towel,
+bathroom_6,Toothbrush,La brosse à dents,De tandenborstel,lah brohs ah dahn,duh tahn-dun-bor-stul,Où est ma brosse à dents ?,Waar is mijn tandenborstel?,Where is my toothbrush?,
+bathroom_7,Toothpaste,Le dentifrice,De tandpasta,luh dahn-tee-frees,duh tahnd-pahs-tah,Il n'y a plus de dentifrice,Er is geen tandpasta meer,There's no more toothpaste,
+bathroom_8,Toilet paper,Le papier toilette,Het wc-papier,luh pah-pyay twah-let,uht way-say-pah-peer,Il faut acheter du papier toilette,We moeten wc-papier kopen,We need to buy toilet paper,
+bathroom_9,Mirror,Le miroir,De spiegel,luh mee-rwahr,duh spee-khul,Je me regarde dans le miroir,Ik kijk in de spiegel,I look in the mirror,
+bathroom_10,Hairdryer,Le sèche-cheveux,De haardroger,luh sesh-shuh-vuh,duh hahr-droh-khur,Je sèche mes cheveux,Ik föhn mijn haar,I dry my hair,
+bathroom_11,Sink,Le lavabo,De wastafel,luh lah-vah-boh,duh vahs-tah-ful,Le lavabo est bouché,De wastafel is verstopt,The sink is clogged,
+bathroom_12,Toilet,Les toilettes,Het toilet,lay twah-let,uht twah-let,Où sont les toilettes ?,Waar is het toilet?,Where is the toilet?,Always plural in French
+bathroom_13,Bathtub,La baignoire,De badkuip,lah beh-nywahr,duh baht-koyp,La baignoire est pleine,De badkuip is vol,The bathtub is full,
+bathroom_14,Faucet,Le robinet,De kraan,luh roh-bee-neh,duh krahn,Le robinet fuit,De kraan lekt,The faucet leaks,
+bathroom_15,Conditioner,L'après-shampooing,De conditioner,lah-preh shahm-pwahn,duh kon-di-shuh-nur,J'utilise de l'après-shampooing,Ik gebruik conditioner,I use conditioner,
+bathroom_16,Body wash,Le gel douche,De douchegel,luh zhel doosh,duh doosh-khel,Le gel douche sent bon,De douchegel ruikt lekker,The body wash smells good,
+bathroom_17,Razor,Le rasoir,Het scheermesje,luh rah-zwahr,uht skheer-mesh-yuh,Je me rase avec un rasoir,Ik scheer me met een scheermesje,I shave with a razor,
+bathroom_18,Shaving cream,La mousse à raser,De scheerschuim,lah moos ah rah-zay,duh skheer-skoym,J'applique la mousse à raser,Ik doe scheerschuim op,I apply shaving cream,
+bathroom_19,Deodorant,Le déodorant,De deodorant,luh day-oh-doh-rahn,duh day-oh-doh-rahnt,Je mets du déodorant,Ik doe deodorant op,I put on deodorant,
+bathroom_20,Comb,Le peigne,De kam,luh pehn-yuh,duh kahm,Je me peigne les cheveux,Ik kam mijn haar,I comb my hair,
+bathroom_21,Brush,La brosse,De borstel,lah brohs,duh bor-stul,Je me brosse les cheveux,Ik borstel mijn haar,I brush my hair,
+bathroom_22,Cotton swabs,Les cotons-tiges,De wattenstaafjes,lay koh-tohn teezh,duh vah-tun-stahf-yuhs,J'utilise des cotons-tiges,Ik gebruik wattenstaafjes,I use cotton swabs,
+bathroom_23,Nail clippers,Le coupe-ongles,De nagelknipper,luh koop-ohngl,duh nah-khul-knip-pur,Je coupe mes ongles,Ik knip mijn nagels,I cut my nails,
+bathroom_24,Bath mat,Le tapis de bain,De badmat,luh tah-pee duh bahn,duh baht-maht,Le tapis de bain est mouillé,De badmat is nat,The bath mat is wet,
+bathroom_25,Shower curtain,Le rideau de douche,Het douchegordijn,luh ree-doh duh doosh,uht doosh-khor-dayn,Ferme le rideau de douche,Sluit het douchegordijn,Close the shower curtain,
+bathroom_26,Toilet brush,La brosse WC,De wc-borstel,lah brohs way-say,duh way-say-bor-stul,Nettoie avec la brosse WC,Maak schoon met de wc-borstel,Clean with the toilet brush,
+bathroom_27,Scale,La balance,De weegschaal,lah bah-lahns,duh waykh-skhahl,Je me pèse sur la balance,Ik weeg me op de weegschaal,I weigh myself on the scale,
+bathroom_28,Laundry basket,Le panier à linge,De wasmand,luh pah-nyay ah lahnzh,duh vahs-mahnd,Mets les vêtements dans le panier,Doe de kleren in de wasmand,Put the clothes in the laundry basket,
+bathroom_29,Tissues,Les mouchoirs,De tissues,lay moo-shwahr,duh tis-yoos,Passe-moi un mouchoir,Geef me een tissue,Pass me a tissue,
+bathroom_30,First aid kit,La trousse de secours,De EHBO-doos,lah troos duh suh-koor,duh ay-hah-boh-dohs,Où est la trousse de secours ?,Waar is de EHBO-doos?,Where is the first aid kit?,
 daily_routine_1,To wake up,Se réveiller,Opstaan
 daily_routine_2,To get up,Se lever,Opstaan
 daily_routine_3,To take a shower,Prendre une douche,Douchen
