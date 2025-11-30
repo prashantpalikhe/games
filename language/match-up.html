@@ -584,7 +584,8 @@
             💡 Tip: You can always tap the speaker icon on any card to hear it read aloud.
           </p>
           <p style="color: #666; font-size: 0.85rem; line-height: 1.5; margin: 0">
-            📚 <strong style="color: var(--secondary)">Long-press</strong> any card to see pronunciation, examples, and
+            📚 <strong style="color: var(--secondary)">Long-press</strong> or
+            <strong style="color: var(--secondary)">double-tap</strong> any card to see pronunciation, examples, and
             grammar tips!
           </p>
         </div>
@@ -959,46 +960,86 @@
         },
       };
 
-      // --- LONG PRESS HANDLER ---
-      const LongPress = {
-        DURATION: 500,
-        timer: null,
-        startX: 0,
-        startY: 0,
+      // --- LONG PRESS & DOUBLE TAP HANDLER ---
+      const GestureHandler = {
+        // Long press settings
+        LONG_PRESS_DURATION: 500,
         MOVE_THRESHOLD: 10,
 
+        // Double tap settings
+        DOUBLE_TAP_DELAY: 300,
+
         attach(element, callback) {
-          element.addEventListener("pointerdown", (e) => this.start(e, callback));
-          element.addEventListener("pointerup", () => this.cancel());
-          element.addEventListener("pointerleave", () => this.cancel());
-          element.addEventListener("pointermove", (e) => this.move(e));
+          let longPressTimer = null;
+          let startX = 0;
+          let startY = 0;
+          let lastTapTime = 0;
+          let tapCount = 0;
+          let tapTimer = null;
+
+          // Long press detection
+          element.addEventListener("pointerdown", (e) => {
+            startX = e.clientX;
+            startY = e.clientY;
+            longPressTimer = setTimeout(() => {
+              callback(e);
+              element.dataset.longPressed = "true";
+            }, this.LONG_PRESS_DURATION);
+          });
+
+          element.addEventListener("pointerup", () => {
+            if (longPressTimer) {
+              clearTimeout(longPressTimer);
+              longPressTimer = null;
+            }
+          });
+
+          element.addEventListener("pointerleave", () => {
+            if (longPressTimer) {
+              clearTimeout(longPressTimer);
+              longPressTimer = null;
+            }
+          });
+
+          element.addEventListener("pointermove", (e) => {
+            if (!longPressTimer) return;
+            const dx = Math.abs(e.clientX - startX);
+            const dy = Math.abs(e.clientY - startY);
+            if (dx > this.MOVE_THRESHOLD || dy > this.MOVE_THRESHOLD) {
+              clearTimeout(longPressTimer);
+              longPressTimer = null;
+            }
+          });
+
+          // Double tap detection (for iOS)
+          element.addEventListener("click", (e) => {
+            const now = Date.now();
+
+            if (now - lastTapTime < this.DOUBLE_TAP_DELAY) {
+              // Double tap detected!
+              tapCount++;
+              if (tapCount === 2) {
+                e.preventDefault();
+                e.stopPropagation();
+                callback(e);
+                element.dataset.longPressed = "true";
+                tapCount = 0;
+                if (tapTimer) clearTimeout(tapTimer);
+              }
+            } else {
+              tapCount = 1;
+            }
+
+            lastTapTime = now;
+
+            // Reset tap count after delay
+            if (tapTimer) clearTimeout(tapTimer);
+            tapTimer = setTimeout(() => {
+              tapCount = 0;
+            }, this.DOUBLE_TAP_DELAY);
+          });
+
           element.addEventListener("contextmenu", (e) => e.preventDefault());
-        },
-
-        start(e, callback) {
-          this.startX = e.clientX;
-          this.startY = e.clientY;
-          this.timer = setTimeout(() => {
-            callback(e);
-            // Prevent the regular click from firing
-            e.target.dataset.longPressed = "true";
-          }, this.DURATION);
-        },
-
-        move(e) {
-          if (!this.timer) return;
-          const dx = Math.abs(e.clientX - this.startX);
-          const dy = Math.abs(e.clientY - this.startY);
-          if (dx > this.MOVE_THRESHOLD || dy > this.MOVE_THRESHOLD) {
-            this.cancel();
-          }
-        },
-
-        cancel() {
-          if (this.timer) {
-            clearTimeout(this.timer);
-            this.timer = null;
-          }
         },
       };
 
@@ -1318,8 +1359,8 @@
             card.classList.add("has-help");
           }
 
-          // Long press for help
-          LongPress.attach(card, (e) => {
+          // Long press or double tap for help
+          GestureHandler.attach(card, (e) => {
             e.stopPropagation();
             card.classList.remove("pressing");
             HelpSheet.show(word, lang);
