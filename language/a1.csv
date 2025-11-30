@@ -1,32 +1,32 @@
-id,en,fr,nl
-basics_1,Yes,Oui,Ja
-basics_2,No,Non,Nee
-basics_3,Please (informal),S'il te plaît,Alsjeblieft
-basics_4,Please (formal),S'il vous plaît,Alstublieft
-basics_5,Thank you,Merci,Dank je
-basics_6,Thank you very much,Merc beaucoup,Hartelijk dank
-basics_7,You’re welcome,De rien,Graag gedaan
-basics_8,Hello (general),Bonjour,Hallo
-basics_9,Hi (informal),Salut,Hoi
-basics_10,Goodbye,Au revoir,Tot ziens
-basics_11,See you soon,À bientôt,Tot snel
-basics_12,Good morning,Buongiorno,Goedemorgen
-basics_13,Good afternoon,Bon après-midi,Goedemiddag
-basics_14,Good evening,Bonsoir,Goedenavond
-basics_15,Good night,Bonne nuit,Welterusten
-basics_16,Excuse me (attention),Excusez-moi,Excuseer
-basics_17,Excuse me (passing),Pardon,Pardon
-basics_18,Sorry,Désolé,Sorry
-basics_19,Okay,D'accord,Oké
-basics_20,No problem,Pas de problème,Geen probleem
-pronoun_subj_1,I,Je,Ik
-pronoun_subj_2,You (informal),Tu,Jij
-pronoun_subj_3,He,Il,Hij
-pronoun_subj_4,She,Elle,Zij
-pronoun_subj_5,We,Nous,Wij
-pronoun_subj_6,You (plural / formal),Vous,Jullie / U
-pronoun_subj_7,They (masc),Ils,Zij
-pronoun_subj_8,They (fem),Elles,Zij
+id,en,fr,nl,phonetic_fr,phonetic_nl,example_fr,example_nl,example_en,grammar
+basics_1,Yes,Oui,Ja,wee,yah,Oui je comprends,Ja ik begrijp het,Yes I understand,
+basics_2,No,Non,Nee,noh,nay,Non merci,Nee dank je,No thank you,
+basics_3,Please (informal),S'il te plaît,Alsjeblieft,seel tuh pleh,als-yuh-bleeft,Aide-moi s'il te plaît,Help me alsjeblieft,Help me please,Use with friends/family (tu form)
+basics_4,Please (formal),S'il vous plaît,Alstublieft,seel voo pleh,als-too-bleeft,Un café s'il vous plaît,Een koffie alstublieft,A coffee please,Use in formal situations (vous form)
+basics_5,Thank you,Merci,Dank je,mehr-see,dahnk yuh,Merci beaucoup !,Dank je wel !,Thank you very much!,
+basics_6,Thank you very much,Merc beaucoup,Hartelijk dank,mehr-see boh-koo,har-tuh-luk dahnk,Merci beaucoup pour votre aide,Hartelijk dank voor uw hulp,Thank you very much for your help,
+basics_7,You're welcome,De rien,Graag gedaan,duh ree-ehn,khrahkh khuh-dahn,De rien c'est normal,Graag gedaan hoor,You're welcome it's nothing,
+basics_8,Hello (general),Bonjour,Hallo,bohn-zhoor,hah-loh,Bonjour comment ça va ?,Hallo hoe gaat het?,Hello how are you?,Bonjour is used until evening
+basics_9,Hi (informal),Salut,Hoi,sah-loo,hoy,Salut ça va ?,Hoi alles goed?,Hi how's it going?,Very casual greeting
+basics_10,Goodbye,Au revoir,Tot ziens,oh ruh-vwahr,tot zeens,Au revoir à demain,Tot ziens tot morgen,Goodbye see you tomorrow,
+basics_11,See you soon,À bientôt,Tot snel,ah byehn-toh,tot snel,À bientôt j'espère,Tot snel hopelijk,See you soon hopefully,
+basics_12,Good morning,Buongiorno,Goedemorgen,bohn-zhoor,khoo-duh-mor-khun,Bonjour bien dormi ?,Goedemorgen goed geslapen?,Good morning did you sleep well?,In French Bonjour covers morning
+basics_13,Good afternoon,Bon après-midi,Goedemiddag,bohn ah-preh mee-dee,khoo-duh-mi-dahkh,Bon après-midi !,Goedemiddag !,Good afternoon!,
+basics_14,Good evening,Bonsoir,Goedenavond,bohn-swahr,khoo-dun-ah-vont,Bonsoir tout le monde,Goedenavond allemaal,Good evening everyone,Use from around 6pm
+basics_15,Good night,Bonne nuit,Welterusten,bon nwee,vel-tuh-rus-tun,Bonne nuit fais de beaux rêves,Welterusten slaap lekker,Good night sweet dreams,Said when going to bed
+basics_16,Excuse me (attention),Excusez-moi,Excuseer,ex-koo-zay mwah,ex-koo-zeer,Excusez-moi vous avez l'heure ?,Excuseer heeft u de tijd?,Excuse me do you have the time?,To get someone's attention
+basics_17,Excuse me (passing),Pardon,Pardon,par-dohn,par-don,Pardon je peux passer ?,Pardon mag ik erdoor?,Excuse me may I pass?,When moving through a crowd
+basics_18,Sorry,Désolé,Sorry,day-zoh-lay,so-ree,Je suis désolé pour le retard,Sorry voor de vertraging,Sorry for the delay,
+basics_19,Okay,D'accord,Oké,dah-kor,oh-kay,D'accord pas de problème,Oké geen probleem,Okay no problem,
+basics_20,No problem,Pas de problème,Geen probleem,pah duh proh-blem,khayn proh-blaym,Pas de problème je comprends,Geen probleem ik begrijp het,No problem I understand,
+pronoun_subj_1,I,Je,Ik,zhuh,ik,Je suis étudiant,Ik ben student,I am a student,Je becomes J' before vowels
+pronoun_subj_2,You (informal),Tu,Jij,too,yay,Tu es mon ami,Jij bent mijn vriend,You are my friend,Use with friends/family
+pronoun_subj_3,He,Il,Hij,eel,hay,Il est gentil,Hij is aardig,He is nice,
+pronoun_subj_4,She,Elle,Zij,el,zay,Elle est belle,Zij is mooi,She is beautiful,
+pronoun_subj_5,We,Nous,Wij,noo,vay,Nous sommes contents,Wij zijn blij,We are happy,
+pronoun_subj_6,You (plural / formal),Vous,Jullie / U,voo,yul-lee / oo,Vous êtes les bienvenus,Jullie zijn welkom,You are welcome,Vous = formal or plural
+pronoun_subj_7,They (masc),Ils,Zij,eel,zay,Ils sont là,Zij zijn daar,They are there,Use for groups with men
+pronoun_subj_8,They (fem),Elles,Zij,el,zay,Elles sont parties,Zij zijn vertrokken,They have left,Use for all-female groups
 pronoun_obj_1,Me,Me,Mij
 pronoun_obj_2,You (informal object),Te,Jou
 pronoun_obj_3,Him,Lui,Hem
@@ -47,46 +47,46 @@ pronoun_demo_3,That (masc),Ce…-là,Die
 pronoun_demo_4,That (fem),Cette…-là,Die
 pronoun_demo_5,These,Ces,Deze
 pronoun_demo_6,Those,Ceux-là,Die daar
-question_1,Who?,Qui ?,Wie?
-question_2,What?,Quoi ? / Que ?,Wat?
-question_3,Where?,Où ?,Waar?
-question_4,When?,Quand ?,Wanneer?
-question_5,Why?,Pourquoi ?,Waarom?
-question_6,How?,Comment ?,Hoe?
-question_7,How much?,Combien ?,Hoeveel?
-question_8,How many?,Combien ?,Hoeveel?
-question_9,Which?,Quel / Quelle ?,Welke?
-question_10,What time is it?,Il est quelle heure ?,Hoe laat is het?
-verb_core_1,To be,Être,Zijn
-verb_core_2,To have,Avoir,Hebben
-verb_core_3,To go,Aller,Gaan
-verb_core_4,To do / make,Faire,Doen / maken
-verb_core_5,To say,Dire,Zeggen
-verb_core_6,To want,Vouloir,Willen
-verb_core_7,To can / be able to,Pouvoir,Kunnen
-verb_core_8,To must / have to,Devoir,Moeten
-verb_core_9,To come,Venir,Komen
-verb_core_10,To take,Prendre,Nemen
-verb_core_11,To put,Mettre,Zetten / leggen
-verb_core_12,To see,Voir,Zien
-verb_core_13,To know (a fact),Savoir,Weten
-verb_core_14,To know (someone / place),Connaître,Kennen
-verb_core_15,To think,Penser,Denken
-verb_core_16,To like,Aimer bien,Leuk vinden
-verb_core_17,To love,Aimer,Houden van
-verb_core_18,To give,Donner,Geven
-verb_core_19,To find,Trouver,Vinden
-verb_core_20,To ask,Demander,Vragen
-connectors_1,And,Et,En
-connectors_2,Or,Ou,Of
-connectors_3,But,Mais,Maar
-connectors_4,Because,Parce que,Omdat
-connectors_5,So,Alors,Dus
-connectors_6,Also,Aussi,Ook
-connectors_7,Very,Très,Erg / heel
-connectors_8,Too (too much),Trop,Te (veel)
-connectors_9,More,Plus,Meer
-connectors_10,Less,Moins,Minder
+question_1,Who?,Qui ?,Wie?,kee,vee,Qui est-ce ?,Wie is dat?,Who is that?,
+question_2,What?,Quoi ? / Que ?,Wat?,kwah / kuh,vaht,Qu'est-ce que c'est ?,Wat is dat?,What is that?,Que before verb / Quoi alone
+question_3,Where?,Où ?,Waar?,oo,vahr,Où est la gare ?,Waar is het station?,Where is the station?,
+question_4,When?,Quand ?,Wanneer?,kahn,vah-neer,Quand est-ce qu'on part ?,Wanneer vertrekken we?,When do we leave?,
+question_5,Why?,Pourquoi ?,Waarom?,poor-kwah,vahr-om,Pourquoi tu es triste ?,Waarom ben je verdrietig?,Why are you sad?,
+question_6,How?,Comment ?,Hoe?,koh-mahn,hoo,Comment ça va ?,Hoe gaat het?,How are you?,
+question_7,How much?,Combien ?,Hoeveel?,kohm-byehn,hoo-vayl,Combien ça coûte ?,Hoeveel kost het?,How much does it cost?,For price/amount
+question_8,How many?,Combien ?,Hoeveel?,kohm-byehn,hoo-vayl,Combien de personnes ?,Hoeveel mensen?,How many people?,For countable things
+question_9,Which?,Quel / Quelle ?,Welke?,kel / kel,vel-kuh,Quelle heure est-il ?,Welke tijd is het?,What time is it?,Quel(m)/Quelle(f)
+question_10,What time is it?,Il est quelle heure ?,Hoe laat is het?,eel eh kel uhr,hoo laht is uht,Il est quelle heure maintenant ?,Hoe laat is het nu?,What time is it now?,
+verb_core_1,To be,Être,Zijn,ehtr,zayn,Je suis content,Ik ben blij,I am happy,Être is irregular: suis/es/est/sommes/êtes/sont
+verb_core_2,To have,Avoir,Hebben,ah-vwahr,heh-bun,J'ai faim,Ik heb honger,I am hungry,Avoir used for age/hunger/thirst
+verb_core_3,To go,Aller,Gaan,ah-lay,khahn,Je vais au travail,Ik ga naar het werk,I go to work,Aller + infinitive = future
+verb_core_4,To do / make,Faire,Doen / maken,fehr,doon / mah-kun,Je fais du sport,Ik doe aan sport,I do sports,Faire is very irregular
+verb_core_5,To say,Dire,Zeggen,deer,zeh-khun,Il dit bonjour,Hij zegt hallo,He says hello,
+verb_core_6,To want,Vouloir,Willen,voo-lwahr,vi-lun,Je veux du café,Ik wil koffie,I want coffee,Je voudrais = I would like (polite)
+verb_core_7,To can / be able to,Pouvoir,Kunnen,poo-vwahr,ku-nun,Je peux t'aider,Ik kan je helpen,I can help you,
+verb_core_8,To must / have to,Devoir,Moeten,duh-vwahr,moo-tun,Je dois partir,Ik moet gaan,I have to go,
+verb_core_9,To come,Venir,Komen,vuh-neer,koh-mun,Tu viens ?,Kom je?,Are you coming?,Venir de + inf = just did
+verb_core_10,To take,Prendre,Nemen,prahn-dr,nay-mun,Je prends le bus,Ik neem de bus,I take the bus,
+verb_core_11,To put,Mettre,Zetten / leggen,mehtr,zeh-tun / leh-khun,Je mets la table,Ik dek de tafel,I set the table,
+verb_core_12,To see,Voir,Zien,vwahr,zeen,Je vois la mer,Ik zie de zee,I see the sea,
+verb_core_13,To know (a fact),Savoir,Weten,sah-vwahr,way-tun,Je sais nager,Ik weet het,I know how to swim,Savoir = facts/skills
+verb_core_14,To know (someone / place),Connaître,Kennen,koh-nehtr,keh-nun,Je connais Paris,Ik ken Amsterdam,I know Paris,Connaître = people/places
+verb_core_15,To think,Penser,Denken,pahn-say,dehn-kun,Je pense à toi,Ik denk aan jou,I think of you,
+verb_core_16,To like,Aimer bien,Leuk vinden,eh-may byehn,leuk vin-dun,J'aime bien ce film,Ik vind deze film leuk,I like this movie,Aimer bien = like / Aimer = love
+verb_core_17,To love,Aimer,Houden van,eh-may,how-dun vahn,Je t'aime,Ik hou van jou,I love you,
+verb_core_18,To give,Donner,Geven,doh-nay,khay-vun,Je te donne un cadeau,Ik geef je een cadeau,I give you a gift,
+verb_core_19,To find,Trouver,Vinden,troo-vay,vin-dun,Je trouve ça beau,Ik vind het mooi,I find it beautiful,
+verb_core_20,To ask,Demander,Vragen,duh-mahn-day,vrah-khun,Je demande de l'aide,Ik vraag om hulp,I ask for help,
+connectors_1,And,Et,En,ay,en,Toi et moi,Jij en ik,You and me,
+connectors_2,Or,Ou,Of,oo,of,Café ou thé ?,Koffie of thee?,Coffee or tea?,
+connectors_3,But,Mais,Maar,meh,mahr,C'est bon mais cher,Het is goed maar duur,It's good but expensive,
+connectors_4,Because,Parce que,Omdat,pahrs kuh,om-daht,Je reste parce que je suis fatigué,Ik blijf omdat ik moe ben,I stay because I am tired,Word order changes in Dutch after omdat
+connectors_5,So,Alors,Dus,ah-lor,dus,Il pleut alors je reste,Het regent dus ik blijf,It's raining so I stay,
+connectors_6,Also,Aussi,Ook,oh-see,ohk,Moi aussi,Ik ook,Me too,
+connectors_7,Very,Très,Erg / heel,treh,ehrkh / hayl,C'est très bon,Het is erg goed,It is very good,
+connectors_8,Too (too much),Trop,Te (veel),troh,tuh (vayl),C'est trop cher,Het is te duur,It's too expensive,
+connectors_9,More,Plus,Meer,ploo,mayr,Je veux plus,Ik wil meer,I want more,Plus de = more of
+connectors_10,Less,Moins,Minder,mwahn,min-dur,Moins de sucre,Minder suiker,Less sugar,
 connectors_11,Here,Ici,Hier
 connectors_12,There,Là,Daar
 connectors_13,Today,Aujourd'hui,Vandaag
@@ -253,16 +253,16 @@ time_phrase_14,Last week,La semaine dernière,Vorige week
 time_phrase_15,This year,Cette année,Dit jaar
 time_phrase_16,Next year,L'année prochaine,Volgend jaar
 time_phrase_17,Last year,L'année dernière,Vorig jaar
-family_1,Family,La famille,De familie
-family_2,Father,Le père,De vader
-family_3,Mother,La mère,De moeder
-family_4,Parents,Les parents,De ouders
-family_5,Son,Le fils,De zoon
-family_6,Daughter,La fille,De dochter
-family_7,Brother,Le frère,De broer
-family_8,Sister,La sœur,De zus
-family_9,Children,Les enfants,De kinderen
-family_10,Baby,Le bébé,De baby
+family_1,Family,La famille,De familie,lah fah-meey,duh fah-mee-lee,Ma famille est grande,Mijn familie is groot,My family is big,
+family_2,Father,Le père,De vader,luh pehr,duh vah-dur,Mon père travaille,Mijn vader werkt,My father works,
+family_3,Mother,La mère,De moeder,lah mehr,duh moo-dur,Ma mère cuisine bien,Mijn moeder kookt goed,My mother cooks well,
+family_4,Parents,Les parents,De ouders,lay pah-rahn,duh ow-durs,Mes parents sont gentils,Mijn ouders zijn aardig,My parents are kind,
+family_5,Son,Le fils,De zoon,luh fees,duh zohn,C'est mon fils,Dit is mijn zoon,This is my son,Fils: the 'l' is silent
+family_6,Daughter,La fille,De dochter,lah feey,duh dokh-tur,Ma fille a 10 ans,Mijn dochter is 10 jaar,My daughter is 10 years old,Fille also means 'girl'
+family_7,Brother,Le frère,De broer,luh frehr,duh broor,J'ai un frère,Ik heb een broer,I have a brother,
+family_8,Sister,La sœur,De zus,lah suhr,duh zus,J'ai deux sœurs,Ik heb twee zussen,I have two sisters,
+family_9,Children,Les enfants,De kinderen,layz ahn-fahn,duh kin-duh-run,Les enfants jouent,De kinderen spelen,The children play,
+family_10,Baby,Le bébé,De baby,luh bay-bay,duh bay-bee,Le bébé dort,De baby slaapt,The baby sleeps,
 family_11,Husband,Le mari,De echtgenoot / man
 family_12,Wife,La femme,De echtgenote / vrouw
 family_13,Grandfather,Le grand-père,De opa
@@ -293,46 +293,46 @@ people_17,Adult,L'adulte,De volwassene
 people_18,Elderly person,La personne âgée,De oudere
 people_19,Couple,Le couple,Het koppel
 people_20,Family member,Un membre de la famille,Een familielid
-adjective_appearance_1,Tall,Grand,Lang
-adjective_appearance_2,Short,Petit,Klein
-adjective_appearance_3,Young,Jeune,Jong
-adjective_appearance_4,Old,Vieux,Oud
-adjective_appearance_5,Beautiful,Belle / Beau,Mooie
-adjective_appearance_6,Ugly,Moche,Lelijk
-adjective_appearance_7,Thin,Mince,Dun / slank
-adjective_appearance_8,Fat,Gros,Dik
-adjective_appearance_9,Strong,Fort,Sterk
-adjective_appearance_10,Weak,Faible,Zwak
-adjective_appearance_11,Clean,Propre,Schoon
-adjective_appearance_12,Dirty,Sale,Vies
-adjective_appearance_13,Healthy,En bonne santé,Gezond
-adjective_appearance_14,Sick,Malade,Ziek
-adjective_appearance_15,Handsome (man),Beau,Knap
-adjective_personality_1,Nice,Gentil,Lief
-adjective_personality_2,Kind,Sympa,Aardig
-adjective_personality_3,Friendly,Aimable,Vriendelijk
-adjective_personality_4,Funny,Drôle,Grapig
-adjective_personality_5,Serious,Sérieux,Serieus
-adjective_personality_6,Smart,Intelligent,Intelligent
-adjective_personality_7,Shy,Timide,Verlegen
-adjective_personality_8,Lazy,Paresseux,Lui
-adjective_personality_9,Hardworking,Travailleur,Hardwerkend
-adjective_personality_10,Honest,Honnête,Eerlijk
+adjective_appearance_1,Tall,Grand,Lang,grahn,lahng,Il est grand,Hij is lang,He is tall,Grand(e) agrees with gender
+adjective_appearance_2,Short,Petit,Klein,puh-tee,kline,Elle est petite,Zij is klein,She is short,Petit(e) agrees with gender
+adjective_appearance_3,Young,Jeune,Jong,zhuhn,yong,Elle est jeune,Zij is jong,She is young,Jeune is same for both genders
+adjective_appearance_4,Old,Vieux,Oud,vyuh,owt,Il est vieux,Hij is oud,He is old,Vieux/vieille/vieil - irregular forms!
+adjective_appearance_5,Beautiful,Belle / Beau,Mooie,bel / boh,moy-uh,Elle est belle,Zij is mooi,She is beautiful,Beau(m)/belle(f)/bel(before vowel)
+adjective_appearance_6,Ugly,Moche,Lelijk,mosh,lay-luk,C'est moche,Het is lelijk,It is ugly,Moche same for both genders
+adjective_appearance_7,Thin,Mince,Dun / slank,mahns,dun / slahnk,Elle est mince,Zij is slank,She is thin,
+adjective_appearance_8,Fat,Gros,Dik,groh,dik,Le chat est gros,De kat is dik,The cat is fat,Gros/grosse for m/f
+adjective_appearance_9,Strong,Fort,Sterk,for,stehrk,Il est très fort,Hij is erg sterk,He is very strong,Fort/forte for m/f
+adjective_appearance_10,Weak,Faible,Zwak,fehbl,zvahk,Je me sens faible,Ik voel me zwak,I feel weak,
+adjective_appearance_11,Clean,Propre,Schoon,propr,skhohn,La maison est propre,Het huis is schoon,The house is clean,
+adjective_appearance_12,Dirty,Sale,Vies,sahl,vees,Mes mains sont sales,Mijn handen zijn vies,My hands are dirty,
+adjective_appearance_13,Healthy,En bonne santé,Gezond,ahn bon sahn-tay,khuh-zont,Il est en bonne santé,Hij is gezond,He is healthy,
+adjective_appearance_14,Sick,Malade,Ziek,mah-lahd,zeek,Je suis malade,Ik ben ziek,I am sick,
+adjective_appearance_15,Handsome (man),Beau,Knap,boh,knap,Il est beau,Hij is knap,He is handsome,Beau only for masculine
+adjective_personality_1,Nice,Gentil,Lief,zhahn-tee,leef,Il est gentil,Hij is lief,He is nice,Gentil/gentille for m/f
+adjective_personality_2,Kind,Sympa,Aardig,sahm-pah,ahr-dukh,Elle est sympa,Zij is aardig,She is kind,Sympa is informal and invariable
+adjective_personality_3,Friendly,Aimable,Vriendelijk,eh-mahbl,vreen-duh-luk,Les gens sont aimables,De mensen zijn vriendelijk,People are friendly,
+adjective_personality_4,Funny,Drôle,Grapig,drohl,khrah-pukh,C'est drôle !,Het is grappig!,It's funny!,Same form for m/f
+adjective_personality_5,Serious,Sérieux,Serieus,say-ryuh,say-ree-uhs,Il est sérieux,Hij is serieus,He is serious,Sérieux/sérieuse for m/f
+adjective_personality_6,Smart,Intelligent,Intelligent,ahn-teh-lee-zhahn,in-teh-lee-khent,Elle est intelligente,Zij is intelligent,She is smart,
+adjective_personality_7,Shy,Timide,Verlegen,tee-meed,vur-lay-khun,Je suis timide,Ik ben verlegen,I am shy,Same form for m/f
+adjective_personality_8,Lazy,Paresseux,Lui,pah-reh-suh,loy,Il est paresseux,Hij is lui,He is lazy,Paresseux/paresseuse for m/f
+adjective_personality_9,Hardworking,Travailleur,Hardwerkend,trah-vah-yuhr,hart-vehr-kunt,Elle est travailleuse,Zij is hardwerkend,She is hardworking,
+adjective_personality_10,Honest,Honnête,Eerlijk,oh-neht,ayr-luk,Il est honnête,Hij is eerlijk,He is honest,Same form for m/f
 adjective_personality_11,Polite,Poli,Beleefd
 adjective_personality_12,Rude,Impoli,Onbeleefd
 adjective_personality_13,Brave,Courageux,Moedig
 adjective_personality_14,Worried,Inquiet,Bezorgd
 adjective_personality_15,Calm,Calme,Kalm
-adjective_emotion_1,Happy,Heureux,Blij
-adjective_emotion_2,Sad,Triste,Verdrietig
-adjective_emotion_3,Angry,Fâché,Boos
-adjective_emotion_4,Tired,Fatigué,Moe
-adjective_emotion_5,Excited,Excité,Enthousiast
-adjective_emotion_6,Nervous,Nerveux,Zenuwachtig
-adjective_emotion_7,Relaxed,Détendu,Ontspannen
-adjective_emotion_8,Afraid,Avoir peur,Bang
-adjective_emotion_9,Bored,Ennuyé,Vervelend
-adjective_emotion_10,Surprised,Surpris,Verrast
+adjective_emotion_1,Happy,Heureux,Blij,uh-ruh,blay,Je suis heureux,Ik ben blij,I am happy,Heureux/heureuse for m/f
+adjective_emotion_2,Sad,Triste,Verdrietig,treest,vur-dree-tukh,Elle est triste,Zij is verdrietig,She is sad,Same form for m/f
+adjective_emotion_3,Angry,Fâché,Boos,fah-shay,bohs,Il est fâché,Hij is boos,He is angry,
+adjective_emotion_4,Tired,Fatigué,Moe,fah-tee-gay,moo,Je suis fatigué,Ik ben moe,I am tired,
+adjective_emotion_5,Excited,Excité,Enthousiast,ex-see-tay,en-too-see-ahst,Je suis excité !,Ik ben enthousiast!,I am excited!,
+adjective_emotion_6,Nervous,Nerveux,Zenuwachtig,nehr-vuh,zay-noo-ahkh-tukh,Je suis nerveux,Ik ben zenuwachtig,I am nervous,Nerveux/nerveuse for m/f
+adjective_emotion_7,Relaxed,Détendu,Ontspannen,day-tahn-doo,ont-spah-nun,Je me sens détendu,Ik voel me ontspannen,I feel relaxed,
+adjective_emotion_8,Afraid,Avoir peur,Bang,ah-vwahr puhr,bahng,J'ai peur,Ik ben bang,I am afraid,In French: avoir peur (have fear)
+adjective_emotion_9,Bored,Ennuyé,Vervelend,ahn-nwee-yay,vur-vay-lunt,Je m'ennuie,Ik verveel me,I am bored,
+adjective_emotion_10,Surprised,Surpris,Verrast,soor-pree,vur-rahst,Je suis surpris !,Ik ben verrast!,I am surprised!,
 home_1,House,La maison,Het huis
 home_2,Apartment,L'appartement,Het appartement
 home_3,Room,La pièce,De kamer
@@ -368,16 +368,36 @@ household_12,TV,La télé,De tv
 household_13,Remote control,La télécommande,De afstandsbediening
 household_14,Heater,Le chauffage,De verwarming
 household_15,Fan,Le ventilateur,De ventilator
-kitchen_1,Knife,Le couteau,Het mes
-kitchen_2,Fork,La fourchette,De vork
-kitchen_3,Spoon,La cuillère,De lepel
-kitchen_4,Plate,L'assiette,Het bord
-kitchen_5,Bowl,Le bol,De kom
-kitchen_6,Cup,La tasse,Het kopje
-kitchen_7,Glass,Le verre,Het glas
-kitchen_8,Pan,La poêle,De pan
-kitchen_9,Pot,La casserole,De pot
-kitchen_10,Fridge,Le réfrigérateur,De koelkast
+kitchen_1,Knife,Le couteau,Het mes,luh koo-toh,uht mehs,Je coupe avec un couteau,Ik snijd met een mes,I cut with a knife,
+kitchen_2,Fork,La fourchette,De vork,lah foor-shet,duh vork,Prends ta fourchette,Pak je vork,Take your fork,
+kitchen_3,Spoon,La cuillère,De lepel,lah kwee-yehr,duh lay-pul,Une cuillère de sucre,Een lepel suiker,A spoon of sugar,
+kitchen_4,Plate,L'assiette,Het bord,lah-syet,uht bort,Mets l'assiette sur la table,Zet het bord op tafel,Put the plate on the table,L'assiette is feminine
+kitchen_5,Bowl,Le bol,De kom,luh bol,duh kom,Un bol de soupe,Een kom soep,A bowl of soup,
+kitchen_6,Cup,La tasse,Het kopje,lah tahs,uht kop-yuh,Une tasse de café,Een kopje koffie,A cup of coffee,
+kitchen_7,Glass,Le verre,Het glas,luh vehr,uht khlahs,Un verre d'eau,Een glas water,A glass of water,
+kitchen_8,Pan,La poêle,De pan,lah pwahl,duh pahn,Je fais cuire dans la poêle,Ik bak in de pan,I fry in the pan,
+kitchen_9,Pot,La casserole,De pot,lah kahs-rol,duh pot,L'eau bout dans la casserole,Het water kookt in de pot,The water boils in the pot,
+kitchen_10,Fridge,Le réfrigérateur,De koelkast,luh ray-free-zhay-rah-tuhr,duh kool-kahst,Le lait est dans le frigo,De melk staat in de koelkast,The milk is in the fridge,Le frigo = informal
+kitchen_11,Oven,Le four,De oven,luh foor,duh oh-vun,Le gâteau est dans le four,De taart staat in de oven,The cake is in the oven,
+kitchen_12,Microwave,Le micro-ondes,De magnetron,luh mee-kroh-ohnd,duh mahkh-nay-tron,Je réchauffe au micro-ondes,Ik warm op in de magnetron,I heat up in the microwave,
+kitchen_13,Toaster,Le grille-pain,De broodrooster,luh gree-pahn,duh broht-rohs-tur,Le pain est dans le grille-pain,Het brood zit in de broodrooster,The bread is in the toaster,
+kitchen_14,Kettle,La bouilloire,De waterkoker,lah boo-ywahr,duh vah-tur-koh-kur,L'eau bout dans la bouilloire,Het water kookt in de waterkoker,The water boils in the kettle,
+kitchen_15,Blender,Le mixeur,De blender,luh meek-suhr,duh blen-dur,Je mixe les fruits,Ik blend het fruit,I blend the fruit,
+kitchen_16,Coffee maker,La cafetière,Het koffiezetapparaat,lah kah-feh-tyehr,uht koh-fee-zet-ah-pah-raht,La cafetière est prête,Het koffiezetapparaat is klaar,The coffee maker is ready,
+kitchen_17,Cutting board,La planche à découper,De snijplank,lah plahnsh ah day-koo-pay,duh snay-plahnk,Coupe sur la planche,Snijd op de snijplank,Cut on the cutting board,
+kitchen_18,Colander,La passoire,Het vergiet,lah pah-swahr,uht vur-kheet,Égoutte les pâtes,Giet de pasta af,Drain the pasta,
+kitchen_19,Spatula,La spatule,De spatel,lah spah-tool,duh spah-tul,Retourne avec la spatule,Draai om met de spatel,Flip with the spatula,
+kitchen_20,Whisk,Le fouet,De garde,luh fweh,duh khahr-duh,Bats les œufs avec le fouet,Klop de eieren met de garde,Beat the eggs with the whisk,
+kitchen_21,Ladle,La louche,De soeplepel,lah loosh,duh soop-lay-pul,Sers la soupe avec la louche,Schep de soep met de soeplepel,Serve the soup with the ladle,
+kitchen_22,Tongs,Les pinces,De tang,lay pahns,duh tahng,Prends la viande avec les pinces,Pak het vlees met de tang,Grab the meat with the tongs,
+kitchen_23,Rolling pin,Le rouleau à pâtisserie,De deegroller,luh roo-loh ah pah-tee-sree,duh daykhh-rol-lur,Étale la pâte avec le rouleau,Rol het deeg uit met de deegroller,Roll the dough with the rolling pin,
+kitchen_24,Grater,La râpe,De rasp,lah rahp,duh rahsp,Râpe le fromage,Rasp de kaas,Grate the cheese,
+kitchen_25,Can opener,L'ouvre-boîte,De blikopener,loov-bwaht,duh blik-oh-puh-nur,Ouvre la boîte avec l'ouvre-boîte,Open het blik met de blikopener,Open the can with the can opener,
+kitchen_26,Peeler,L'éplucheur,De dunschiller,lay-ploo-shuhr,duh dun-skhil-lur,Épluche les pommes de terre,Schil de aardappels,Peel the potatoes,
+kitchen_27,Measuring cup,Le verre doseur,De maatbeker,luh vehr doh-zuhr,duh maht-bay-kur,Mesure avec le verre doseur,Meet met de maatbeker,Measure with the measuring cup,
+kitchen_28,Baking tray,La plaque de cuisson,De bakplaat,lah plahk duh kwee-sohn,duh bahk-plaht,Mets les biscuits sur la plaque,Leg de koekjes op de bakplaat,Put the cookies on the baking tray,
+kitchen_29,Dish towel,Le torchon,De theedoek,luh tor-shohn,duh tay-dook,Sèche avec le torchon,Droog af met de theedoek,Dry with the dish towel,
+kitchen_30,Apron,Le tablier,De schort,luh tahb-lyay,duh skhort,Mets ton tablier,Doe je schort aan,Put on your apron,
 bathroom_1,Shower,La douche,De douche
 bathroom_2,Bath,Le bain,Het bad
 bathroom_3,Soap,Le savon,De zeep
@@ -413,16 +433,16 @@ daily_phrase_7,The house is clean,La maison est propre,Het huis is schoon
 daily_phrase_8,The house is dirty,La maison est sale,Het huis is vies
 daily_phrase_9,I need to cook,Je dois cuisiner,Ik moet koken
 daily_phrase_10,We are eating,Nous mangeons,Wij eten
-food_1,Bread,Le pain,Het brood
-food_2,Water,L'eau,Het water
-food_3,Milk,Le lait,De melk
-food_4,Cheese,Le fromage,De kaas
-food_5,Butter,Le beurre,De boter
-food_6,Yogurt,Le yaourt,De yoghurt
-food_7,Rice,Le riz,De rijst
-food_8,Pasta,Les pâtes,De pasta
-food_9,Egg,Un œuf,Het ei
-food_10,Chicken,Le poulet,De kip
+food_1,Bread,Le pain,Het brood,luh pahn,uht broht,Je mange du pain,Ik eet brood,I eat bread,du/de la/des = some (partitive)
+food_2,Water,L'eau,Het water,loh,uht vah-tur,Je bois de l'eau,Ik drink water,I drink water,L'eau is feminine
+food_3,Milk,Le lait,De melk,luh leh,duh mehlk,Je prends du lait,Ik neem melk,I take milk,
+food_4,Cheese,Le fromage,De kaas,luh froh-mahzh,duh kahs,J'adore le fromage,Ik hou van kaas,I love cheese,
+food_5,Butter,Le beurre,De boter,luh buhr,duh boh-tur,Du pain avec du beurre,Brood met boter,Bread with butter,
+food_6,Yogurt,Le yaourt,De yoghurt,luh yah-oort,duh yoh-khurt,Je mange un yaourt,Ik eet een yoghurt,I eat a yogurt,
+food_7,Rice,Le riz,De rijst,luh ree,duh rayst,Je cuisine du riz,Ik kook rijst,I cook rice,
+food_8,Pasta,Les pâtes,De pasta,lay paht,duh pahs-tah,J'aime les pâtes,Ik hou van pasta,I like pasta,Always plural in French
+food_9,Egg,Un œuf,Het ei,uhn uhf,uht ay,Je veux un œuf,Ik wil een ei,I want an egg,Plural: des œufs (ayz)
+food_10,Chicken,Le poulet,De kip,luh poo-leh,duh kip,Je mange du poulet,Ik eet kip,I eat chicken,
 food_11,Beef,Le bœuf,Het rundvlees
 food_12,Pork,Le porc,Het varkensvlees
 food_13,Fish,Le poisson,De vis
@@ -688,16 +708,16 @@ fashion_7,Pattern,Le motif,Het patroon
 fashion_8,Price,Le prix,De prijs
 fashion_9,Sale,La promotion,De aanbieding
 fashion_10,Receipt,Le reçu,Het bonnetje
-color_1,Red,Rouge,Rood
-color_2,Blue,Bleu,Blauw
-color_3,Green,Vert,Groen
-color_4,Yellow,Jaune,Geel
-color_5,Black,Noir,Zwart
-color_6,White,Blanc,Wit
-color_7,Grey,Gris,Grijs
-color_8,Brown,Marron,Bruin
-color_9,Pink,Rose,Roze
-color_10,Orange,Orange,Oranje
+color_1,Red,Rouge,Rood,roozh,roht,La pomme est rouge,De appel is rood,The apple is red,
+color_2,Blue,Bleu,Blauw,bluh,blauw,Le ciel est bleu,De lucht is blauw,The sky is blue,Bleu/bleue for m/f
+color_3,Green,Vert,Groen,vehr,khroon,L'herbe est verte,Het gras is groen,The grass is green,Vert/verte for m/f
+color_4,Yellow,Jaune,Geel,zhohn,khayl,Le soleil est jaune,De zon is geel,The sun is yellow,
+color_5,Black,Noir,Zwart,nwahr,zvahrt,Le chat est noir,De kat is zwart,The cat is black,Noir/noire for m/f
+color_6,White,Blanc,Wit,blahn,vit,La neige est blanche,De sneeuw is wit,The snow is white,Blanc/blanche for m/f
+color_7,Grey,Gris,Grijs,gree,khrays,Le ciel est gris,De lucht is grijs,The sky is grey,
+color_8,Brown,Marron,Bruin,mah-rohn,brayn,Les yeux marron,Bruine ogen,Brown eyes,Marron is invariable
+color_9,Pink,Rose,Roze,rohz,roh-zuh,La fleur est rose,De bloem is roze,The flower is pink,
+color_10,Orange,Orange,Oranje,oh-rahnzh,oh-rahn-yuh,L'orange est orange,De sinaasappel is oranje,The orange is orange,Orange is invariable
 color_11,Light blue,Bleu clair,Lichtblauw
 color_12,Dark blue,Bleu foncé,Donkerblauw
 color_13,Light green,Vert clair,Lichtgroen
