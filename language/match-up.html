@@ -378,6 +378,10 @@
   <body>
     <header>
       <div class="controls-row">
+        <select id="csv-select" onchange="game.changeCsv(this.value)">
+          <option value="a1.csv">A1 Vocabulary</option>
+          <option value="duolingo.csv">Duolingo</option>
+        </select>
         <select id="category-select" onchange="game.changeCategory(this.value)">
           <option value="all">All Categories</option>
         </select>
@@ -895,7 +899,23 @@
     </script>
 
     <script>
-      const DATA_URL = "./a1.csv";
+      // CSV Selection Storage
+      const CsvStorage = {
+        KEY: "match-up-csv-selection",
+
+        get() {
+          if (typeof Storage === "undefined") return "a1.csv";
+          return localStorage.getItem(this.KEY) || "a1.csv";
+        },
+
+        set(csvFile) {
+          if (typeof Storage === "undefined") return;
+          localStorage.setItem(this.KEY, csvFile);
+        },
+      };
+
+      // Get initial CSV from storage
+      const getDataUrl = () => `./${CsvStorage.get()}`;
 
       const LANGUAGE_LOCALES = {
         en: "en-US",
@@ -1180,6 +1200,7 @@
           this.activeData = [];
           this.categories = new Set();
           this.masteredSet = Storage.load(); // Load mastery from memory
+          this.currentCsv = CsvStorage.get();
 
           this.selectedLeft = null;
           this.selectedRight = null;
@@ -1192,18 +1213,35 @@
           this.elPercent = document.getElementById("percent-label");
           this.elProgressFill = document.getElementById("progress-fill");
 
+          // Set initial CSV selection
+          const csvSelect = document.getElementById("csv-select");
+          if (csvSelect) {
+            csvSelect.value = this.currentCsv;
+          }
+
           this.init();
         }
 
         async init() {
-          this.fullData = await DataFetcher.loadData(DATA_URL);
+          // Show loading overlay
+          document.getElementById("loading-overlay").style.display = "flex";
+          document.getElementById("game-board").style.display = "none";
 
-          if (!this.fullData.length) return;
+          // Lazy load CSV data
+          const dataUrl = getDataUrl();
+          this.fullData = await DataFetcher.loadData(dataUrl);
+
+          if (!this.fullData.length) {
+            document.getElementById("loading-overlay").style.display = "none";
+            alert("Failed to load data. Please check the CSV file.");
+            return;
+          }
 
           // Initialize Settings
           Settings.init();
 
           // Setup Categories
+          this.categories.clear();
           this.fullData.forEach((item) => this.categories.add(item.category));
           this.populateCategorySelect();
 
@@ -1218,9 +1256,24 @@
           this.startRound();
         }
 
+        async changeCsv(csvFile) {
+          if (csvFile === this.currentCsv) return;
+
+          this.currentCsv = csvFile;
+          CsvStorage.set(csvFile);
+
+          // Reload game with new CSV
+          await this.init();
+        }
+
         createSlots() {
           const leftCol = document.getElementById("col-left");
           const rightCol = document.getElementById("col-right");
+
+          // Clear existing slots if any
+          leftCol.innerHTML = "";
+          rightCol.innerHTML = "";
+
           for (let i = 0; i < this.maxPairs; i++) {
             const l = document.createElement("div");
             l.className = "card-slot";
@@ -1235,6 +1288,20 @@
 
         populateCategorySelect() {
           const select = document.getElementById("category-select");
+
+          // Clear existing options except "All Categories"
+          const allOption = select.querySelector('option[value="all"]');
+          select.innerHTML = "";
+          if (allOption) {
+            select.appendChild(allOption);
+          } else {
+            const opt = document.createElement("option");
+            opt.value = "all";
+            opt.innerText = "All Categories";
+            select.appendChild(opt);
+          }
+
+          // Add category options
           const sorted = Array.from(this.categories).sort();
           sorted.forEach((cat) => {
             const opt = document.createElement("option");
