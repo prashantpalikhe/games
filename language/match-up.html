@@ -103,6 +103,25 @@
         background: rgba(28, 176, 246, 0.1);
       }
 
+      .learn-btn {
+        padding: 8px 12px;
+        border-radius: 12px;
+        border: 2px solid var(--primary);
+        background: var(--primary);
+        color: white;
+        font-family: "Nunito", sans-serif;
+        font-weight: 700;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.2s;
+      }
+
+      .learn-btn:hover {
+        background: var(--primary-dark);
+        border-color: var(--primary-dark);
+        transform: translateY(-1px);
+      }
+
       /* Toggle Switch */
       .toggle-switch {
         position: relative;
@@ -385,6 +404,10 @@
         <select id="category-select" onchange="game.changeCategory(this.value)">
           <option value="all">All Categories</option>
         </select>
+        <button id="learn-btn" class="learn-btn" onclick="game.showLearnSheet()" style="display: none">Learn</button>
+        <button class="reset-btn" onclick="game.resetProgress()">Reset</button>
+      </div>
+      <div class="controls-row">
         <select id="lang-left" onchange="game.restart()">
           <option value="en">English</option>
           <option value="fr" selected>French</option>
@@ -395,8 +418,6 @@
           <option value="fr">French</option>
           <option value="nl">Dutch</option>
         </select>
-        <button class="reset-btn" onclick="game.resetProgress()">Reset</button>
-        <button class="sheet-btn" onclick="document.querySelector('bottom-sheet').open()">☰ Menu</button>
       </div>
     </header>
 
@@ -418,6 +439,36 @@
       <div class="column" id="col-left"></div>
       <div class="column" id="col-right"></div>
     </div>
+
+    <!-- Learn Bottom Sheet (Markdown) -->
+    <bottom-sheet id="learn-sheet">
+      <div style="padding: 8px 0">
+        <div id="learn-content" style="color: #e0e0e0; line-height: 1.6">
+          <div style="text-align: center; padding: 20px; color: #888">
+            <div class="spinner" style="margin: 0 auto 12px"></div>
+            <div>Loading...</div>
+          </div>
+        </div>
+        <button
+          onclick="document.getElementById('learn-sheet').close()"
+          style="
+            width: 100%;
+            margin-top: 24px;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            font-family: inherit;
+          "
+        >
+          Close
+        </button>
+      </div>
+    </bottom-sheet>
 
     <!-- Help Bottom Sheet -->
     <bottom-sheet id="help-sheet">
@@ -923,6 +974,272 @@
         nl: "nl-NL",
       };
 
+      // --- MARKDOWN PARSER (Simple) ---
+      const MarkdownParser = {
+        parse(markdown) {
+          const lines = markdown.split("\n");
+          const output = [];
+          let inTable = false;
+          let tableRows = [];
+          let inList = false;
+          let listItems = [];
+
+          for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+
+            // Empty line
+            if (!line) {
+              if (inTable && tableRows.length > 0) {
+                output.push(this._renderTable(tableRows));
+                tableRows = [];
+                inTable = false;
+              }
+              if (inList && listItems.length > 0) {
+                output.push(this._renderList(listItems));
+                listItems = [];
+                inList = false;
+              }
+              output.push("<br>");
+              continue;
+            }
+
+            // Headers
+            if (line.startsWith("### ")) {
+              if (inTable && tableRows.length > 0) {
+                output.push(this._renderTable(tableRows));
+                tableRows = [];
+                inTable = false;
+              }
+              if (inList && listItems.length > 0) {
+                output.push(this._renderList(listItems));
+                listItems = [];
+                inList = false;
+              }
+              output.push(
+                `<h3 style="color: var(--secondary); font-size: 1.2rem; margin-top: 24px; margin-bottom: 12px; font-weight: 700;">${this._processInline(
+                  line.substring(4)
+                )}</h3>`
+              );
+              continue;
+            }
+            if (line.startsWith("## ")) {
+              if (inTable && tableRows.length > 0) {
+                output.push(this._renderTable(tableRows));
+                tableRows = [];
+                inTable = false;
+              }
+              if (inList && listItems.length > 0) {
+                output.push(this._renderList(listItems));
+                listItems = [];
+                inList = false;
+              }
+              output.push(
+                `<h2 style="color: var(--secondary); font-size: 1.4rem; margin-top: 28px; margin-bottom: 16px; font-weight: 700;">${this._processInline(
+                  line.substring(3)
+                )}</h2>`
+              );
+              continue;
+            }
+            if (line.startsWith("# ")) {
+              if (inTable && tableRows.length > 0) {
+                output.push(this._renderTable(tableRows));
+                tableRows = [];
+                inTable = false;
+              }
+              if (inList && listItems.length > 0) {
+                output.push(this._renderList(listItems));
+                listItems = [];
+                inList = false;
+              }
+              output.push(
+                `<h1 style="color: var(--secondary); font-size: 1.6rem; margin-top: 32px; margin-bottom: 20px; font-weight: 800;">${this._processInline(
+                  line.substring(2)
+                )}</h1>`
+              );
+              continue;
+            }
+
+            // Horizontal rules
+            if (line === "---") {
+              if (inTable && tableRows.length > 0) {
+                output.push(this._renderTable(tableRows));
+                tableRows = [];
+                inTable = false;
+              }
+              if (inList && listItems.length > 0) {
+                output.push(this._renderList(listItems));
+                listItems = [];
+                inList = false;
+              }
+              output.push('<hr style="border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 24px 0;">');
+              continue;
+            }
+
+            // Tables
+            if (line.startsWith("|") && line.endsWith("|")) {
+              if (inList) {
+                output.push(this._renderList(listItems));
+                listItems = [];
+                inList = false;
+              }
+              inTable = true;
+              const cells = line
+                .split("|")
+                .map((c) => c.trim())
+                .filter((c) => c);
+              // Skip separator rows (all dashes)
+              if (cells.length > 0 && !cells.every((c) => c.match(/^[-:]+$/))) {
+                tableRows.push(cells);
+              }
+              continue;
+            }
+
+            // Lists
+            if (line.match(/^[-*] /)) {
+              if (inTable) {
+                output.push(this._renderTable(tableRows));
+                tableRows = [];
+                inTable = false;
+              }
+              inList = true;
+              listItems.push(this._processInline(line.substring(2)));
+              continue;
+            }
+
+            // Regular paragraph
+            if (inTable) {
+              output.push(this._renderTable(tableRows));
+              tableRows = [];
+              inTable = false;
+            }
+            if (inList) {
+              output.push(this._renderList(listItems));
+              listItems = [];
+              inList = false;
+            }
+
+            const processed = this._processInline(line);
+            if (processed) {
+              output.push(`<p style="margin: 12px 0; line-height: 1.6;">${processed}</p>`);
+            }
+          }
+
+          // Close any open blocks
+          if (inTable && tableRows.length > 0) output.push(this._renderTable(tableRows));
+          if (inList && listItems.length > 0) output.push(this._renderList(listItems));
+
+          return output.join("\n");
+        },
+
+        _processInline(text) {
+          // Escape HTML first
+          const div = document.createElement("div");
+          div.textContent = text;
+          text = div.innerHTML;
+
+          // Bold (must be done before italic)
+          text = text.replace(/\*\*(.*?)\*\*/g, '<strong style="color: #fff; font-weight: 700;">$1</strong>');
+          // Italic (single asterisk, not part of bold)
+          text = text.replace(/(^|[^*])\*([^*]+?)\*([^*]|$)/g, '$1<em style="font-style: italic;">$2</em>$3');
+          // Inline code
+          text = text.replace(
+            /`([^`]+)`/g,
+            '<code style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.9em;">$1</code>'
+          );
+          return text;
+        },
+
+        _renderTable(rows) {
+          if (rows.length === 0) return "";
+
+          // First row is header if we have multiple rows
+          const hasHeader = rows.length > 1;
+          const header = hasHeader ? rows[0] : null;
+          const body = hasHeader ? rows.slice(1) : rows;
+
+          let html =
+            '<table style="width: 100%; border-collapse: collapse; margin: 16px 0; background: rgba(255,255,255,0.05); border-radius: 8px; overflow: hidden;">';
+
+          // Header
+          if (header && header.length > 0) {
+            html += "<thead><tr>";
+            header.forEach((cell) => {
+              html += `<th style="padding: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.1); text-align: left; font-weight: 700; color: var(--secondary);">${this._processInline(
+                cell
+              )}</th>`;
+            });
+            html += "</tr></thead>";
+          }
+
+          // Body
+          if (body.length > 0) {
+            html += "<tbody>";
+            body.forEach((row) => {
+              html += "<tr>";
+              row.forEach((cell) => {
+                html += `<td style="padding: 10px 12px; border: 1px solid rgba(255,255,255,0.1);">${this._processInline(
+                  cell
+                )}</td>`;
+              });
+              html += "</tr>";
+            });
+            html += "</tbody>";
+          }
+
+          html += "</table>";
+          return html;
+        },
+
+        _renderList(items) {
+          if (items.length === 0) return "";
+          return `<ul style="margin: 12px 0; padding-left: 24px; list-style-type: disc;">${items
+            .map((item) => `<li style="margin: 8px 0; line-height: 1.6;">${item}</li>`)
+            .join("")}</ul>`;
+        },
+      };
+
+      // --- LEARN SHEET ---
+      const LearnSheet = {
+        async show(category) {
+          const sheet = document.getElementById("learn-sheet");
+          const content = document.getElementById("learn-content");
+
+          // Show loading
+          content.innerHTML = `
+            <div style="text-align: center; padding: 20px; color: #888">
+              <div class="spinner" style="margin: 0 auto 12px"></div>
+              <div>Loading...</div>
+            </div>
+          `;
+
+          sheet.open();
+
+          try {
+            // Try to load markdown file
+            const mdPath = `./duolingo/${category}.md`;
+            const response = await fetch(mdPath);
+
+            if (!response.ok) {
+              throw new Error("File not found");
+            }
+
+            const markdown = await response.text();
+            const html = MarkdownParser.parse(markdown);
+
+            content.innerHTML = html;
+          } catch (error) {
+            content.innerHTML = `
+              <div style="text-align: center; padding: 40px; color: #888">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" style="opacity: 0.3; margin-bottom: 12px">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                </svg>
+                <div>Could not load learning material for this section.</div>
+              </div>
+            `;
+          }
+        },
+      };
+
       // --- HELP SHEET ---
       const HelpSheet = {
         currentWord: null,
@@ -1244,6 +1561,7 @@
           this.categories.clear();
           this.fullData.forEach((item) => this.categories.add(item.category));
           this.populateCategorySelect();
+          this.updateLearnButton();
 
           // Prepare Board
           this.createSlots();
@@ -1264,6 +1582,7 @@
 
           // Reload game with new CSV
           await this.init();
+          this.updateLearnButton();
         }
 
         createSlots() {
@@ -1321,7 +1640,40 @@
             this.activeData = this.fullData.filter((item) => item.category === cat);
           }
           this.updateGlobalProgress();
+          this.updateLearnButton();
           this.startRound();
+        }
+
+        async updateLearnButton() {
+          const learnBtn = document.getElementById("learn-btn");
+          const categorySelect = document.getElementById("category-select");
+          const selectedCategory = categorySelect.value;
+
+          // Only show for duolingo.csv and when a specific category is selected
+          if (this.currentCsv !== "duolingo.csv" || selectedCategory === "all") {
+            learnBtn.style.display = "none";
+            return;
+          }
+
+          // Check if markdown file exists
+          try {
+            const mdPath = `./duolingo/${selectedCategory}.md`;
+            const response = await fetch(mdPath, { method: "HEAD" });
+            learnBtn.style.display = response.ok ? "block" : "none";
+          } catch (error) {
+            learnBtn.style.display = "none";
+          }
+        }
+
+        async showLearnSheet() {
+          const categorySelect = document.getElementById("category-select");
+          const selectedCategory = categorySelect.value;
+
+          if (selectedCategory === "all") {
+            return;
+          }
+
+          await LearnSheet.show(selectedCategory);
         }
 
         restart() {
