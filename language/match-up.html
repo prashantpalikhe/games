@@ -1204,7 +1204,7 @@
 
           this.selectedLeft = null;
           this.selectedRight = null;
-          this.maxPairs = 5;
+          this.maxPairs = 10;
           this.pairsOnBoard = 0;
 
           // UI Refs
@@ -1373,16 +1373,16 @@
 
           let deck = [];
 
-          // Try to take 3 new words and 2 review words (or whatever is available)
+          // Try to take new words and review words (or whatever is available)
           if (unmastered.length > 0) {
-            deck.push(...unmastered.slice(0, 5));
-            // If we didn't fill 5, add from mastered
-            if (deck.length < 5) {
-              deck.push(...mastered.slice(0, 5 - deck.length));
+            deck.push(...unmastered.slice(0, this.maxPairs));
+            // If we didn't fill maxPairs, add from mastered
+            if (deck.length < this.maxPairs) {
+              deck.push(...mastered.slice(0, this.maxPairs - deck.length));
             }
           } else {
             // Mastery 100% -> Just review random cards
-            deck = mastered.slice(0, 5);
+            deck = mastered.slice(0, this.maxPairs);
           }
 
           // Randomize the final hand
