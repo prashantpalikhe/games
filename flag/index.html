@@ -80,6 +80,11 @@
         bottom: 0;
       }
 
+      /* Hide content until Vue app is ready */
+      [v-cloak] {
+        display: none !important;
+      }
+
       /* Custom utilities for animations */
       @keyframes bounce-custom {
         0%,
@@ -472,6 +477,7 @@
     <!-- App Container -->
     <div
       id="app"
+      v-cloak
       :class="{'animate-shake': shakeActive}"
       class="w-full max-w-md h-full max-h-[900px] bg-white shadow-2xl relative overflow-hidden flex flex-col md:rounded-xl md:h-[90vh] md:mt-0 transition-transform"
     >
@@ -553,6 +559,25 @@
                 <div
                   class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform duration-200"
                   :class="soundEnabled ? 'translate-x-6' : 'translate-x-0'"
+                ></div>
+              </div>
+            </button>
+            <button
+              @click="autoContinue = !autoContinue"
+              class="py-4 px-4 rounded-xl font-bold text-left transition-all flex justify-between items-center border-2"
+              :class="autoContinue ? 'bg-blue-50 border-blue-500 text-blue-700' : 'bg-white border-gray-200 text-gray-600'"
+            >
+              <div class="flex items-center space-x-3">
+                <span v-html="autoContinue ? icons.play : icons.pause"></span>
+                <span>Auto-Continue (Correct Answers)</span>
+              </div>
+              <div
+                class="w-12 h-6 rounded-full relative transition-colors duration-200"
+                :class="autoContinue ? 'bg-blue-500' : 'bg-gray-300'"
+              >
+                <div
+                  class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform duration-200"
+                  :class="autoContinue ? 'translate-x-6' : 'translate-x-0'"
                 ></div>
               </div>
             </button>
@@ -1031,7 +1056,7 @@
 
     <script>
       const { createApp, ref, computed, onMounted, onUnmounted } = Vue;
-
+      debugger;
       // --- DATA ---
       const COUNTRIES = [
         {
@@ -2703,6 +2728,8 @@
         gear: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>`,
         volume: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>`,
         volumeOff: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>`,
+        play: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>`,
+        pause: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`,
       };
 
       createApp({
@@ -2736,6 +2763,7 @@
 
           // Settings State
           const soundEnabled = ref(true);
+          const autoContinue = ref(false);
           const showSettings = ref(false);
 
           // Timer State (Blitz Mode)
@@ -3353,6 +3381,11 @@
                 autoAdvanceTimer.value = setTimeout(() => {
                   nextQuestion();
                 }, 600);
+              } else if (autoContinue.value) {
+                // Auto-continue for correct answers when setting is enabled (except blitz which already has it)
+                autoAdvanceTimer.value = setTimeout(() => {
+                  nextQuestion();
+                }, 0);
               }
             } else {
               feedback.value = "incorrect";
@@ -3580,6 +3613,7 @@
               try {
                 const parsed = JSON.parse(savedSettings);
                 if (parsed.sound !== undefined) soundEnabled.value = parsed.sound;
+                if (parsed.autoContinue !== undefined) autoContinue.value = parsed.autoContinue;
               } catch (e) {}
             }
 
@@ -3589,6 +3623,17 @@
                 "flag-master-settings",
                 JSON.stringify({
                   sound: soundEnabled.value,
+                  autoContinue: autoContinue.value,
+                })
+              );
+            });
+
+            Vue.watch(autoContinue, () => {
+              localStorage.setItem(
+                "flag-master-settings",
+                JSON.stringify({
+                  sound: soundEnabled.value,
+                  autoContinue: autoContinue.value,
                 })
               );
             });
@@ -3630,6 +3675,7 @@
             continents,
             collectedFlags,
             soundEnabled,
+            autoContinue,
             showSettings,
             fireworksContainer,
             floatingPoints,
