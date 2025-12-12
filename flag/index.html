@@ -2,10 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 
     <!-- iOS / PWA Setup -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -475,43 +472,24 @@
   </head>
   <body class="bg-gray-100 text-gray-800 font-sans overflow-hidden flex justify-center items-center animate-gradient">
     <!-- App Container -->
-    <div
-      id="app"
-      v-cloak
-      :class="{'animate-shake': shakeActive}"
-      class="w-full max-w-md h-full max-h-[900px] bg-white shadow-2xl relative overflow-hidden flex flex-col md:rounded-xl md:h-[90vh] md:mt-0 transition-transform"
-    >
+    <div id="app" v-cloak :class="{'animate-shake': shakeActive}" class="w-full max-w-md h-full max-h-[900px] bg-white shadow-2xl relative overflow-hidden flex flex-col md:rounded-xl md:h-[90vh] md:mt-0 transition-transform">
       <!-- Floating Points Container -->
       <div class="absolute inset-0 pointer-events-none overflow-hidden z-50">
-        <div
-          v-for="point in floatingPoints"
-          :key="point.id"
-          class="float-points"
-          :style="{ left: point.x + 'px', top: point.y + 'px' }"
-        >
-          +{{ point.amount }}
-        </div>
+        <div v-for="point in floatingPoints" :key="point.id" class="float-points" :style="{ left: point.x + 'px', top: point.y + 'px' }">+{{ point.amount }}</div>
       </div>
 
       <!-- Fireworks Container -->
       <div ref="fireworksContainer" class="absolute inset-0 pointer-events-none z-40"></div>
 
       <!-- Region Selector Sheet -->
-      <native-sheet
-        :open="showRegionSelector ? '' : null"
-        @native-sheet-toggle="showRegionSelector = $event.detail.open"
-      >
+      <native-sheet :open="showRegionSelector ? '' : null" @native-sheet-toggle="showRegionSelector = $event.detail.open">
         <div class="flex justify-center py-4">
           <div class="w-12 h-1.5 bg-gray-300 rounded-full"></div>
         </div>
         <div class="w-full max-w-md mx-auto space-y-6">
           <div class="flex justify-between items-center">
             <h3 class="text-2xl font-bold text-gray-800">Select Region</h3>
-            <button
-              @click="showRegionSelector = false"
-              class="text-gray-400 hover:text-gray-600 bg-gray-100 rounded-full p-1"
-              v-html="icons.x"
-            ></button>
+            <button @click="showRegionSelector = false" class="text-gray-400 hover:text-gray-600 bg-gray-100 rounded-full p-1" v-html="icons.x"></button>
           </div>
           <div class="grid grid-cols-2 gap-3">
             <button
@@ -536,11 +514,7 @@
         <div class="w-full max-w-md mx-auto space-y-6">
           <div class="flex justify-between items-center">
             <h3 class="text-2xl font-bold text-gray-800">Settings</h3>
-            <button
-              @click="showSettings = false"
-              class="text-gray-400 hover:text-gray-600 bg-gray-100 rounded-full p-1"
-              v-html="icons.x"
-            ></button>
+            <button @click="showSettings = false" class="text-gray-400 hover:text-gray-600 bg-gray-100 rounded-full p-1" v-html="icons.x"></button>
           </div>
           <div class="flex flex-col space-y-4">
             <button
@@ -552,14 +526,8 @@
                 <span v-html="soundEnabled ? icons.volume : icons.volumeOff"></span>
                 <span>Sound Effects</span>
               </div>
-              <div
-                class="w-12 h-6 rounded-full relative transition-colors duration-200"
-                :class="soundEnabled ? 'bg-blue-500' : 'bg-gray-300'"
-              >
-                <div
-                  class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform duration-200"
-                  :class="soundEnabled ? 'translate-x-6' : 'translate-x-0'"
-                ></div>
+              <div class="w-12 h-6 rounded-full relative transition-colors duration-200" :class="soundEnabled ? 'bg-blue-500' : 'bg-gray-300'">
+                <div class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform duration-200" :class="soundEnabled ? 'translate-x-6' : 'translate-x-0'"></div>
               </div>
             </button>
             <button
@@ -571,14 +539,8 @@
                 <span v-html="autoContinue ? icons.play : icons.pause"></span>
                 <span>Auto-Continue (Correct Answers)</span>
               </div>
-              <div
-                class="w-12 h-6 rounded-full relative transition-colors duration-200"
-                :class="autoContinue ? 'bg-blue-500' : 'bg-gray-300'"
-              >
-                <div
-                  class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform duration-200"
-                  :class="autoContinue ? 'translate-x-6' : 'translate-x-0'"
-                ></div>
+              <div class="w-12 h-6 rounded-full relative transition-colors duration-200" :class="autoContinue ? 'bg-blue-500' : 'bg-gray-300'">
+                <div class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform duration-200" :class="autoContinue ? 'translate-x-6' : 'translate-x-0'"></div>
               </div>
             </button>
           </div>
@@ -586,42 +548,26 @@
       </native-sheet>
 
       <!-- Mistakes Sheet -->
-      <native-sheet
-        class="mistakes-sheet"
-        :open="showMistakesModal ? '' : null"
-        @native-sheet-toggle="showMistakesModal = $event.detail.open"
-      >
+      <native-sheet class="mistakes-sheet" :open="showMistakesModal ? '' : null" @native-sheet-toggle="showMistakesModal = $event.detail.open">
         <div class="flex justify-center py-4">
           <div class="w-12 h-1.5 bg-gray-300 rounded-full"></div>
         </div>
         <div class="w-full max-w-md mx-auto flex flex-col space-y-4">
           <div class="flex justify-between items-center">
             <h3 class="text-2xl font-bold text-gray-800">Your Mistakes</h3>
-            <button
-              @click="showMistakesModal = false"
-              class="text-gray-400 hover:text-gray-600 bg-gray-100 rounded-full p-1"
-              v-html="icons.x"
-            ></button>
+            <button @click="showMistakesModal = false" class="text-gray-400 hover:text-gray-600 bg-gray-100 rounded-full p-1" v-html="icons.x"></button>
           </div>
 
           <div class="overflow-y-auto max-h-[60vh] pr-2 -mr-2 custom-scrollbar">
             <div class="space-y-4 pb-4">
-              <div
-                v-for="(item, idx) in wrongAnswers"
-                :key="idx"
-                class="bg-gray-50 rounded-xl p-4 border border-gray-200 flex flex-col"
-              >
+              <div v-for="(item, idx) in wrongAnswers" :key="idx" class="bg-gray-50 rounded-xl p-4 border border-gray-200 flex flex-col">
                 <div class="flex items-start space-x-4 mb-3">
-                  <img
-                    :src="`https://flagcdn.com/w160/${item.question.correctOption.code}.png`"
-                    class="w-20 h-auto object-cover rounded shadow-sm border border-gray-200"
-                    loading="lazy"
-                  />
+                  <img :src="`https://flagcdn.com/w160/${item.question.correctOption.code}.png`" class="w-20 h-auto object-cover rounded shadow-sm border border-gray-200" loading="lazy" />
                   <div>
                     <div class="text-xs text-gray-400 font-bold uppercase mb-0.5">Correct Answer</div>
                     <div class="text-lg font-extrabold text-gray-800 leading-tight">
-                      {{ gameMode === 'capitals' ? item.question.correctOption.capital :
-                      item.question.correctOption.name }}
+                      {{ gameMode === 'capitals' ? item.question.correctOption.capital : (gameMode === 'language' ? item.question.correctOption.language : (gameMode === 'currency' ? item.question.correctOption.currency :
+                      item.question.correctOption.name)) }}
                     </div>
                   </div>
                 </div>
@@ -636,7 +582,7 @@
                       <span v-if="item.type === 'timeout'">Time's Up!</span>
                       <span v-else-if="typeof item.userAnswer === 'string'"> "{{ item.userAnswer }}" </span>
                       <span v-else-if="item.userAnswer">
-                        {{ gameMode === 'capitals' ? item.userAnswer.capital : item.userAnswer.name }}
+                        {{ gameMode === 'capitals' ? item.userAnswer.capital : (gameMode === 'language' ? item.userAnswer.language : (gameMode === 'currency' ? item.userAnswer.currency : item.userAnswer.name)) }}
                       </span>
                     </div>
                   </div>
@@ -646,21 +592,13 @@
           </div>
 
           <div class="pt-2 border-t border-gray-100">
-            <button
-              @click="showMistakesModal = false"
-              class="w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition-colors"
-            >
-              Close
-            </button>
+            <button @click="showMistakesModal = false" class="w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition-colors">Close</button>
           </div>
         </div>
       </native-sheet>
 
       <!-- START SCREEN -->
-      <div
-        v-if="screen === 'start'"
-        class="flex flex-col items-center justify-center h-full p-6 text-center animate-fade-in relative"
-      >
+      <div v-if="screen === 'start'" class="flex flex-col items-center justify-center h-full p-6 text-center animate-fade-in relative">
         <!-- Settings Button -->
         <button
           @click="showSettings = true"
@@ -671,9 +609,7 @@
         </button>
 
         <div class="mb-8 animate-bounce-custom">
-          <div
-            class="w-32 h-24 bg-blue-500 rounded-lg shadow-lg flex items-center justify-center relative overflow-hidden border-4 border-blue-700 transform rotate-3"
-          >
+          <div class="w-32 h-24 bg-blue-500 rounded-lg shadow-lg flex items-center justify-center relative overflow-hidden border-4 border-blue-700 transform rotate-3">
             <div class="absolute inset-0 flex flex-col">
               <div class="h-1/3 bg-yellow-400"></div>
               <div class="h-1/3 bg-blue-500"></div>
@@ -682,23 +618,15 @@
           </div>
         </div>
         <h1 class="text-4xl font-extrabold text-gray-800 mb-4">Flag Master</h1>
-        <p class="text-gray-500 text-lg mb-8 max-w-md">
-          Master all {{ totalCountries }} flags of the world in one endless run!
-        </p>
+        <p class="text-gray-500 text-lg mb-8 max-w-md">Master all {{ totalCountries }} flags of the world in one endless run!</p>
 
-        <div
-          v-if="highScore > 0"
-          class="mb-8 bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full font-bold inline-flex items-center shadow-sm"
-        >
+        <div v-if="highScore > 0" class="mb-8 bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full font-bold inline-flex items-center shadow-sm">
           <span class="mr-2" v-html="icons.trophy"></span>
           Best Score: {{ highScore }}
         </div>
 
         <!-- Region Selector -->
-        <button
-          @click="showRegionSelector = true"
-          class="mb-6 px-5 py-2 bg-white border-2 border-gray-200 rounded-full text-gray-700 font-bold flex items-center shadow-sm hover:bg-gray-50 transition-colors no-select"
-        >
+        <button @click="showRegionSelector = true" class="mb-6 px-5 py-2 bg-white border-2 border-gray-200 rounded-full text-gray-700 font-bold flex items-center shadow-sm hover:bg-gray-50 transition-colors no-select">
           <span class="mr-2 text-blue-500" v-html="icons.globe"></span>
           Region: {{ selectedRegion }}
         </button>
@@ -729,10 +657,7 @@
           </div>
         </div>
 
-        <button
-          @click="screen = 'passport'"
-          class="mt-6 text-blue-500 font-bold flex items-center space-x-2 px-4 py-2 rounded-full hover:bg-blue-50 transition-colors"
-        >
+        <button @click="screen = 'passport'" class="mt-6 text-blue-500 font-bold flex items-center space-x-2 px-4 py-2 rounded-full hover:bg-blue-50 transition-colors">
           <span v-html="icons.book"></span>
           <span>My Passport</span>
         </button>
@@ -742,47 +667,23 @@
       <div v-if="screen === 'passport'" class="flex flex-col h-full bg-gray-50">
         <div class="bg-white shadow-sm px-4 py-4 z-10 flex items-center justify-between safe-top">
           <div class="flex items-center space-x-3">
-            <button
-              @click="screen = 'start'"
-              class="text-gray-500 hover:text-gray-700 bg-gray-100 p-2 rounded-full transition-colors"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
+            <button @click="screen = 'start'" class="text-gray-500 hover:text-gray-700 bg-gray-100 p-2 rounded-full transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M19 12H5" />
                 <path d="M12 19l-7-7 7-7" />
               </svg>
             </button>
             <h2 class="text-xl font-bold text-gray-800">My Passport</h2>
           </div>
-          <div class="text-sm font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
-            {{ Object.keys(collectedFlags).length }} / {{ totalCountries }}
-          </div>
+          <div class="text-sm font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">{{ Object.keys(collectedFlags).length }} / {{ totalCountries }}</div>
         </div>
 
         <div class="flex-1 overflow-y-auto p-4">
           <!-- Region Stats -->
           <div class="grid grid-cols-2 gap-2 mb-6">
-            <div
-              class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex flex-col items-center justify-center"
-              v-for="region in continents.filter(c => c !== 'World')"
-              :key="region"
-            >
+            <div class="bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex flex-col items-center justify-center" v-for="region in continents.filter(c => c !== 'World')" :key="region">
               <span class="text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">{{ region }}</span>
-              <span
-                class="text-lg font-extrabold"
-                :class="getRegionProgress(region) === 100 ? 'text-green-500' : 'text-gray-700'"
-              >
-                {{ getRegionCount(region) }}%
-              </span>
+              <span class="text-lg font-extrabold" :class="getRegionProgress(region) === 100 ? 'text-green-500' : 'text-gray-700'"> {{ getRegionCount(region) }}% </span>
               <div class="w-full h-1.5 bg-gray-100 rounded-full mt-2 overflow-hidden">
                 <div class="h-full bg-green-500 rounded-full" :style="{ width: getRegionProgress(region) + '%' }"></div>
               </div>
@@ -796,22 +697,11 @@
               class="aspect-square rounded-xl flex items-center justify-center relative overflow-hidden border-2 transition-all"
               :class="collectedFlags[country.code] ? 'bg-white border-blue-200 shadow-sm' : 'bg-gray-100 border-gray-200 opacity-60'"
             >
-              <img
-                v-if="collectedFlags[country.code]"
-                :src="`https://flagcdn.com/w160/${country.code}.png`"
-                loading="lazy"
-                class="w-full h-full object-cover"
-                :alt="country.name"
-              />
+              <img v-if="collectedFlags[country.code]" :src="`https://flagcdn.com/w160/${country.code}.png`" loading="lazy" class="w-full h-full object-cover" :alt="country.name" />
               <span v-else class="text-2xl text-gray-300">?</span>
 
               <!-- Count Badge -->
-              <div
-                v-if="collectedFlags[country.code] > 1"
-                class="absolute bottom-0 right-0 bg-blue-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-tl-lg"
-              >
-                {{ collectedFlags[country.code] }}
-              </div>
+              <div v-if="collectedFlags[country.code] > 1" class="absolute bottom-0 right-0 bg-blue-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-tl-lg">{{ collectedFlags[country.code] }}</div>
             </div>
           </div>
         </div>
@@ -829,17 +719,11 @@
               <div class="flex-1 relative h-4">
                 <!-- Track -->
                 <div class="absolute inset-0 bg-gray-200 rounded-full overflow-hidden border border-gray-300/50">
-                  <div
-                    class="h-full transition-all duration-500 ease-out rounded-full shadow-[0_0_10px_rgba(0,0,0,0.1)]"
-                    :class="progressBarClass"
-                    :style="{ width: progress + '%' }"
-                  ></div>
+                  <div class="h-full transition-all duration-500 ease-out rounded-full shadow-[0_0_10px_rgba(0,0,0,0.1)]" :class="progressBarClass" :style="{ width: progress + '%' }"></div>
                 </div>
               </div>
 
-              <div class="text-sm font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-md min-w-[60px] text-center">
-                {{ score }}
-              </div>
+              <div class="text-sm font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-md min-w-[60px] text-center">{{ score }}</div>
             </div>
 
             <div class="flex items-center space-x-1">
@@ -851,11 +735,7 @@
           <!-- Blitz Timer -->
           <div v-if="gameMode === 'blitz'" class="w-full mt-3">
             <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden shadow-inner">
-              <div
-                class="h-full transition-all duration-100 ease-linear"
-                :class="timeLeft < 2 ? 'bg-red-600 animate-pulse' : 'bg-orange-500'"
-                :style="{ width: (timeLeft / 5) * 100 + '%' }"
-              ></div>
+              <div class="h-full transition-all duration-100 ease-linear" :class="timeLeft < 2 ? 'bg-red-600 animate-pulse' : 'bg-orange-500'" :style="{ width: (timeLeft / 5) * 100 + '%' }"></div>
             </div>
           </div>
         </div>
@@ -863,13 +743,11 @@
         <!-- Game Board -->
         <div class="flex-1 overflow-y-auto p-4 flex flex-col items-center w-full pb-32">
           <h2 class="text-2xl font-bold text-gray-700 mt-4 mb-6 text-left w-full">
-            {{ gameMode === 'reverse' ? 'Which flag is this?' : (gameMode === 'capitals' ? 'What is the capital?' :
-            (gameMode === 'description' ? 'Which country has this flag?' : 'Which country is this?')) }}
+            {{ gameMode === 'reverse' ? 'Which flag is this?' : (gameMode === 'capitals' ? 'What is the capital?' : (gameMode === 'language' ? 'What is the official language?' : (gameMode === 'currency' ? 'What is the currency?' : (gameMode
+            === 'description' ? 'Which country has this flag?' : 'Which country is this?')))) }}
           </h2>
 
-          <div
-            class="mb-6 p-4 bg-white rounded-2xl shadow-sm border-2 border-gray-100 w-full flex flex-col justify-center items-center min-h-[160px]"
-          >
+          <div class="mb-6 p-4 bg-white rounded-2xl shadow-sm border-2 border-gray-100 w-full flex flex-col justify-center items-center min-h-[160px]">
             <img
               v-if="currentQuestion && gameMode !== 'reverse' && gameMode !== 'description'"
               :src="`https://flagcdn.com/w640/${currentQuestion.correctOption.code}.png`"
@@ -878,12 +756,7 @@
               :class="[currentEffect, { 'transition-all duration-500': feedback !== null }]"
               @error="handleImageError"
             />
-            <h3
-              v-if="currentQuestion && gameMode === 'reverse'"
-              class="text-3xl font-extrabold text-gray-800 text-center mt-2"
-            >
-              {{ currentQuestion.correctOption.name }}
-            </h3>
+            <h3 v-if="currentQuestion && gameMode === 'reverse'" class="text-3xl font-extrabold text-gray-800 text-center mt-2">{{ currentQuestion.correctOption.name }}</h3>
             <div v-if="currentQuestion && gameMode === 'description'" class="text-center px-2">
               <div class="text-xl font-bold text-gray-600 mb-2">📖 Flag Description:</div>
               <p class="text-lg text-gray-800 leading-relaxed">{{ currentQuestion.correctOption.description }}</p>
@@ -912,11 +785,7 @@
             </form>
           </div>
 
-          <div
-            class="grid w-full"
-            :class="gameMode === 'reverse' ? 'grid-cols-2 gap-4' : 'grid-cols-1 gap-3'"
-            v-else-if="currentQuestion"
-          >
+          <div class="grid w-full" :class="gameMode === 'reverse' ? 'grid-cols-2 gap-4' : 'grid-cols-1 gap-3'" v-else-if="currentQuestion">
             <button
               v-for="(option, idx) in currentQuestion.options"
               :key="option.code"
@@ -929,51 +798,28 @@
               :disabled="feedback !== null"
             >
               <div class="flex items-center" :class="{'w-full justify-center': gameMode === 'reverse'}">
-                <span
-                  class="flex items-center justify-center w-8 h-8 rounded-lg text-sm border absolute top-2 left-2"
-                  :class="getNumberClass(option)"
-                  v-if="gameMode === 'reverse'"
-                >
-                  {{ idx + 1 }}
-                </span>
-                <span
-                  class="flex items-center justify-center w-8 h-8 rounded-lg text-sm border mr-3"
-                  :class="getNumberClass(option)"
-                  v-else
-                >
-                  {{ idx + 1 }}
-                </span>
+                <span class="flex items-center justify-center w-8 h-8 rounded-lg text-sm border absolute top-2 left-2" :class="getNumberClass(option)" v-if="gameMode === 'reverse'"> {{ idx + 1 }} </span>
+                <span class="flex items-center justify-center w-8 h-8 rounded-lg text-sm border mr-3" :class="getNumberClass(option)" v-else> {{ idx + 1 }} </span>
 
-                <span v-if="gameMode !== 'reverse'">{{ gameMode === 'capitals' ? option.capital : option.name }}</span>
-                <img
-                  v-if="gameMode === 'reverse'"
-                  :src="`https://flagcdn.com/w320/${option.code}.png`"
-                  alt="Flag"
-                  class="h-20 w-auto rounded shadow-sm object-cover"
-                  @error="handleImageError"
-                />
+                <span v-if="gameMode !== 'reverse'"> {{ gameMode === 'capitals' ? option.capital : (gameMode === 'language' ? option.language : (gameMode === 'currency' ? option.currency : option.name)) }} </span>
+                <img v-if="gameMode === 'reverse'" :src="`https://flagcdn.com/w320/${option.code}.png`" alt="Flag" class="h-20 w-auto rounded shadow-sm object-cover" @error="handleImageError" />
               </div>
             </button>
           </div>
         </div>
 
         <!-- Bottom Sheet -->
-        <div
-          class="fixed bottom-0 left-0 right-0 max-w-md mx-auto sheet-transition p-4 border-t-2 flex flex-col z-50 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.3)]"
-          :class="bottomSheetClasses"
-        >
+        <div class="fixed bottom-0 left-0 right-0 max-w-md mx-auto sheet-transition p-4 border-t-2 flex flex-col z-50 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.3)]" :class="bottomSheetClasses">
           <div class="flex items-center justify-between mb-4 px-2">
             <div class="flex items-center space-x-3">
               <div class="p-2 rounded-full text-white" :class="isCorrect ? 'bg-green-500' : 'bg-red-500'">
                 <span v-html="isCorrect ? icons.check : icons.x"></span>
               </div>
               <div>
-                <h3 class="text-xl font-extrabold" :class="isCorrect ? 'text-green-600' : 'text-red-600'">
-                  {{ isCorrect ? 'Excellent!' : (feedback === 'timeout' ? "Time's Up!" : 'Incorrect') }}
-                </h3>
+                <h3 class="text-xl font-extrabold" :class="isCorrect ? 'text-green-600' : 'text-red-600'">{{ isCorrect ? 'Excellent!' : (feedback === 'timeout' ? "Time's Up!" : 'Incorrect') }}</h3>
                 <p v-if="!isCorrect" class="text-red-500 font-medium">
-                  Correct: {{ gameMode === 'capitals' ? currentQuestion?.correctOption.capital :
-                  currentQuestion?.correctOption.name }}
+                  Correct: {{ gameMode === 'capitals' ? currentQuestion?.correctOption.capital : (gameMode === 'language' ? currentQuestion?.correctOption.language : (gameMode === 'currency' ? currentQuestion?.correctOption.currency :
+                  currentQuestion?.correctOption.name)) }}
                 </p>
               </div>
             </div>
@@ -989,9 +835,7 @@
         </div>
 
         <!-- Desktop Hint -->
-        <div class="hidden md:block fixed bottom-4 right-4 text-xs text-gray-400 bg-white p-2 rounded border shadow-sm">
-          Press <strong>1-4</strong> to answer, <strong>Enter</strong> to continue
-        </div>
+        <div class="hidden md:block fixed bottom-4 right-4 text-xs text-gray-400 bg-white p-2 rounded border shadow-sm">Press <strong>1-4</strong> to answer, <strong>Enter</strong> to continue</div>
       </div>
 
       <!-- END SCREEN -->
@@ -1012,11 +856,7 @@
           <div class="flex justify-between items-center mb-4 border-b pb-4 border-gray-300" v-if="highScore > 0">
             <span class="text-gray-600 font-bold">Best Score</span>
             <div class="flex items-center">
-              <span
-                v-if="score >= highScore && score > 0"
-                class="mr-2 text-xs bg-yellow-400 text-white px-2 py-1 rounded-full font-bold animate-pulse"
-                >NEW!</span
-              >
+              <span v-if="score >= highScore && score > 0" class="mr-2 text-xs bg-yellow-400 text-white px-2 py-1 rounded-full font-bold animate-pulse">NEW!</span>
               <span class="text-2xl font-extrabold text-yellow-600">{{ highScore }}</span>
             </div>
           </div>
@@ -1056,7 +896,6 @@
 
     <script>
       const { createApp, ref, computed, onMounted, onUnmounted } = Vue;
-      debugger;
       // --- DATA ---
       const COUNTRIES = [
         {
@@ -1225,8 +1064,7 @@
           name: "Bahamas",
           continent: "North America",
           difficulty: "medium",
-          description:
-            "Three horizontal stripes of aquamarine, yellow, and aquamarine with a black triangle on the hoist",
+          description: "Three horizontal stripes of aquamarine, yellow, and aquamarine with a black triangle on the hoist",
         },
         {
           code: "bt",
@@ -1275,8 +1113,7 @@
           name: "Central African Republic",
           continent: "Africa",
           difficulty: "hard",
-          description:
-            "Four horizontal stripes of blue, white, green, and yellow with a red vertical stripe and yellow star",
+          description: "Four horizontal stripes of blue, white, green, and yellow with a red vertical stripe and yellow star",
         },
         {
           code: "cg",
@@ -1339,8 +1176,7 @@
           name: "Cuba",
           continent: "North America",
           difficulty: "medium",
-          description:
-            "Five horizontal stripes alternating blue and white with a red triangle and white star on the hoist",
+          description: "Five horizontal stripes alternating blue and white with a red triangle and white star on the hoist",
         },
         {
           code: "cv",
@@ -1431,8 +1267,7 @@
           name: "Eritrea",
           continent: "Africa",
           difficulty: "hard",
-          description:
-            "Red triangle on the hoist with green and blue triangular sections and a yellow wreath and olive branch",
+          description: "Red triangle on the hoist with green and blue triangular sections and a yellow wreath and olive branch",
         },
         {
           code: "es",
@@ -1558,8 +1393,7 @@
           name: "Guyana",
           continent: "South America",
           difficulty: "hard",
-          description:
-            "Green background with yellow triangle bordered by white, containing a red triangle bordered by black",
+          description: "Green background with yellow triangle bordered by white, containing a red triangle bordered by black",
         },
         {
           code: "hn",
@@ -1650,16 +1484,14 @@
           name: "Jamaica",
           continent: "North America",
           difficulty: "medium",
-          description:
-            "Gold diagonal cross dividing the flag into green triangles at top and bottom and black at sides",
+          description: "Gold diagonal cross dividing the flag into green triangles at top and bottom and black at sides",
         },
         {
           code: "jo",
           name: "Jordan",
           continent: "Asia",
           difficulty: "hard",
-          description:
-            "Horizontal black, white, and green stripes with a red triangle on the hoist featuring a white star",
+          description: "Horizontal black, white, and green stripes with a red triangle on the hoist featuring a white star",
         },
         {
           code: "jp",
@@ -1673,8 +1505,7 @@
           name: "Kenya",
           continent: "Africa",
           difficulty: "medium",
-          description:
-            "Horizontal black, red, and green stripes with white borders and a Maasai shield with spears in center",
+          description: "Horizontal black, red, and green stripes with white borders and a Maasai shield with spears in center",
         },
         {
           code: "kg",
@@ -1702,8 +1533,7 @@
           name: "Comoros",
           continent: "Africa",
           difficulty: "hard",
-          description:
-            "Four horizontal stripes of yellow, white, red, and blue with a green triangle and white crescent and stars",
+          description: "Four horizontal stripes of yellow, white, red, and blue with a green triangle and white crescent and stars",
         },
         {
           code: "kn",
@@ -1717,8 +1547,7 @@
           name: "North Korea",
           continent: "Asia",
           difficulty: "medium",
-          description:
-            "Blue stripes on top and bottom, wide red stripe in center with a white circle containing a red star",
+          description: "Blue stripes on top and bottom, wide red stripe in center with a white circle containing a red star",
         },
         {
           code: "kr",
@@ -1739,8 +1568,7 @@
           name: "Kazakhstan",
           continent: "Asia",
           difficulty: "medium",
-          description:
-            "Light blue background with a yellow sun and eagle in the center and ornamental pattern on hoist",
+          description: "Light blue background with a yellow sun and eagle in the center and ornamental pattern on hoist",
         },
         {
           code: "la",
@@ -1775,8 +1603,7 @@
           name: "Sri Lanka",
           continent: "Asia",
           difficulty: "medium",
-          description:
-            "Green and orange vertical stripes on left, maroon field with yellow lion holding a sword and leaves",
+          description: "Green and orange vertical stripes on left, maroon field with yellow lion holding a sword and leaves",
         },
         {
           code: "lr",
@@ -1944,16 +1771,14 @@
           name: "Mozambique",
           continent: "Africa",
           difficulty: "hard",
-          description:
-            "Horizontal green, black, and yellow stripes with white borders and a red triangle with a star and rifle",
+          description: "Horizontal green, black, and yellow stripes with white borders and a red triangle with a star and rifle",
         },
         {
           code: "na",
           name: "Namibia",
           continent: "Africa",
           difficulty: "medium",
-          description:
-            "Diagonal red stripe bordered by white from bottom left to top right, blue and green triangles, with yellow sun",
+          description: "Diagonal red stripe bordered by white from bottom left to top right, blue and green triangles, with yellow sun",
         },
         {
           code: "ne",
@@ -2009,16 +1834,14 @@
           name: "New Zealand",
           continent: "Oceania",
           difficulty: "easy",
-          description:
-            "Blue background with Union Jack in corner and four red stars with white borders forming the Southern Cross",
+          description: "Blue background with Union Jack in corner and four red stars with white borders forming the Southern Cross",
         },
         {
           code: "om",
           name: "Oman",
           continent: "Asia",
           difficulty: "hard",
-          description:
-            "Horizontal white, red, and green stripes with a red vertical band featuring a white emblem on the hoist",
+          description: "Horizontal white, red, and green stripes with a red vertical band featuring a white emblem on the hoist",
         },
         {
           code: "pa",
@@ -2067,8 +1890,7 @@
           name: "Portugal",
           continent: "Europe",
           difficulty: "easy",
-          description:
-            "Vertical green and red stripes with the armillary sphere and shield coat of arms at the junction",
+          description: "Vertical green and red stripes with the armillary sphere and shield coat of arms at the junction",
         },
         {
           code: "pw",
@@ -2131,8 +1953,7 @@
           name: "Solomon Islands",
           continent: "Oceania",
           difficulty: "hard",
-          description:
-            "Diagonal yellow stripe from bottom left to top right dividing blue and green with five white stars",
+          description: "Diagonal yellow stripe from bottom left to top right dividing blue and green with five white stars",
         },
         {
           code: "sc",
@@ -2216,8 +2037,7 @@
           name: "South Sudan",
           continent: "Africa",
           difficulty: "hard",
-          description:
-            "Horizontal black, red, and green stripes with white borders and a blue triangle with yellow star on hoist",
+          description: "Horizontal black, red, and green stripes with white borders and a blue triangle with yellow star on hoist",
         },
         {
           code: "st",
@@ -2245,8 +2065,7 @@
           name: "Eswatini",
           continent: "Africa",
           difficulty: "hard",
-          description:
-            "Horizontal blue, yellow, red, yellow, and blue stripes with a black and white shield and weapons",
+          description: "Horizontal blue, yellow, red, yellow, and blue stripes with a black and white shield and weapons",
         },
         {
           code: "td",
@@ -2260,8 +2079,7 @@
           name: "Togo",
           continent: "Africa",
           difficulty: "hard",
-          description:
-            "Five horizontal stripes alternating green and yellow with a red square containing a white star in corner",
+          description: "Five horizontal stripes alternating green and yellow with a red square containing a white star in corner",
         },
         {
           code: "th",
@@ -2289,8 +2107,7 @@
           name: "Turkmenistan",
           continent: "Asia",
           difficulty: "hard",
-          description:
-            "Green background with a red vertical stripe featuring carpet patterns and a crescent with stars",
+          description: "Green background with a red vertical stripe featuring carpet patterns and a crescent with stars",
         },
         {
           code: "tn",
@@ -2339,8 +2156,7 @@
           name: "Tanzania",
           continent: "Africa",
           difficulty: "medium",
-          description:
-            "Diagonal yellow stripe bordered by black from bottom left to top right, green and blue triangles",
+          description: "Diagonal yellow stripe bordered by black from bottom left to top right, green and blue triangles",
         },
         {
           code: "ua",
@@ -2354,8 +2170,7 @@
           name: "Uganda",
           continent: "Africa",
           difficulty: "medium",
-          description:
-            "Six horizontal stripes of black, yellow, and red repeated with a white circle containing a crested crane",
+          description: "Six horizontal stripes of black, yellow, and red repeated with a white circle containing a crested crane",
         },
         {
           code: "us",
@@ -2390,16 +2205,14 @@
           name: "Saint Vincent and the Grenadines",
           continent: "North America",
           difficulty: "hard",
-          description:
-            "Vertical stripes of blue, yellow, and green with three green diamonds arranged in a V in the center",
+          description: "Vertical stripes of blue, yellow, and green with three green diamonds arranged in a V in the center",
         },
         {
           code: "ve",
           name: "Venezuela",
           continent: "South America",
           difficulty: "medium",
-          description:
-            "Three horizontal stripes of yellow, blue, and red with an arc of eight white stars in the center",
+          description: "Three horizontal stripes of yellow, blue, and red with an arc of eight white stars in the center",
         },
         {
           code: "vn",
@@ -2413,8 +2226,7 @@
           name: "Vanuatu",
           continent: "Oceania",
           difficulty: "hard",
-          description:
-            "Horizontal red and green sections divided by a yellow Y-shape with black borders and a boar tusk emblem",
+          description: "Horizontal red and green sections divided by a yellow Y-shape with black borders and a boar tusk emblem",
         },
         {
           code: "ws",
@@ -2435,24 +2247,21 @@
           name: "South Africa",
           continent: "Africa",
           difficulty: "easy",
-          description:
-            "Horizontal Y-shape in green with black borders separating red, blue, white, and yellow sections",
+          description: "Horizontal Y-shape in green with black borders separating red, blue, white, and yellow sections",
         },
         {
           code: "zm",
           name: "Zambia",
           continent: "Africa",
           difficulty: "medium",
-          description:
-            "Green background with an orange eagle over three vertical stripes of red, black, and orange in the corner",
+          description: "Green background with an orange eagle over three vertical stripes of red, black, and orange in the corner",
         },
         {
           code: "zw",
           name: "Zimbabwe",
           continent: "Africa",
           difficulty: "medium",
-          description:
-            "Horizontal green, yellow, red, black, red, yellow, and green stripes with white triangle containing Zimbabwe bird on red star",
+          description: "Horizontal green, yellow, red, black, red, yellow, and green stripes with white triangle containing Zimbabwe bird on red star",
         },
       ];
 
@@ -2654,13 +2463,420 @@
         zw: "Harare",
       };
 
-      // Merge capitals
+      const LANGUAGES = {
+        ad: "Catalan",
+        ae: "Arabic",
+        af: "Pashto, Dari",
+        ag: "English",
+        al: "Albanian",
+        am: "Armenian",
+        ao: "Portuguese",
+        ar: "Spanish",
+        at: "German",
+        au: "English",
+        az: "Azerbaijani",
+        ba: "Bosnian, Croatian, Serbian",
+        bb: "English",
+        bd: "Bengali",
+        be: "Dutch, French, German",
+        bf: "French",
+        bg: "Bulgarian",
+        bh: "Arabic",
+        bi: "Kirundi, French",
+        bj: "French",
+        bn: "Malay",
+        bo: "Spanish, Quechua, Aymara",
+        br: "Portuguese",
+        bs: "English",
+        bt: "Dzongkha",
+        bw: "English, Setswana",
+        by: "Belarusian, Russian",
+        bz: "English",
+        ca: "English, French",
+        cd: "French",
+        cf: "French, Sango",
+        cg: "French",
+        ch: "German, French, Italian, Romansh",
+        ci: "French",
+        cl: "Spanish",
+        cm: "French, English",
+        cn: "Mandarin",
+        co: "Spanish",
+        cr: "Spanish",
+        cu: "Spanish",
+        cv: "Portuguese",
+        cy: "Greek, Turkish",
+        cz: "Czech",
+        de: "German",
+        dj: "French, Arabic",
+        dk: "Danish",
+        dm: "English",
+        do: "Spanish",
+        dz: "Arabic, Berber",
+        ec: "Spanish",
+        ee: "Estonian",
+        eg: "Arabic",
+        er: "Tigrinya, Arabic, English",
+        es: "Spanish",
+        et: "Amharic",
+        fi: "Finnish, Swedish",
+        fj: "English, Fijian, Hindi",
+        fm: "English",
+        fr: "French",
+        ga: "French",
+        gb: "English",
+        gd: "English",
+        ge: "Georgian",
+        gh: "English",
+        gm: "English",
+        gn: "French",
+        gq: "Spanish, French, Portuguese",
+        gr: "Greek",
+        gt: "Spanish",
+        gw: "Portuguese",
+        gy: "English",
+        hn: "Spanish",
+        hr: "Croatian",
+        ht: "French, Haitian Creole",
+        hu: "Hungarian",
+        id: "Indonesian",
+        ie: "Irish, English",
+        il: "Hebrew, Arabic",
+        in: "Hindi, English",
+        iq: "Arabic, Kurdish",
+        ir: "Persian",
+        is: "Icelandic",
+        it: "Italian",
+        jm: "English",
+        jo: "Arabic",
+        jp: "Japanese",
+        ke: "English, Swahili",
+        kg: "Kyrgyz, Russian",
+        kh: "Khmer",
+        ki: "English, Gilbertese",
+        km: "Comorian, Arabic, French",
+        kn: "English",
+        kp: "Korean",
+        kr: "Korean",
+        kw: "Arabic",
+        kz: "Kazakh, Russian",
+        la: "Lao",
+        lb: "Arabic, French",
+        lc: "English",
+        li: "German",
+        lk: "Sinhala, Tamil",
+        lr: "English",
+        ls: "Sesotho, English",
+        lt: "Lithuanian",
+        lu: "Luxembourgish, French, German",
+        ly: "Arabic",
+        ma: "Arabic, Berber",
+        mc: "French",
+        md: "Romanian",
+        me: "Montenegrin",
+        mg: "Malagasy, French",
+        mh: "Marshallese, English",
+        mk: "Macedonian",
+        ml: "French",
+        mm: "Burmese",
+        mn: "Mongolian",
+        mr: "Arabic",
+        mt: "Maltese, English",
+        mu: "English, French, Mauritian Creole",
+        mv: "Dhivehi",
+        mw: "English, Chichewa",
+        mx: "Spanish",
+        my: "Malay",
+        mz: "Portuguese",
+        na: "English",
+        ne: "French",
+        ng: "English",
+        ni: "Spanish",
+        nl: "Dutch",
+        no: "Norwegian",
+        np: "Nepali",
+        nr: "Nauruan, English",
+        nz: "English, Māori",
+        om: "Arabic",
+        pa: "Spanish",
+        pe: "Spanish, Quechua",
+        pg: "English, Tok Pisin",
+        ph: "Filipino, English",
+        pk: "Urdu, English",
+        pl: "Polish",
+        pt: "Portuguese",
+        pw: "Palauan, English",
+        py: "Spanish, Guarani",
+        qa: "Arabic",
+        ro: "Romanian",
+        rs: "Serbian",
+        ru: "Russian",
+        rw: "Kinyarwanda, French, English",
+        sa: "Arabic",
+        sb: "English",
+        sc: "English, French, Seychellois Creole",
+        sd: "Arabic, English",
+        se: "Swedish",
+        sg: "English, Malay, Mandarin, Tamil",
+        si: "Slovenian",
+        sk: "Slovak",
+        sl: "English",
+        sm: "Italian",
+        sn: "French",
+        so: "Somali, Arabic",
+        sr: "Dutch",
+        ss: "English",
+        st: "Portuguese",
+        sv: "Spanish",
+        sy: "Arabic",
+        sz: "Swazi, English",
+        td: "French, Arabic",
+        tg: "French",
+        th: "Thai",
+        tj: "Tajik",
+        tl: "Tetum, Portuguese",
+        tm: "Turkmen",
+        tn: "Arabic",
+        to: "Tongan, English",
+        tr: "Turkish",
+        tt: "English",
+        tv: "Tuvaluan, English",
+        tw: "Mandarin",
+        tz: "Swahili, English",
+        ua: "Ukrainian",
+        ug: "English, Swahili",
+        us: "English",
+        uy: "Spanish",
+        uz: "Uzbek",
+        va: "Italian, Latin",
+        vc: "English",
+        ve: "Spanish",
+        vn: "Vietnamese",
+        vu: "Bislama, English, French",
+        ws: "Samoan, English",
+        ye: "Arabic",
+        za: "Zulu, Xhosa, Afrikaans, English",
+        zm: "English",
+        zw: "English, Shona, Ndebele",
+      };
+
+      const CURRENCIES = {
+        ad: "Euro",
+        ae: "UAE Dirham",
+        af: "Afghan Afghani",
+        ag: "East Caribbean Dollar",
+        al: "Albanian Lek",
+        am: "Armenian Dram",
+        ao: "Angolan Kwanza",
+        ar: "Argentine Peso",
+        at: "Euro",
+        au: "Australian Dollar",
+        az: "Azerbaijani Manat",
+        ba: "Bosnia-Herzegovina Convertible Mark",
+        bb: "Barbadian Dollar",
+        bd: "Bangladeshi Taka",
+        be: "Euro",
+        bf: "West African CFA Franc",
+        bg: "Bulgarian Lev",
+        bh: "Bahraini Dinar",
+        bi: "Burundian Franc",
+        bj: "West African CFA Franc",
+        bn: "Brunei Dollar",
+        bo: "Bolivian Boliviano",
+        br: "Brazilian Real",
+        bs: "Bahamian Dollar",
+        bt: "Bhutanese Ngultrum",
+        bw: "Botswana Pula",
+        by: "Belarusian Ruble",
+        bz: "Belize Dollar",
+        ca: "Canadian Dollar",
+        cd: "Congolese Franc",
+        cf: "Central African CFA Franc",
+        cg: "Central African CFA Franc",
+        ch: "Swiss Franc",
+        ci: "West African CFA Franc",
+        cl: "Chilean Peso",
+        cm: "Central African CFA Franc",
+        cn: "Chinese Yuan",
+        co: "Colombian Peso",
+        cr: "Costa Rican Colón",
+        cu: "Cuban Peso",
+        cv: "Cape Verdean Escudo",
+        cy: "Euro",
+        cz: "Czech Koruna",
+        de: "Euro",
+        dj: "Djiboutian Franc",
+        dk: "Danish Krone",
+        dm: "East Caribbean Dollar",
+        do: "Dominican Peso",
+        dz: "Algerian Dinar",
+        ec: "US Dollar",
+        ee: "Euro",
+        eg: "Egyptian Pound",
+        er: "Eritrean Nakfa",
+        es: "Euro",
+        et: "Ethiopian Birr",
+        fi: "Euro",
+        fj: "Fijian Dollar",
+        fm: "US Dollar",
+        fr: "Euro",
+        ga: "Central African CFA Franc",
+        gb: "British Pound",
+        gd: "East Caribbean Dollar",
+        ge: "Georgian Lari",
+        gh: "Ghanaian Cedi",
+        gm: "Gambian Dalasi",
+        gn: "Guinean Franc",
+        gq: "Central African CFA Franc",
+        gr: "Euro",
+        gt: "Guatemalan Quetzal",
+        gw: "West African CFA Franc",
+        gy: "Guyanese Dollar",
+        hn: "Honduran Lempira",
+        hr: "Croatian Kuna",
+        ht: "Haitian Gourde",
+        hu: "Hungarian Forint",
+        id: "Indonesian Rupiah",
+        ie: "Euro",
+        il: "Israeli Shekel",
+        in: "Indian Rupee",
+        iq: "Iraqi Dinar",
+        ir: "Iranian Rial",
+        is: "Icelandic Króna",
+        it: "Euro",
+        jm: "Jamaican Dollar",
+        jo: "Jordanian Dinar",
+        jp: "Japanese Yen",
+        ke: "Kenyan Shilling",
+        kg: "Kyrgystani Som",
+        kh: "Cambodian Riel",
+        ki: "Australian Dollar",
+        km: "Comorian Franc",
+        kn: "East Caribbean Dollar",
+        kp: "North Korean Won",
+        kr: "South Korean Won",
+        kw: "Kuwaiti Dinar",
+        kz: "Kazakhstani Tenge",
+        la: "Laotian Kip",
+        lb: "Lebanese Pound",
+        lc: "East Caribbean Dollar",
+        li: "Swiss Franc",
+        lk: "Sri Lankan Rupee",
+        lr: "Liberian Dollar",
+        ls: "Lesotho Loti",
+        lt: "Euro",
+        lu: "Euro",
+        lv: "Euro",
+        ly: "Libyan Dinar",
+        ma: "Moroccan Dirham",
+        mc: "Euro",
+        md: "Moldovan Leu",
+        me: "Euro",
+        mg: "Malagasy Ariary",
+        mh: "US Dollar",
+        mk: "Macedonian Denar",
+        ml: "West African CFA Franc",
+        mm: "Myanmar Kyat",
+        mn: "Mongolian Tugrik",
+        mr: "Mauritanian Ouguiya",
+        mt: "Euro",
+        mu: "Mauritian Rupee",
+        mv: "Maldivian Rufiyaa",
+        mw: "Malawian Kwacha",
+        mx: "Mexican Peso",
+        my: "Malaysian Ringgit",
+        mz: "Mozambican Metical",
+        na: "Namibian Dollar",
+        ne: "West African CFA Franc",
+        ng: "Nigerian Naira",
+        ni: "Nicaraguan Córdoba",
+        nl: "Euro",
+        no: "Norwegian Krone",
+        np: "Nepalese Rupee",
+        nr: "Australian Dollar",
+        nz: "New Zealand Dollar",
+        om: "Omani Rial",
+        pa: "Panamanian Balboa",
+        pe: "Peruvian Sol",
+        pg: "Papua New Guinean Kina",
+        ph: "Philippine Peso",
+        pk: "Pakistani Rupee",
+        pl: "Polish Zloty",
+        pt: "Euro",
+        pw: "US Dollar",
+        py: "Paraguayan Guaraní",
+        qa: "Qatari Riyal",
+        ro: "Romanian Leu",
+        rs: "Serbian Dinar",
+        ru: "Russian Ruble",
+        rw: "Rwandan Franc",
+        sa: "Saudi Riyal",
+        sb: "Solomon Islands Dollar",
+        sc: "Seychellois Rupee",
+        sd: "Sudanese Pound",
+        se: "Swedish Krona",
+        sg: "Singapore Dollar",
+        si: "Euro",
+        sk: "Euro",
+        sl: "Sierra Leonean Leone",
+        sm: "Euro",
+        sn: "West African CFA Franc",
+        so: "Somali Shilling",
+        sr: "Surinamese Dollar",
+        ss: "South Sudanese Pound",
+        st: "São Tomé and Príncipe Dobra",
+        sv: "US Dollar",
+        sy: "Syrian Pound",
+        sz: "Swazi Lilangeni",
+        td: "Central African CFA Franc",
+        tg: "West African CFA Franc",
+        th: "Thai Baht",
+        tj: "Tajikistani Somoni",
+        tl: "US Dollar",
+        tm: "Turkmenistani Manat",
+        tn: "Tunisian Dinar",
+        to: "Tongan Pa'anga",
+        tr: "Turkish Lira",
+        tt: "Trinidad and Tobago Dollar",
+        tv: "Australian Dollar",
+        tw: "New Taiwan Dollar",
+        tz: "Tanzanian Shilling",
+        ua: "Ukrainian Hryvnia",
+        ug: "Ugandan Shilling",
+        us: "US Dollar",
+        uy: "Uruguayan Peso",
+        uz: "Uzbekistani Som",
+        va: "Euro",
+        vc: "East Caribbean Dollar",
+        ve: "Venezuelan Bolívar",
+        vn: "Vietnamese Dong",
+        vu: "Vanuatu Vatu",
+        ws: "Samoan Tala",
+        ye: "Yemeni Rial",
+        za: "South African Rand",
+        zm: "Zambian Kwacha",
+        zw: "US Dollar",
+      };
+
+      // Merge capitals, languages, and currencies
       COUNTRIES.forEach((c) => {
         if (CAPITALS[c.code]) {
           c.capital = CAPITALS[c.code];
         } else {
           console.warn("Missing capital for", c.code);
           c.capital = "Unknown";
+        }
+        if (LANGUAGES[c.code]) {
+          c.language = LANGUAGES[c.code];
+        } else {
+          console.warn("Missing language for", c.code);
+          c.language = "Unknown";
+        }
+        if (CURRENCIES[c.code]) {
+          c.currency = CURRENCIES[c.code];
+        } else {
+          console.warn("Missing currency for", c.code);
+          c.currency = "Unknown";
         }
       });
 
@@ -2819,6 +3035,20 @@
               icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4 8 4v14"/><path d="M8 21v-9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v9"/></svg>`,
             },
             {
+              id: "language",
+              name: "Language",
+              description: "Guess the official language",
+              color: "purple",
+              icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+            },
+            {
+              id: "currency",
+              name: "Currency",
+              description: "Guess the currency",
+              color: "pink",
+              icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="6" x2="12" y2="18"/><line x1="6" y1="12" x2="18" y2="12"/></svg>`,
+            },
+            {
               id: "description",
               name: "Description",
               description: "Match description to flag",
@@ -2884,10 +3114,7 @@
                 if (b.charAt(i - 1) === a.charAt(j - 1)) {
                   matrix[i][j] = matrix[i - 1][j - 1];
                 } else {
-                  matrix[i][j] = Math.min(
-                    matrix[i - 1][j - 1] + 1,
-                    Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1)
-                  );
+                  matrix[i][j] = Math.min(matrix[i - 1][j - 1] + 1, Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1));
                 }
               }
             }
@@ -2948,9 +3175,7 @@
             let correctOption = queue.value[currentIndex.value];
 
             // Try to find a better candidate in the future queue
-            const futureIndex = queue.value
-              .slice(currentIndex.value)
-              .findIndex((c) => c.difficulty === targetDifficulty);
+            const futureIndex = queue.value.slice(currentIndex.value).findIndex((c) => c.difficulty === targetDifficulty);
             if (futureIndex !== -1) {
               const actualIndex = currentIndex.value + futureIndex;
               // Swap
@@ -2963,7 +3188,24 @@
             // Pick 3 distractors
             const distractors = [];
 
-            // 1. Similarity Traps (Priority)
+            // Helper function to get the display value for the current mode
+            const getDisplayValue = (country) => {
+              if (gameMode.value === "capitals") return country.capital;
+              if (gameMode.value === "language") return country.language;
+              if (gameMode.value === "currency") return country.currency;
+              return country.name;
+            };
+
+            // Get the correct answer's display value
+            const correctDisplayValue = getDisplayValue(correctOption);
+
+            // Helper function to check if a country's display value is unique
+            const isDisplayValueUnique = (country, existingCountries) => {
+              const displayValue = getDisplayValue(country);
+              return !existingCountries.some((c) => getDisplayValue(c) === displayValue);
+            };
+
+            // 1. Similarity Traps (Priority) - but only if they have unique display values
             if (SIMILAR_FLAGS[correctOption.code]) {
               const traps = SIMILAR_FLAGS[correctOption.code];
               // Shuffle traps
@@ -2972,15 +3214,30 @@
               for (const trapCode of shuffledTraps) {
                 const trapCountry = COUNTRIES.find((c) => c.code === trapCode);
                 if (trapCountry && distractors.length < 3) {
-                  distractors.push(trapCountry);
+                  // Only add if it has a unique display value (for language/currency/capitals modes)
+                  if (gameMode.value === "normal" || gameMode.value === "reverse" || gameMode.value === "description" || gameMode.value === "hard" || gameMode.value === "mindfuck" || gameMode.value === "blitz") {
+                    // For normal modes, just check country code uniqueness
+                    if (!distractors.includes(trapCountry)) {
+                      distractors.push(trapCountry);
+                    }
+                  } else {
+                    // For capitals/language/currency modes, check display value uniqueness
+                    if (isDisplayValueUnique(trapCountry, [correctOption, ...distractors])) {
+                      distractors.push(trapCountry);
+                    }
+                  }
                 }
               }
             }
 
             // 2. Filter available distractors (Region based if possible)
-            let availableDistractors = COUNTRIES.filter(
-              (c) => c.code !== correctOption.code && !distractors.includes(c)
-            );
+            let availableDistractors = COUNTRIES.filter((c) => c.code !== correctOption.code && !distractors.includes(c));
+
+            // For language/currency/capitals modes, also filter out countries with duplicate display values
+            if (gameMode.value === "capitals" || gameMode.value === "language" || gameMode.value === "currency") {
+              availableDistractors = availableDistractors.filter((c) => isDisplayValueUnique(c, [correctOption, ...distractors]));
+            }
+
             if (selectedRegion.value !== "World") {
               availableDistractors = availableDistractors.filter((c) => c.continent === selectedRegion.value);
             }
@@ -2988,16 +3245,36 @@
             // Fallback if not enough
             if (availableDistractors.length < 3) {
               availableDistractors = COUNTRIES.filter((c) => c.code !== correctOption.code && !distractors.includes(c));
+              // Re-apply display value uniqueness filter for language/currency/capitals modes
+              if (gameMode.value === "capitals" || gameMode.value === "language" || gameMode.value === "currency") {
+                availableDistractors = availableDistractors.filter((c) => isDisplayValueUnique(c, [correctOption, ...distractors]));
+              }
             }
 
             // Fill remaining spots
             while (distractors.length < 3) {
+              if (availableDistractors.length === 0) break; // No more unique options available
+
               const randomIndex = Math.floor(Math.random() * availableDistractors.length);
               const randomDistractor = availableDistractors[randomIndex];
-              // Check distinctness again just in case
+
+              // Check distinctness
               if (!distractors.includes(randomDistractor)) {
-                distractors.push(randomDistractor);
-                // Remove from pool to avoid dupes
+                // For language/currency/capitals modes, also check display value uniqueness
+                if (gameMode.value === "capitals" || gameMode.value === "language" || gameMode.value === "currency") {
+                  if (isDisplayValueUnique(randomDistractor, [correctOption, ...distractors])) {
+                    distractors.push(randomDistractor);
+                    availableDistractors.splice(randomIndex, 1);
+                  } else {
+                    // Remove this option from pool since it's not unique
+                    availableDistractors.splice(randomIndex, 1);
+                  }
+                } else {
+                  distractors.push(randomDistractor);
+                  availableDistractors.splice(randomIndex, 1);
+                }
+              } else {
+                // Remove duplicate from pool
                 availableDistractors.splice(randomIndex, 1);
               }
             }
@@ -3269,13 +3546,7 @@
           };
 
           const triggerCelebration = () => {
-            const celebrations = [
-              triggerConfetti,
-              triggerFireworks,
-              triggerSchoolPride,
-              triggerPride,
-              triggerRealFireworks,
-            ];
+            const celebrations = [triggerConfetti, triggerFireworks, triggerSchoolPride, triggerPride, triggerRealFireworks];
             const randomCelebration = celebrations[Math.floor(Math.random() * celebrations.length)];
             randomCelebration();
           };
@@ -3445,8 +3716,7 @@
 
           const handleImageError = (e) => {
             e.target.onerror = null;
-            e.target.src =
-              "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+            e.target.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
           };
 
           const shareScore = async () => {
@@ -3456,6 +3726,8 @@
               blitz: "Blitz",
               hard: "Hard",
               capitals: "Capitals",
+              language: "Language",
+              currency: "Currency",
               description: "Description",
               mindfuck: "Mindfuck",
             };
@@ -3508,8 +3780,7 @@
               if (selectedOption.value === option) {
                 classes = "bg-blue-100 border-blue-500 text-blue-700";
               } else {
-                classes =
-                  "bg-white border-gray-200 hover:bg-gray-50 text-gray-700 active:border-b-2 active:translate-y-[2px]";
+                classes = "bg-white border-gray-200 hover:bg-gray-50 text-gray-700 active:border-b-2 active:translate-y-[2px]";
               }
             }
             return classes;
