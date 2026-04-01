@@ -711,7 +711,7 @@
       <!-- PLAYING SCREEN -->
       <div v-if="screen === 'playing'" class="flex flex-col h-full relative">
         <!-- Header -->
-        <div class="pt-6 pb-6 px-4 flex flex-col bg-white z-10 safe-top">
+        <div class="pb-6 px-4 flex flex-col bg-white z-10" style="padding-top: calc(env(safe-area-inset-top, 20px) + 1.5rem)">
           <div class="flex items-center justify-between w-full">
             <button @click="quitGame" class="text-gray-400 hover:text-gray-600 no-select" v-html="icons.x"></button>
 
