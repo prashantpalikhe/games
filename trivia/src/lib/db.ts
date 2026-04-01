@@ -176,6 +176,7 @@ const DEFAULT_SETTINGS: UserSettings = {
   preferredDifficulty: "mixed",
   questionsPerSession: 10,
   soundEnabled: true,
+  hapticsEnabled: true,
   theme: "dark",
   autoProgress: false,
   autoProgressDelayMs: 2000,

@@ -68,6 +68,7 @@ export interface UserSettings {
   preferredDifficulty: "easy" | "medium" | "hard" | "mixed";
   questionsPerSession: number;
   soundEnabled: boolean;
+  hapticsEnabled: boolean;
   theme: "dark" | "light" | "system";
   autoProgress: boolean;
   autoProgressDelayMs: number; // milliseconds before auto-advancing

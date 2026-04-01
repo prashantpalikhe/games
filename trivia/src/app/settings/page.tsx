@@ -9,6 +9,7 @@ import {
   Moon,
   Sun,
   Monitor,
+  Vibrate,
   Volume2,
   VolumeX,
   Target,
@@ -239,9 +240,11 @@ export default function SettingsPage() {
         </CardContent>
       </Card>
 
-      {/* Sound */}
+      {/* Sound & Haptics */}
       <Card>
-        <CardContent className="p-4">
+        <CardContent className="space-y-4 p-4">
+          <h3 className="font-semibold">Sound & Haptics</h3>
+
           <div className="flex items-center justify-between">
             <Label className="flex items-center gap-2">
               {settings.soundEnabled ? (
@@ -254,6 +257,19 @@ export default function SettingsPage() {
             <Switch
               checked={settings.soundEnabled}
               onCheckedChange={(v) => updateSetting({ soundEnabled: v })}
+            />
+          </div>
+
+          <Separator />
+
+          <div className="flex items-center justify-between">
+            <Label className="flex items-center gap-2">
+              <Vibrate className="h-4 w-4 text-muted-foreground" />
+              Haptic Feedback
+            </Label>
+            <Switch
+              checked={settings.hapticsEnabled}
+              onCheckedChange={(v) => updateSetting({ hapticsEnabled: v })}
             />
           </div>
         </CardContent>

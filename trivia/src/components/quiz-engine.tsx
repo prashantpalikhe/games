@@ -28,6 +28,7 @@ import {
   calculateQuality,
 } from "@/lib/spaced-repetition";
 import { useHaptics } from "@/hooks/use-haptics";
+import { useSound } from "@/hooks/use-sound";
 
 interface QuizEngineProps {
   questions: Question[];
@@ -57,6 +58,7 @@ export function QuizEngine({
     totalTime: number;
   } | null>(null);
   const haptics = useHaptics();
+  const sound = useSound();
   const answeredRef = useRef(false);
   const autoTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -117,6 +119,8 @@ export function QuizEngine({
       totalTime: Math.round((Date.now() - sessionStartTime) / 1000),
     });
     setIsComplete(true);
+    sound.celebration();
+    haptics.success();
   }
 
   function advanceToNext() {
@@ -146,9 +150,9 @@ export function QuizEngine({
       const correct = answer === currentQuestion.correctAnswer;
       const timeSpent = Date.now() - questionStartTime;
 
-      // Haptic feedback
-      if (correct) haptics.success();
-      else haptics.error();
+      // Feedback
+      if (correct) { haptics.success(); sound.correct(); }
+      else { haptics.error(); sound.wrong(); }
 
       // Update spaced repetition
       let card = await getCardState(currentQuestion.id);
@@ -375,7 +379,7 @@ export function QuizEngine({
 
           <Button
             onClick={() => advanceToNext()}
-            className="mt-3 w-full gap-2"
+            className="mt-3 w-full gap-2 h-14 text-base font-semibold"
           >
             {autoProgress && isCorrectAnswer && autoProgressCountdown > 0 ? (
               <>

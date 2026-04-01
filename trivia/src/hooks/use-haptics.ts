@@ -9,7 +9,7 @@ export function useHaptics() {
   const [enabled, setEnabled] = useState(true);
 
   useEffect(() => {
-    getSettings().then((s) => setEnabled(s.soundEnabled));
+    getSettings().then((s) => setEnabled(s.hapticsEnabled));
   }, []);
 
   return {
