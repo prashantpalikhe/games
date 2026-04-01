@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "deploy": "vercel --yes --prod --scope prashantpalikhes-projects"
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",
