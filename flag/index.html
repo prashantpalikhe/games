@@ -45,6 +45,11 @@
         },
       };
     </script>
+    <!-- Web Haptics -->
+    <script type="module">
+      import { WebHaptics } from 'https://esm.sh/web-haptics@0.0.6';
+      window.__haptics = new WebHaptics();
+    </script>
     <!-- Canvas Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <!-- Vue 3 CDN -->
@@ -3382,6 +3387,7 @@
               // Ticking sound for last 3 seconds (when second changes)
               if (newTime <= 3 && newTime > 0 && newTime < oldTime) {
                 playSound("tick");
+                haptic("light");
               }
 
               if (timeLeft.value <= 0) {
@@ -3407,6 +3413,7 @@
             streak.value = 0;
 
             playSound("incorrect");
+            haptic("error");
           };
 
           // Voice Recognition Logic
@@ -3423,6 +3430,7 @@
             recognition.onstart = () => {
               isListening.value = true;
               voiceTranscript.value = "";
+              haptic("selection");
             };
 
             recognition.onresult = (event) => {
@@ -3560,6 +3568,12 @@
               osc.start(ctx.currentTime);
               osc.stop(ctx.currentTime + 0.05);
             }
+          };
+
+          // Haptic feedback
+          const haptic = (type) => {
+            if (!window.__haptics) return;
+            window.__haptics.trigger(type);
           };
 
           // Confetti Logic
@@ -3777,6 +3791,7 @@
 
               // Sound & Haptics
               playSound("correct");
+              haptic("success");
 
               // Update High Score
               let beatHighScore = false;
@@ -3802,9 +3817,11 @@
               if (beatHighScore) {
                 // Confetti for NEW High Score (First time only this run, if beating a non-zero record)
                 triggerCelebration();
+                haptic("heavy");
               } else if (streak.value > 0 && streak.value % 5 === 0) {
                 // Confetti every 5 streak
                 triggerCelebration();
+                haptic("heavy");
               } else if (isPerfect && (gameMode.value === "hard" || gameMode.value === "voice")) {
                 triggerConfetti();
               }
@@ -3836,6 +3853,7 @@
 
               // Sound & Haptics
               playSound("incorrect");
+              haptic("error");
             }
           };
 
