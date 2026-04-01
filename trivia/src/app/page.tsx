@@ -2,24 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  Brain,
-  Play,
-  RotateCcw,
-  TrendingUp,
-} from "lucide-react";
+import { Brain, Play, RotateCcw, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { StreakDisplay } from "@/components/streak-display";
 import { HeatmapCalendar } from "@/components/heatmap-calendar";
 import { CategoryCard } from "@/components/category-card";
-import {
-  getStreak,
-  getRecentSessions,
-  getDueCards,
-  getSettings,
-} from "@/lib/db";
+import { getStreak, getRecentSessions, getDueCards, getSettings } from "@/lib/db";
 import { getAllCategories, getCategoryStats } from "@/lib/questions";
 import type { StreakData, QuizSession, CategoryStats, UserSettings } from "@/lib/types";
 
@@ -31,13 +21,7 @@ export default function HomePage() {
   const [settings, setSettings] = useState<UserSettings | null>(null);
 
   useEffect(() => {
-    Promise.all([
-      getStreak(),
-      getRecentSessions(5),
-      getDueCards(),
-      getCategoryStats(),
-      getSettings(),
-    ]).then(([s, rs, dc, cs, st]) => {
+    Promise.all([getStreak(), getRecentSessions(5), getDueCards(), getCategoryStats(), getSettings()]).then(([s, rs, dc, cs, st]) => {
       setStreak(s);
       setRecentSessions(rs);
       setDueCount(dc.length);
@@ -47,11 +31,7 @@ export default function HomePage() {
   }, []);
 
   const categories = getAllCategories();
-  const todayAnswered = recentSessions
-    .filter(
-      (s) => s.date.split("T")[0] === new Date().toISOString().split("T")[0]
-    )
-    .reduce((sum, s) => sum + s.totalQuestions, 0);
+  const todayAnswered = recentSessions.filter((s) => s.date.split("T")[0] === new Date().toISOString().split("T")[0]).reduce((sum, s) => sum + s.totalQuestions, 0);
   const dailyGoal = settings?.dailyGoal ?? 10;
   const dailyProgress = Math.min(100, (todayAnswered / dailyGoal) * 100);
 
@@ -60,9 +40,7 @@ export default function HomePage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold">Trivia Master</h1>
-        <p className="text-sm text-muted-foreground">
-          Train your brain, one question at a time
-        </p>
+        <p className="text-sm text-muted-foreground">Train your brain, one question at a time</p>
       </div>
 
       {/* Streak + Daily Goal */}
@@ -75,18 +53,11 @@ export default function HomePage() {
               <span className="text-sm text-muted-foreground">Daily Goal</span>
             </div>
             <div className="mt-1 flex items-baseline gap-1">
-              <span className="text-2xl font-bold font-mono tabular-nums">
-                {todayAnswered}
-              </span>
-              <span className="text-sm text-muted-foreground">
-                / {dailyGoal}
-              </span>
+              <span className="text-2xl font-bold font-mono tabular-nums">{todayAnswered}</span>
+              <span className="text-sm text-muted-foreground">/ {dailyGoal}</span>
             </div>
             <div className="mt-2 h-1.5 w-full rounded-full bg-muted">
-              <div
-                className="h-full rounded-full bg-primary transition-all"
-                style={{ width: `${dailyProgress}%` }}
-              />
+              <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${dailyProgress}%` }} />
             </div>
           </CardContent>
         </Card>
@@ -103,14 +74,9 @@ export default function HomePage() {
                 </div>
                 <div className="flex-1">
                   <h3 className="font-semibold">Review Due Cards</h3>
-                  <p className="text-xs text-muted-foreground">
-                    {dueCount} cards ready for review
-                  </p>
+                  <p className="text-xs text-muted-foreground">{dueCount} cards ready for review</p>
                 </div>
-                <Badge
-                  variant="secondary"
-                  className="bg-amber-500/10 text-amber-500"
-                >
+                <Badge variant="secondary" className="bg-amber-500/10 text-amber-500">
                   {dueCount}
                 </Badge>
               </CardContent>
@@ -126,10 +92,7 @@ export default function HomePage() {
         </Link>
 
         <Link href="/play?mode=review">
-          <Button
-            variant="outline"
-            className="h-auto w-full flex-col gap-1 py-4"
-          >
+          <Button variant="outline" className="h-auto w-full flex-col gap-1 py-4">
             <Brain className="h-6 w-6" />
             <span className="text-sm">Review</span>
           </Button>
@@ -150,20 +113,13 @@ export default function HomePage() {
       <div>
         <div className="mb-3 flex items-center justify-between">
           <h3 className="font-semibold">Categories</h3>
-          <Link
-            href="/categories"
-            className="text-xs text-primary hover:underline"
-          >
+          <Link href="/categories" className="text-xs text-primary hover:underline">
             View all
           </Link>
         </div>
-        <div className="space-y-3">
+        <div className="grid space-y-3">
           {categories.slice(0, 3).map((cat) => (
-            <CategoryCard
-              key={cat.name}
-              {...cat}
-              stats={categoryStats.find((s) => s.category === cat.name)}
-            />
+            <CategoryCard key={cat.name} {...cat} stats={categoryStats.find((s) => s.category === cat.name)} />
           ))}
         </div>
       </div>
@@ -178,20 +134,13 @@ export default function HomePage() {
                 <CardContent className="flex items-center justify-between p-3">
                   <div>
                     <p className="text-sm font-medium">{session.category}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {new Date(session.date).toLocaleDateString()}
-                    </p>
+                    <p className="text-xs text-muted-foreground">{new Date(session.date).toLocaleDateString()}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-sm font-mono font-bold">
                       {session.correctAnswers}/{session.totalQuestions}
                     </p>
-                    <p className="text-xs text-muted-foreground">
-                      {Math.round(
-                        (session.correctAnswers / session.totalQuestions) * 100
-                      )}
-                      %
-                    </p>
+                    <p className="text-xs text-muted-foreground">{Math.round((session.correctAnswers / session.totalQuestions) * 100)}%</p>
                   </div>
                 </CardContent>
               </Card>

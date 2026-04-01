@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl:*)",
+      "Bash(pnpm build:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(vercel --yes --prod --scope prashantpalikhes-projects)"
+    ]
+  }
+}
