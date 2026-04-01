@@ -563,6 +563,21 @@
                 <div class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform duration-200" :class="autoListen ? 'translate-x-6' : 'translate-x-0'"></div>
               </div>
             </button>
+            <button
+              @click="hapticEnabled = !hapticEnabled"
+              class="py-4 px-4 rounded-xl font-bold text-left transition-all flex justify-between items-center border-2"
+              :class="hapticEnabled ? 'bg-blue-50 border-blue-500 text-blue-700' : 'bg-white border-gray-200 text-gray-600'"
+            >
+              <div class="flex items-center space-x-3">
+                <span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 8.5 9 12l-3.5 3.5L2 12l3.5-3.5Z"/><path d="m12 2 3.5 3.5L12 9 8.5 5.5 12 2Z"/><path d="M18.5 8.5 22 12l-3.5 3.5L15 12l3.5-3.5Z"/><path d="m12 15 3.5 3.5L12 22l-3.5-3.5L12 15Z"/></svg>
+                </span>
+                <span>Haptic Feedback</span>
+              </div>
+              <div class="w-12 h-6 rounded-full relative transition-colors duration-200" :class="hapticEnabled ? 'bg-blue-500' : 'bg-gray-300'">
+                <div class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform duration-200" :class="hapticEnabled ? 'translate-x-6' : 'translate-x-0'"></div>
+              </div>
+            </button>
           </div>
         </div>
       </native-sheet>
@@ -3049,6 +3064,7 @@
           const soundEnabled = ref(true);
           const autoContinue = ref(false);
           const autoListen = ref(true);
+          const hapticEnabled = ref(true);
           const showSettings = ref(false);
 
           // Timer State (Blitz Mode)
@@ -3571,8 +3587,15 @@
           };
 
           // Haptic feedback
+          const HAPTIC_CELEBRATION = {
+            pattern: [
+              { duration: 60, intensity: 1 },
+              { delay: 30, duration: 80, intensity: 1 },
+              { delay: 30, duration: 100, intensity: 1 },
+            ],
+          };
           const haptic = (type) => {
-            if (!window.__haptics) return;
+            if (!hapticEnabled.value || !window.__haptics) return;
             window.__haptics.trigger(type);
           };
 
@@ -3716,6 +3739,7 @@
             const celebrations = [triggerConfetti, triggerFireworks, triggerSchoolPride, triggerPride, triggerRealFireworks];
             const randomCelebration = celebrations[Math.floor(Math.random() * celebrations.length)];
             randomCelebration();
+            haptic(HAPTIC_CELEBRATION);
           };
 
           const handleAnswer = (option, event = null) => {
@@ -3817,13 +3841,12 @@
               if (beatHighScore) {
                 // Confetti for NEW High Score (First time only this run, if beating a non-zero record)
                 triggerCelebration();
-                haptic("heavy");
               } else if (streak.value > 0 && streak.value % 5 === 0) {
                 // Confetti every 5 streak
                 triggerCelebration();
-                haptic("heavy");
               } else if (isPerfect && (gameMode.value === "hard" || gameMode.value === "voice")) {
                 triggerConfetti();
+                haptic(HAPTIC_CELEBRATION);
               }
 
               if (gameMode.value === "blitz") {
@@ -4070,6 +4093,7 @@
                 if (parsed.sound !== undefined) soundEnabled.value = parsed.sound;
                 if (parsed.autoContinue !== undefined) autoContinue.value = parsed.autoContinue;
                 if (parsed.autoListen !== undefined) autoListen.value = parsed.autoListen;
+                if (parsed.haptic !== undefined) hapticEnabled.value = parsed.haptic;
               } catch (e) {}
             }
 
@@ -4081,12 +4105,14 @@
                   sound: soundEnabled.value,
                   autoContinue: autoContinue.value,
                   autoListen: autoListen.value,
+                  haptic: hapticEnabled.value,
                 })
               );
             };
             Vue.watch(soundEnabled, saveSettings);
             Vue.watch(autoContinue, saveSettings);
             Vue.watch(autoListen, saveSettings);
+            Vue.watch(hapticEnabled, saveSettings);
           });
 
           onUnmounted(() => {
@@ -4127,6 +4153,7 @@
             soundEnabled,
             autoContinue,
             autoListen,
+            hapticEnabled,
             showSettings,
             fireworksContainer,
             floatingPoints,
