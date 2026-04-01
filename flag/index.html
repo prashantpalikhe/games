@@ -643,7 +643,8 @@
                         'bg-purple-500 border-purple-700 hover:bg-purple-600': mode.color === 'purple',
                         'bg-red-500 border-red-700 hover:bg-red-600': mode.color === 'red',
                         'bg-blue-500 border-blue-700 hover:bg-blue-600': mode.color === 'blue',
-                        'bg-pink-500 border-pink-700 hover:bg-pink-600': mode.color === 'pink'
+                        'bg-pink-500 border-pink-700 hover:bg-pink-600': mode.color === 'pink',
+                        'bg-orange-500 border-orange-700 hover:bg-orange-600': mode.color === 'orange'
                     }"
           >
             <div class="text-white opacity-90 transform scale-125 mt-4" v-html="mode.icon"></div>
@@ -743,8 +744,8 @@
         <!-- Game Board -->
         <div class="flex-1 overflow-y-auto p-4 flex flex-col items-center w-full pb-32">
           <h2 class="text-2xl font-bold text-gray-700 mt-4 mb-6 text-left w-full">
-            {{ gameMode === 'reverse' ? 'Which flag is this?' : (gameMode === 'capitals' ? 'What is the capital?' : (gameMode === 'language' ? 'What is the official language?' : (gameMode === 'currency' ? 'What is the currency?' : (gameMode
-            === 'description' ? 'Which country has this flag?' : 'Which country is this?')))) }}
+            {{ gameMode === 'voice' ? 'Say the country name!' : (gameMode === 'reverse' ? 'Which flag is this?' : (gameMode === 'capitals' ? 'What is the capital?' : (gameMode === 'language' ? 'What is the official language?' : (gameMode === 'currency' ? 'What is the currency?' : (gameMode
+            === 'description' ? 'Which country has this flag?' : 'Which country is this?'))))) }}
           </h2>
 
           <div class="mb-6 p-4 bg-white rounded-2xl shadow-sm border-2 border-gray-100 w-full flex flex-col justify-center items-center min-h-[160px]">
@@ -763,8 +764,49 @@
             </div>
           </div>
 
+          <!-- Voice Mode UI -->
+          <div v-if="gameMode === 'voice'" class="w-full px-4">
+            <div class="flex flex-col items-center space-y-4">
+              <!-- Transcript display -->
+              <div v-if="voiceTranscript" class="w-full p-4 rounded-xl border-2 text-lg font-bold text-center"
+                :class="{
+                  'border-gray-200 bg-gray-50 text-gray-700': feedback === null,
+                  'border-green-500 bg-green-50 text-green-700': feedback === 'correct',
+                  'border-red-500 bg-red-50 text-red-700': feedback === 'incorrect'
+                }">
+                "{{ voiceTranscript }}"
+              </div>
+
+              <!-- Mic button -->
+              <button
+                v-if="feedback === null"
+                @click="startListening"
+                :disabled="isListening"
+                class="w-24 h-24 rounded-full flex items-center justify-center transition-all shadow-lg active:scale-95"
+                :class="isListening
+                  ? 'bg-red-500 animate-pulse shadow-red-300'
+                  : 'bg-orange-500 hover:bg-orange-600 shadow-orange-300'"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                  <line x1="12" y1="19" x2="12" y2="22"/>
+                </svg>
+              </button>
+
+              <p v-if="feedback === null" class="text-sm text-gray-500 font-medium">
+                {{ isListening ? 'Listening... speak now!' : 'Tap the mic and say the country name' }}
+              </p>
+
+              <!-- Not supported message -->
+              <p v-if="!voiceSupported" class="text-sm text-red-500 font-medium text-center">
+                Voice recognition is not supported in this browser. Try Chrome or Safari.
+              </p>
+            </div>
+          </div>
+
           <!-- Input for Hard Mode -->
-          <div v-if="gameMode === 'hard'" class="w-full px-4">
+          <div v-else-if="gameMode === 'hard'" class="w-full px-4">
             <form @submit.prevent="handleAnswer(userAnswer)" class="flex flex-col space-y-4">
               <input
                 type="text"
@@ -835,7 +877,7 @@
         </div>
 
         <!-- Desktop Hint -->
-        <div class="hidden md:block fixed bottom-4 right-4 text-xs text-gray-400 bg-white p-2 rounded border shadow-sm">Press <strong>1-4</strong> to answer, <strong>Enter</strong> to continue</div>
+        <div v-if="gameMode !== 'voice' && gameMode !== 'hard'" class="hidden md:block fixed bottom-4 right-4 text-xs text-gray-400 bg-white p-2 rounded border shadow-sm">Press <strong>1-4</strong> to answer, <strong>Enter</strong> to continue</div>
       </div>
 
       <!-- END SCREEN -->
@@ -2969,6 +3011,12 @@
           const hasCelebratedHighScore = ref(false);
           const userAnswer = ref(""); // For hard mode
 
+          // Voice Mode State
+          const isListening = ref(false);
+          const voiceTranscript = ref("");
+          const voiceSupported = ref(!!(window.SpeechRecognition || window.webkitSpeechRecognition));
+          let recognition = null;
+
           // Passport / Collection State
           const collectedFlags = ref({}); // { 'us': 1, 'fr': 3 } - counts of correct answers
 
@@ -3061,6 +3109,13 @@
               description: "Distorted, chaotic flags",
               color: "pink",
               icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.929 2.586a1 1 0 0 1 .485-.485c1.06-.53 2.536 1.414 2.586 2.929A10.003 10.003 0 0 1 12 22a10.003 10.003 0 0 1-10-10c.114-1.06 1.929-1.536 2.929-.586a1 1 0 0 1 .485.485c.53 1.06-1.414 2.536-2.929 2.586a10.003 10.003 0 0 0 14.142 0c-.05-1.515 1.414-3.465 2.929-2.929a1 1 0 0 1 .485.485z"/></svg>`,
+            },
+            {
+              id: "voice",
+              name: "Voice",
+              description: "Say the country name out loud",
+              color: "orange",
+              icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>`,
             },
           ];
 
@@ -3338,7 +3393,84 @@
             playSound("incorrect");
           };
 
+          // Voice Recognition Logic
+          const startListening = () => {
+            if (!voiceSupported.value || isListening.value || feedback.value !== null) return;
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = "en-US";
+            recognition.interimResults = true;
+            recognition.maxAlternatives = 5;
+            recognition.continuous = false;
+
+            recognition.onstart = () => {
+              isListening.value = true;
+              voiceTranscript.value = "";
+            };
+
+            recognition.onresult = (event) => {
+              // Show interim results as user speaks
+              let interim = "";
+              let finalTranscript = "";
+              for (let i = event.resultIndex; i < event.results.length; i++) {
+                if (event.results[i].isFinal) {
+                  finalTranscript = event.results[i][0].transcript;
+                } else {
+                  interim = event.results[i][0].transcript;
+                }
+              }
+              voiceTranscript.value = finalTranscript || interim;
+
+              if (finalTranscript) {
+                // Try all alternatives for best match
+                const correctName = currentQuestion.value.correctOption.name.toLowerCase();
+                let bestMatch = finalTranscript;
+                let bestDist = levenshtein(finalTranscript.trim().toLowerCase(), correctName);
+
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                  if (event.results[i].isFinal) {
+                    for (let j = 0; j < event.results[i].length; j++) {
+                      const alt = event.results[i][j].transcript.trim().toLowerCase();
+                      const dist = levenshtein(alt, correctName);
+                      if (dist < bestDist) {
+                        bestDist = dist;
+                        bestMatch = event.results[i][j].transcript;
+                      }
+                    }
+                  }
+                }
+
+                voiceTranscript.value = bestMatch;
+                isListening.value = false;
+                handleAnswer(bestMatch);
+              }
+            };
+
+            recognition.onerror = (event) => {
+              isListening.value = false;
+              if (event.error === "no-speech") {
+                voiceTranscript.value = "No speech detected. Try again.";
+              }
+            };
+
+            recognition.onend = () => {
+              isListening.value = false;
+            };
+
+            recognition.start();
+          };
+
+          const stopListening = () => {
+            if (recognition) {
+              recognition.abort();
+              recognition = null;
+            }
+            isListening.value = false;
+          };
+
           const initGame = (mode = "normal") => {
+            stopListening();
             initAudio();
             gameMode.value = mode;
             score.value = 0;
@@ -3347,6 +3479,7 @@
             wrongAnswers.value = [];
             showMistakesModal.value = false;
             hasCelebratedHighScore.value = false;
+            voiceTranscript.value = "";
 
             // Filter Countries
             let filteredCountries = COUNTRIES;
@@ -3554,6 +3687,11 @@
           const handleAnswer = (option, event = null) => {
             if (feedback.value !== null) return; // Already answered
 
+            // Stop voice recognition if active
+            if (gameMode.value === "voice") {
+              stopListening();
+            }
+
             // Clear mindfuck effect to reveal the flag
             if (gameMode.value === "mindfuck") {
               currentEffect.value = null;
@@ -3565,12 +3703,15 @@
             let isPerfect = false;
             const correctCode = currentQuestion.value.correctOption.code;
 
-            if (gameMode.value === "hard") {
-              // Hard Mode Logic
+            if (gameMode.value === "hard" || gameMode.value === "voice") {
+              // Hard / Voice Mode Logic — fuzzy string matching
               const input = (typeof option === "string" ? option : userAnswer.value).trim().toLowerCase();
               const correctName = currentQuestion.value.correctOption.name.toLowerCase();
 
-              const maxDistance = correctName.length <= 4 ? 1 : 2;
+              // Voice mode gets slightly more tolerance since speech recognition is imprecise
+              const maxDistance = gameMode.value === "voice"
+                ? (correctName.length <= 4 ? 1 : 3)
+                : (correctName.length <= 4 ? 1 : 2);
               const dist = levenshtein(input, correctName);
 
               if (dist === 0) {
@@ -3594,9 +3735,9 @@
                 // Speed bonus: more points for answering faster
                 // Up to 50 extra points (10 per second remaining)
                 points += Math.ceil(timeLeft.value * 10);
-              } else if (gameMode.value === "hard") {
-                points += 10; // Hard mode base bonus
-                if (isPerfect) points += 20; // Perfect spelling bonus
+              } else if (gameMode.value === "hard" || gameMode.value === "voice") {
+                points += 10; // Hard/Voice mode base bonus
+                if (isPerfect) points += 20; // Perfect match bonus
               } else if (gameMode.value === "mindfuck") {
                 points += 5; // Mindfuck bonus
               }
@@ -3644,7 +3785,7 @@
               } else if (streak.value > 0 && streak.value % 5 === 0) {
                 // Confetti every 5 streak
                 triggerCelebration();
-              } else if (isPerfect && gameMode.value === "hard") {
+              } else if (isPerfect && (gameMode.value === "hard" || gameMode.value === "voice")) {
                 triggerConfetti();
               }
 
@@ -3666,7 +3807,7 @@
 
               wrongAnswers.value.push({
                 question: currentQuestion.value,
-                userAnswer: gameMode.value === "hard" ? userAnswer.value : option,
+                userAnswer: (gameMode.value === "hard" || gameMode.value === "voice") ? (gameMode.value === "voice" ? voiceTranscript.value : userAnswer.value) : option,
                 type: "incorrect",
               });
 
@@ -3694,6 +3835,7 @@
               selectedOption.value = null;
               feedback.value = null;
               userAnswer.value = "";
+              voiceTranscript.value = "";
               if (gameMode.value === "blitz") {
                 startTimer();
               }
@@ -3701,6 +3843,7 @@
           };
 
           const quitGame = () => {
+            stopListening();
             clearInterval(timerInterval.value);
             if (autoAdvanceTimer.value) clearTimeout(autoAdvanceTimer.value);
 
@@ -3832,7 +3975,7 @@
           // Keyboard Events
           const handleKeydown = (e) => {
             if (screen.value === "playing") {
-              if (["1", "2", "3", "4"].includes(e.key) && feedback.value === null) {
+              if (["1", "2", "3", "4"].includes(e.key) && feedback.value === null && gameMode.value !== "hard" && gameMode.value !== "voice") {
                 const index = parseInt(e.key) - 1;
                 if (currentQuestion.value && currentQuestion.value.options[index]) {
                   handleAnswer(currentQuestion.value.options[index]);
@@ -3960,6 +4103,11 @@
             shakeActive,
             gameModes,
             currentEffect,
+            isListening,
+            voiceTranscript,
+            voiceSupported,
+            startListening,
+            stopListening,
             getRegionCount: (region) => {
               const regionCountries = COUNTRIES.filter((c) => c.continent === region);
               const collected = regionCountries.filter((c) => collectedFlags.value[c.code]);
