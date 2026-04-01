@@ -1,0 +1,115 @@
+{
+  "category": "Science",
+  "icon": "🔬",
+  "color": "#22d3ee",
+  "questions": [
+    {
+      "id": "sci-001",
+      "category": "Science",
+      "difficulty": "easy",
+      "question": "What is the chemical symbol for water?",
+      "correctAnswer": "H₂O",
+      "incorrectAnswers": ["CO₂", "NaCl", "O₂"],
+      "explanation": "Water consists of two hydrogen atoms bonded to one oxygen atom."
+    },
+    {
+      "id": "sci-002",
+      "category": "Science",
+      "difficulty": "easy",
+      "question": "What planet is known as the Red Planet?",
+      "correctAnswer": "Mars",
+      "incorrectAnswers": ["Venus", "Jupiter", "Saturn"],
+      "explanation": "Mars appears red due to iron oxide (rust) on its surface."
+    },
+    {
+      "id": "sci-003",
+      "category": "Science",
+      "difficulty": "easy",
+      "question": "What gas do plants absorb from the atmosphere?",
+      "correctAnswer": "Carbon dioxide",
+      "incorrectAnswers": ["Oxygen", "Nitrogen", "Helium"],
+      "explanation": "Plants use CO₂ in photosynthesis to produce glucose and oxygen."
+    },
+    {
+      "id": "sci-004",
+      "category": "Science",
+      "difficulty": "medium",
+      "question": "What is the powerhouse of the cell?",
+      "correctAnswer": "Mitochondria",
+      "incorrectAnswers": ["Nucleus", "Ribosome", "Golgi apparatus"],
+      "explanation": "Mitochondria generate most of the cell's ATP through oxidative phosphorylation."
+    },
+    {
+      "id": "sci-005",
+      "category": "Science",
+      "difficulty": "medium",
+      "question": "What is the speed of light in a vacuum (approximately)?",
+      "correctAnswer": "300,000 km/s",
+      "incorrectAnswers": ["150,000 km/s", "500,000 km/s", "1,000,000 km/s"],
+      "explanation": "The speed of light is approximately 299,792,458 meters per second."
+    },
+    {
+      "id": "sci-006",
+      "category": "Science",
+      "difficulty": "medium",
+      "question": "What element has the atomic number 79?",
+      "correctAnswer": "Gold",
+      "incorrectAnswers": ["Silver", "Platinum", "Copper"],
+      "explanation": "Gold (Au) has 79 protons in its nucleus."
+    },
+    {
+      "id": "sci-007",
+      "category": "Science",
+      "difficulty": "medium",
+      "question": "What is the most abundant gas in Earth's atmosphere?",
+      "correctAnswer": "Nitrogen",
+      "incorrectAnswers": ["Oxygen", "Carbon dioxide", "Argon"],
+      "explanation": "Nitrogen makes up about 78% of Earth's atmosphere."
+    },
+    {
+      "id": "sci-008",
+      "category": "Science",
+      "difficulty": "hard",
+      "question": "What is the Chandrasekhar limit?",
+      "correctAnswer": "~1.4 solar masses",
+      "incorrectAnswers": ["~3.0 solar masses", "~0.5 solar masses", "~10 solar masses"],
+      "explanation": "The Chandrasekhar limit is the maximum mass of a stable white dwarf star."
+    },
+    {
+      "id": "sci-009",
+      "category": "Science",
+      "difficulty": "hard",
+      "question": "What particle is exchanged in the strong nuclear force?",
+      "correctAnswer": "Gluon",
+      "incorrectAnswers": ["Photon", "W boson", "Graviton"],
+      "explanation": "Gluons mediate the strong force between quarks inside protons and neutrons."
+    },
+    {
+      "id": "sci-010",
+      "category": "Science",
+      "difficulty": "hard",
+      "question": "What is the half-life of Carbon-14?",
+      "correctAnswer": "~5,730 years",
+      "incorrectAnswers": ["~1,200 years", "~10,000 years", "~50,000 years"],
+      "explanation": "Carbon-14 dating is used for organic materials up to about 50,000 years old."
+    },
+    {
+      "id": "sci-011",
+      "category": "Science",
+      "difficulty": "easy",
+      "question": "How many bones are in the adult human body?",
+      "correctAnswer": "206",
+      "incorrectAnswers": ["186", "256", "312"],
+      "explanation": "Babies have around 270 bones, but many fuse together as they grow."
+    },
+    {
+      "id": "sci-012",
+      "category": "Science",
+      "difficulty": "medium",
+      "question": "What is the hardest natural substance on Earth?",
+      "correctAnswer": "Diamond",
+      "incorrectAnswers": ["Quartz", "Topaz", "Corundum"],
+      "explanation": "Diamond scores 10 on the Mohs hardness scale, the highest possible."
+    }
+  ]
+}

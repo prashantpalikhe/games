@@ -1,0 +1,97 @@
+{
+  "category": "Entertainment",
+  "icon": "🎬",
+  "color": "#a855f7",
+  "questions": [
+    {
+      "id": "ent-001",
+      "category": "Entertainment",
+      "difficulty": "easy",
+      "question": "Who directed the movie 'Jaws'?",
+      "correctAnswer": "Steven Spielberg",
+      "incorrectAnswers": ["Martin Scorsese", "Francis Ford Coppola", "George Lucas"],
+      "explanation": "Spielberg directed Jaws in 1975, which became a massive blockbuster."
+    },
+    {
+      "id": "ent-002",
+      "category": "Entertainment",
+      "difficulty": "easy",
+      "question": "What band released 'Bohemian Rhapsody'?",
+      "correctAnswer": "Queen",
+      "incorrectAnswers": ["The Beatles", "Led Zeppelin", "Pink Floyd"],
+      "explanation": "Queen released Bohemian Rhapsody in 1975 on the album 'A Night at the Opera'."
+    },
+    {
+      "id": "ent-003",
+      "category": "Entertainment",
+      "difficulty": "easy",
+      "question": "What is the highest-grossing film of all time (unadjusted)?",
+      "correctAnswer": "Avatar",
+      "incorrectAnswers": ["Avengers: Endgame", "Titanic", "Star Wars: The Force Awakens"],
+      "explanation": "Avatar (2009) earned over $2.9 billion worldwide."
+    },
+    {
+      "id": "ent-004",
+      "category": "Entertainment",
+      "difficulty": "medium",
+      "question": "In which TV show would you find the character Walter White?",
+      "correctAnswer": "Breaking Bad",
+      "incorrectAnswers": ["The Wire", "Better Call Saul", "Dexter"],
+      "explanation": "Bryan Cranston played Walter White in Breaking Bad (2008-2013)."
+    },
+    {
+      "id": "ent-005",
+      "category": "Entertainment",
+      "difficulty": "medium",
+      "question": "Who wrote the novel '1984'?",
+      "correctAnswer": "George Orwell",
+      "incorrectAnswers": ["Aldous Huxley", "Ray Bradbury", "H.G. Wells"],
+      "explanation": "George Orwell published 1984 in 1949, a year before his death."
+    },
+    {
+      "id": "ent-006",
+      "category": "Entertainment",
+      "difficulty": "medium",
+      "question": "What video game franchise features a character named Master Chief?",
+      "correctAnswer": "Halo",
+      "incorrectAnswers": ["Call of Duty", "Gears of War", "Destiny"],
+      "explanation": "Master Chief (John-117) is the protagonist of the Halo series."
+    },
+    {
+      "id": "ent-007",
+      "category": "Entertainment",
+      "difficulty": "hard",
+      "question": "Who composed 'The Four Seasons'?",
+      "correctAnswer": "Antonio Vivaldi",
+      "incorrectAnswers": ["Johann Sebastian Bach", "Wolfgang Amadeus Mozart", "Ludwig van Beethoven"],
+      "explanation": "Vivaldi composed The Four Seasons around 1720 as part of 'Il cimento dell'armonia e dell'inventione'."
+    },
+    {
+      "id": "ent-008",
+      "category": "Entertainment",
+      "difficulty": "hard",
+      "question": "What was the first feature-length animated film?",
+      "correctAnswer": "El Apóstol (1917)",
+      "incorrectAnswers": ["Snow White and the Seven Dwarfs (1937)", "Fantasia (1940)", "The Adventures of Prince Achmed (1926)"],
+      "explanation": "El Apóstol was an Argentine political satire, though no copies survive today."
+    },
+    {
+      "id": "ent-009",
+      "category": "Entertainment",
+      "difficulty": "hard",
+      "question": "Which author created the fictional world of Discworld?",
+      "correctAnswer": "Terry Pratchett",
+      "incorrectAnswers": ["Douglas Adams", "Neil Gaiman", "Terry Brooks"],
+      "explanation": "Pratchett wrote 41 Discworld novels between 1983 and 2015."
+    },
+    {
+      "id": "ent-010",
+      "category": "Entertainment",
+      "difficulty": "easy",
+      "question": "What instrument does a pianist play?",
+      "correctAnswer": "Piano",
+      "incorrectAnswers": ["Organ", "Harpsichord", "Synthesizer"],
+      "explanation": "The piano was invented by Bartolomeo Cristofori around 1700."
+    }
+  ]
+}

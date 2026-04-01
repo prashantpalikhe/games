@@ -1,0 +1,97 @@
+{
+  "category": "Sports",
+  "icon": "⚽",
+  "color": "#ef4444",
+  "questions": [
+    {
+      "id": "spo-001",
+      "category": "Sports",
+      "difficulty": "easy",
+      "question": "How many players are on a standard soccer team on the field?",
+      "correctAnswer": "11",
+      "incorrectAnswers": ["9", "10", "12"],
+      "explanation": "Each team fields 11 players including the goalkeeper."
+    },
+    {
+      "id": "spo-002",
+      "category": "Sports",
+      "difficulty": "easy",
+      "question": "In which sport would you perform a 'slam dunk'?",
+      "correctAnswer": "Basketball",
+      "incorrectAnswers": ["Volleyball", "Tennis", "Football"],
+      "explanation": "A slam dunk is when a player jumps and scores by pushing the ball through the hoop."
+    },
+    {
+      "id": "spo-003",
+      "category": "Sports",
+      "difficulty": "easy",
+      "question": "What country hosted the 2016 Summer Olympics?",
+      "correctAnswer": "Brazil",
+      "incorrectAnswers": ["China", "Japan", "United Kingdom"],
+      "explanation": "The 2016 Olympics were held in Rio de Janeiro, Brazil."
+    },
+    {
+      "id": "spo-004",
+      "category": "Sports",
+      "difficulty": "medium",
+      "question": "Who holds the record for the most Grand Slam titles in tennis (men's)?",
+      "correctAnswer": "Novak Djokovic",
+      "incorrectAnswers": ["Roger Federer", "Rafael Nadal", "Pete Sampras"],
+      "explanation": "Djokovic has won 24 Grand Slam singles titles."
+    },
+    {
+      "id": "spo-005",
+      "category": "Sports",
+      "difficulty": "medium",
+      "question": "In cricket, how many runs is a 'century'?",
+      "correctAnswer": "100",
+      "incorrectAnswers": ["50", "150", "200"],
+      "explanation": "Scoring 100 or more runs in a single innings is called a century."
+    },
+    {
+      "id": "spo-006",
+      "category": "Sports",
+      "difficulty": "medium",
+      "question": "What is the diameter of a basketball hoop in inches?",
+      "correctAnswer": "18 inches",
+      "incorrectAnswers": ["16 inches", "20 inches", "22 inches"],
+      "explanation": "The official NBA rim diameter is 18 inches (45.7 cm)."
+    },
+    {
+      "id": "spo-007",
+      "category": "Sports",
+      "difficulty": "hard",
+      "question": "In which year were women first allowed to compete in the Olympic Games?",
+      "correctAnswer": "1900",
+      "incorrectAnswers": ["1896", "1912", "1920"],
+      "explanation": "Women first competed at the 1900 Paris Olympics in tennis, sailing, croquet, and golf."
+    },
+    {
+      "id": "spo-008",
+      "category": "Sports",
+      "difficulty": "hard",
+      "question": "What is the only country to have played in every FIFA World Cup?",
+      "correctAnswer": "Brazil",
+      "incorrectAnswers": ["Germany", "Argentina", "Italy"],
+      "explanation": "Brazil has participated in all 22 FIFA World Cup tournaments since 1930."
+    },
+    {
+      "id": "spo-009",
+      "category": "Sports",
+      "difficulty": "hard",
+      "question": "What martial art is an Olympic sport that originated in Korea?",
+      "correctAnswer": "Taekwondo",
+      "incorrectAnswers": ["Karate", "Judo", "Kung Fu"],
+      "explanation": "Taekwondo became an official Olympic sport at the 2000 Sydney Games."
+    },
+    {
+      "id": "spo-010",
+      "category": "Sports",
+      "difficulty": "easy",
+      "question": "What sport is played at Wimbledon?",
+      "correctAnswer": "Tennis",
+      "incorrectAnswers": ["Cricket", "Golf", "Rugby"],
+      "explanation": "Wimbledon is the oldest tennis tournament, first held in 1877."
+    }
+  ]
+}

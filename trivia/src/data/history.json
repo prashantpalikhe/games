@@ -1,0 +1,97 @@
+{
+  "category": "History",
+  "icon": "📜",
+  "color": "#f59e0b",
+  "questions": [
+    {
+      "id": "his-001",
+      "category": "History",
+      "difficulty": "easy",
+      "question": "In what year did World War II end?",
+      "correctAnswer": "1945",
+      "incorrectAnswers": ["1943", "1944", "1946"],
+      "explanation": "WWII ended with Japan's surrender on September 2, 1945."
+    },
+    {
+      "id": "his-002",
+      "category": "History",
+      "difficulty": "easy",
+      "question": "Who was the first President of the United States?",
+      "correctAnswer": "George Washington",
+      "incorrectAnswers": ["Thomas Jefferson", "John Adams", "Benjamin Franklin"],
+      "explanation": "Washington served as president from 1789 to 1797."
+    },
+    {
+      "id": "his-003",
+      "category": "History",
+      "difficulty": "easy",
+      "question": "What ancient civilization built the pyramids of Giza?",
+      "correctAnswer": "Ancient Egyptians",
+      "incorrectAnswers": ["Romans", "Greeks", "Mesopotamians"],
+      "explanation": "The Great Pyramid was built around 2560 BCE for Pharaoh Khufu."
+    },
+    {
+      "id": "his-004",
+      "category": "History",
+      "difficulty": "medium",
+      "question": "What year did the Berlin Wall fall?",
+      "correctAnswer": "1989",
+      "incorrectAnswers": ["1987", "1991", "1985"],
+      "explanation": "The Berlin Wall fell on November 9, 1989, leading to German reunification."
+    },
+    {
+      "id": "his-005",
+      "category": "History",
+      "difficulty": "medium",
+      "question": "Who was the first woman to fly solo across the Atlantic?",
+      "correctAnswer": "Amelia Earhart",
+      "incorrectAnswers": ["Harriet Quimby", "Bessie Coleman", "Jacqueline Cochran"],
+      "explanation": "Earhart made the solo flight in 1932, five years after Lindbergh."
+    },
+    {
+      "id": "his-006",
+      "category": "History",
+      "difficulty": "medium",
+      "question": "The Magna Carta was signed in which year?",
+      "correctAnswer": "1215",
+      "incorrectAnswers": ["1066", "1315", "1415"],
+      "explanation": "King John of England sealed the Magna Carta at Runnymede on June 15, 1215."
+    },
+    {
+      "id": "his-007",
+      "category": "History",
+      "difficulty": "hard",
+      "question": "What was the Treaty of Westphalia (1648) primarily about?",
+      "correctAnswer": "Ending the Thirty Years' War",
+      "incorrectAnswers": ["Ending the Hundred Years' War", "Establishing the Holy Roman Empire", "Creating the League of Nations"],
+      "explanation": "The treaty established the concept of state sovereignty in international relations."
+    },
+    {
+      "id": "his-008",
+      "category": "History",
+      "difficulty": "hard",
+      "question": "Who was the last pharaoh of ancient Egypt?",
+      "correctAnswer": "Cleopatra VII",
+      "incorrectAnswers": ["Ramesses II", "Tutankhamun", "Nefertiti"],
+      "explanation": "Cleopatra VII ruled from 51 BCE until her death in 30 BCE."
+    },
+    {
+      "id": "his-009",
+      "category": "History",
+      "difficulty": "hard",
+      "question": "What empire was ruled by Suleiman the Magnificent?",
+      "correctAnswer": "Ottoman Empire",
+      "incorrectAnswers": ["Mughal Empire", "Persian Empire", "Byzantine Empire"],
+      "explanation": "Suleiman I ruled the Ottoman Empire from 1520 to 1566 during its golden age."
+    },
+    {
+      "id": "his-010",
+      "category": "History",
+      "difficulty": "easy",
+      "question": "What ship sank on its maiden voyage in 1912?",
+      "correctAnswer": "RMS Titanic",
+      "incorrectAnswers": ["RMS Lusitania", "HMS Britannic", "SS Andrea Doria"],
+      "explanation": "The Titanic sank after hitting an iceberg on April 15, 1912."
+    }
+  ]
+}

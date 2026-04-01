@@ -1,0 +1,97 @@
+{
+  "category": "Geography",
+  "icon": "🌍",
+  "color": "#10b981",
+  "questions": [
+    {
+      "id": "geo-001",
+      "category": "Geography",
+      "difficulty": "easy",
+      "question": "What is the largest continent by area?",
+      "correctAnswer": "Asia",
+      "incorrectAnswers": ["Africa", "North America", "Europe"],
+      "explanation": "Asia covers about 44.6 million km², nearly 30% of Earth's land area."
+    },
+    {
+      "id": "geo-002",
+      "category": "Geography",
+      "difficulty": "easy",
+      "question": "What is the longest river in the world?",
+      "correctAnswer": "Nile",
+      "incorrectAnswers": ["Amazon", "Mississippi", "Yangtze"],
+      "explanation": "The Nile stretches approximately 6,650 km through northeastern Africa."
+    },
+    {
+      "id": "geo-003",
+      "category": "Geography",
+      "difficulty": "easy",
+      "question": "What is the capital of Japan?",
+      "correctAnswer": "Tokyo",
+      "incorrectAnswers": ["Osaka", "Kyoto", "Yokohama"],
+      "explanation": "Tokyo has been Japan's capital since 1868."
+    },
+    {
+      "id": "geo-004",
+      "category": "Geography",
+      "difficulty": "medium",
+      "question": "What is the smallest country in the world by area?",
+      "correctAnswer": "Vatican City",
+      "incorrectAnswers": ["Monaco", "San Marino", "Liechtenstein"],
+      "explanation": "Vatican City covers just 0.44 km² (110 acres)."
+    },
+    {
+      "id": "geo-005",
+      "category": "Geography",
+      "difficulty": "medium",
+      "question": "What strait separates Europe from Africa?",
+      "correctAnswer": "Strait of Gibraltar",
+      "incorrectAnswers": ["Strait of Hormuz", "Strait of Malacca", "Bosporus"],
+      "explanation": "The Strait of Gibraltar is only 14.3 km wide at its narrowest point."
+    },
+    {
+      "id": "geo-006",
+      "category": "Geography",
+      "difficulty": "medium",
+      "question": "Mount Kilimanjaro is located in which country?",
+      "correctAnswer": "Tanzania",
+      "incorrectAnswers": ["Kenya", "Ethiopia", "Uganda"],
+      "explanation": "Kilimanjaro is in northeastern Tanzania, near the Kenyan border."
+    },
+    {
+      "id": "geo-007",
+      "category": "Geography",
+      "difficulty": "hard",
+      "question": "What is the deepest point in the ocean?",
+      "correctAnswer": "Challenger Deep",
+      "incorrectAnswers": ["Tonga Trench", "Puerto Rico Trench", "Java Trench"],
+      "explanation": "Challenger Deep in the Mariana Trench reaches about 10,935 meters."
+    },
+    {
+      "id": "geo-008",
+      "category": "Geography",
+      "difficulty": "hard",
+      "question": "What country has the most time zones?",
+      "correctAnswer": "France",
+      "incorrectAnswers": ["Russia", "United States", "United Kingdom"],
+      "explanation": "France has 12 time zones due to its overseas territories."
+    },
+    {
+      "id": "geo-009",
+      "category": "Geography",
+      "difficulty": "hard",
+      "question": "What is the driest inhabited continent?",
+      "correctAnswer": "Australia",
+      "incorrectAnswers": ["Africa", "Asia", "South America"],
+      "explanation": "Australia receives an average of only 470mm of rain per year."
+    },
+    {
+      "id": "geo-010",
+      "category": "Geography",
+      "difficulty": "easy",
+      "question": "What ocean is the largest?",
+      "correctAnswer": "Pacific Ocean",
+      "incorrectAnswers": ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean"],
+      "explanation": "The Pacific Ocean covers about 165.25 million km²."
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "category": "Technology",
+  "icon": "💻",
+  "color": "#3b82f6",
+  "questions": [
+    {
+      "id": "tech-001",
+      "category": "Technology",
+      "difficulty": "easy",
+      "question": "What does 'HTTP' stand for?",
+      "correctAnswer": "HyperText Transfer Protocol",
+      "incorrectAnswers": ["HyperText Transmission Protocol", "High Transfer Text Protocol", "HyperText Transport Protocol"],
+      "explanation": "HTTP is the foundation protocol of data communication on the World Wide Web."
+    },
+    {
+      "id": "tech-002",
+      "category": "Technology",
+      "difficulty": "easy",
+      "question": "Who co-founded Apple with Steve Jobs?",
+      "correctAnswer": "Steve Wozniak",
+      "incorrectAnswers": ["Bill Gates", "Tim Cook", "Larry Page"],
+      "explanation": "Wozniak and Jobs founded Apple in 1976. Ronald Wayne was also a co-founder."
+    },
+    {
+      "id": "tech-003",
+      "category": "Technology",
+      "difficulty": "easy",
+      "question": "What does 'CPU' stand for?",
+      "correctAnswer": "Central Processing Unit",
+      "incorrectAnswers": ["Computer Processing Unit", "Central Program Unit", "Core Processing Unit"],
+      "explanation": "The CPU is the primary component that executes instructions in a computer."
+    },
+    {
+      "id": "tech-004",
+      "category": "Technology",
+      "difficulty": "medium",
+      "question": "What year was the World Wide Web invented?",
+      "correctAnswer": "1989",
+      "incorrectAnswers": ["1991", "1985", "1993"],
+      "explanation": "Tim Berners-Lee proposed the WWW at CERN in 1989."
+    },
+    {
+      "id": "tech-005",
+      "category": "Technology",
+      "difficulty": "medium",
+      "question": "What programming language was created by Brendan Eich in 10 days?",
+      "correctAnswer": "JavaScript",
+      "incorrectAnswers": ["Python", "Ruby", "PHP"],
+      "explanation": "Eich created JavaScript in May 1995 while at Netscape."
+    },
+    {
+      "id": "tech-006",
+      "category": "Technology",
+      "difficulty": "medium",
+      "question": "What does 'SQL' stand for?",
+      "correctAnswer": "Structured Query Language",
+      "incorrectAnswers": ["Simple Query Language", "Standard Query Logic", "Sequential Query Language"],
+      "explanation": "SQL was developed at IBM in the 1970s for relational database management."
+    },
+    {
+      "id": "tech-007",
+      "category": "Technology",
+      "difficulty": "hard",
+      "question": "What was the first commercially available microprocessor?",
+      "correctAnswer": "Intel 4004",
+      "incorrectAnswers": ["Intel 8080", "Zilog Z80", "Motorola 6800"],
+      "explanation": "The Intel 4004 was released in 1971 as a 4-bit processor."
+    },
+    {
+      "id": "tech-008",
+      "category": "Technology",
+      "difficulty": "hard",
+      "question": "What does the 'B' in USB stand for?",
+      "correctAnswer": "Bus",
+      "incorrectAnswers": ["Binary", "Byte", "Band"],
+      "explanation": "USB stands for Universal Serial Bus."
+    },
+    {
+      "id": "tech-009",
+      "category": "Technology",
+      "difficulty": "hard",
+      "question": "Who is considered the father of computer science?",
+      "correctAnswer": "Alan Turing",
+      "incorrectAnswers": ["Charles Babbage", "John von Neumann", "Ada Lovelace"],
+      "explanation": "Turing formalized the concepts of algorithm and computation with the Turing machine."
+    },
+    {
+      "id": "tech-010",
+      "category": "Technology",
+      "difficulty": "medium",
+      "question": "What does 'API' stand for?",
+      "correctAnswer": "Application Programming Interface",
+      "incorrectAnswers": ["Advanced Programming Interface", "Application Protocol Interface", "Automated Programming Interface"],
+      "explanation": "APIs define how different software components should interact."
+    }
+  ]
+}
