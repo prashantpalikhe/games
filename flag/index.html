@@ -543,6 +543,21 @@
                 <div class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform duration-200" :class="autoContinue ? 'translate-x-6' : 'translate-x-0'"></div>
               </div>
             </button>
+            <button
+              @click="autoListen = !autoListen"
+              class="py-4 px-4 rounded-xl font-bold text-left transition-all flex justify-between items-center border-2"
+              :class="autoListen ? 'bg-blue-50 border-blue-500 text-blue-700' : 'bg-white border-gray-200 text-gray-600'"
+            >
+              <div class="flex items-center space-x-3">
+                <span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+                </span>
+                <span>Auto-Listen (Voice Mode)</span>
+              </div>
+              <div class="w-12 h-6 rounded-full relative transition-colors duration-200" :class="autoListen ? 'bg-blue-500' : 'bg-gray-300'">
+                <div class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform duration-200" :class="autoListen ? 'translate-x-6' : 'translate-x-0'"></div>
+              </div>
+            </button>
           </div>
         </div>
       </native-sheet>
@@ -795,7 +810,7 @@
               </button>
 
               <p v-if="feedback === null" class="text-sm text-gray-500 font-medium">
-                {{ isListening ? 'Listening... speak now!' : 'Tap the mic and say the country name' }}
+                {{ isListening ? 'Listening... speak now!' : (autoListen ? 'Starting mic...' : 'Tap the mic and say the country name') }}
               </p>
 
               <!-- Not supported message -->
@@ -3028,6 +3043,7 @@
           // Settings State
           const soundEnabled = ref(true);
           const autoContinue = ref(false);
+          const autoListen = ref(true);
           const showSettings = ref(false);
 
           // Timer State (Blitz Mode)
@@ -3499,6 +3515,10 @@
             if (mode === "blitz") {
               startTimer();
             }
+            if (mode === "voice" && autoListen.value) {
+              // Small delay to let the screen render first
+              setTimeout(() => startListening(), 300);
+            }
           };
 
           // Audio Logic
@@ -3839,6 +3859,9 @@
               if (gameMode.value === "blitz") {
                 startTimer();
               }
+              if (gameMode.value === "voice" && autoListen.value) {
+                setTimeout(() => startListening(), 300);
+              }
             }
           };
 
@@ -4028,29 +4051,24 @@
                 const parsed = JSON.parse(savedSettings);
                 if (parsed.sound !== undefined) soundEnabled.value = parsed.sound;
                 if (parsed.autoContinue !== undefined) autoContinue.value = parsed.autoContinue;
+                if (parsed.autoListen !== undefined) autoListen.value = parsed.autoListen;
               } catch (e) {}
             }
 
             // Watchers to save settings
-            Vue.watch(soundEnabled, () => {
+            const saveSettings = () => {
               localStorage.setItem(
                 "flag-master-settings",
                 JSON.stringify({
                   sound: soundEnabled.value,
                   autoContinue: autoContinue.value,
+                  autoListen: autoListen.value,
                 })
               );
-            });
-
-            Vue.watch(autoContinue, () => {
-              localStorage.setItem(
-                "flag-master-settings",
-                JSON.stringify({
-                  sound: soundEnabled.value,
-                  autoContinue: autoContinue.value,
-                })
-              );
-            });
+            };
+            Vue.watch(soundEnabled, saveSettings);
+            Vue.watch(autoContinue, saveSettings);
+            Vue.watch(autoListen, saveSettings);
           });
 
           onUnmounted(() => {
@@ -4090,6 +4108,7 @@
             collectedFlags,
             soundEnabled,
             autoContinue,
+            autoListen,
             showSettings,
             fireworksContainer,
             floatingPoints,
