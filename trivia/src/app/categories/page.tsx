@@ -31,7 +31,7 @@ export default function CategoriesPage() {
         </p>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-3">
         {categories.map((cat) => (
           <CategoryCard
             key={cat.name}
