@@ -273,7 +273,7 @@ export function QuizEngine({
 
       {/* Question card */}
       <Card>
-        <CardContent className="p-6">
+        <CardContent className="p-4">
           <div className="mb-3 flex items-center gap-2">
             <Badge
               variant="secondary"

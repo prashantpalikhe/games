@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "trivia",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--dir", "trivia", "dev"],
+      "port": 3000
+    }
+  ]
+}

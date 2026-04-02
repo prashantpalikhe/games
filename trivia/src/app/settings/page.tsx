@@ -102,7 +102,7 @@ export default function SettingsPage() {
 
       {/* Learning Preferences */}
       <Card>
-        <CardContent className="space-y-5 p-4">
+        <CardContent className="space-y-4 p-4">
           <h3 className="font-semibold">Learning</h3>
 
           <div className="space-y-2">

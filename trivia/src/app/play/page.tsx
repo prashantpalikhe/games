@@ -178,7 +178,7 @@ function PlayContent() {
       {/* Category Selection */}
       <div>
         <h3 className="mb-3 font-semibold">Select Category</h3>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-3">
           <button
             onClick={() => setSelectedCategory(null)}
             className={`rounded-xl border p-3 text-left transition-all ${

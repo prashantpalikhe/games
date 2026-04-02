@@ -117,7 +117,7 @@ export default function HomePage() {
             View all
           </Link>
         </div>
-        <div className="grid space-y-3">
+        <div className="flex flex-col gap-3">
           {categories.slice(0, 3).map((cat) => (
             <CategoryCard key={cat.name} {...cat} stats={categoryStats.find((s) => s.category === cat.name)} />
           ))}
@@ -128,7 +128,7 @@ export default function HomePage() {
       {recentSessions.length > 0 && (
         <div>
           <h3 className="mb-3 font-semibold">Recent Sessions</h3>
-          <div className="space-y-3">
+          <div className="flex flex-col gap-3">
             {recentSessions.slice(0, 3).map((session) => (
               <Card key={session.id}>
                 <CardContent className="flex items-center justify-between p-3">

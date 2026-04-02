@@ -100,7 +100,7 @@ export default function StatsPage() {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="mt-4 space-y-4">
+        <TabsContent value="overview" className="mt-4 flex flex-col gap-3">
           <StreakDisplay className="w-full" />
 
           <div className="grid grid-cols-2 gap-3">
@@ -156,7 +156,7 @@ export default function StatsPage() {
           )}
         </TabsContent>
 
-        <TabsContent value="categories" className="mt-4 space-y-3">
+        <TabsContent value="categories" className="mt-4 flex flex-col gap-3">
           {categories.map((cat) => {
             const stats = categoryStats.find(
               (s) => s.category === cat.name
@@ -209,7 +209,7 @@ export default function StatsPage() {
           })}
         </TabsContent>
 
-        <TabsContent value="mastery" className="mt-4 space-y-4">
+        <TabsContent value="mastery" className="mt-4 flex flex-col gap-3">
           <Card>
             <CardContent className="space-y-4 p-4">
               <h3 className="font-semibold">Mastery Levels</h3>

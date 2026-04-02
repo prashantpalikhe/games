@@ -31,7 +31,7 @@ export default function CategoriesPage() {
         </p>
       </div>
 
-      <div className="space-y-3">
+      <div className="flex flex-col gap-3">
         {categories.map((cat) => (
           <CategoryCard
             key={cat.name}
