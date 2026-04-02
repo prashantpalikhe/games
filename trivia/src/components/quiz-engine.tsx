@@ -7,6 +7,7 @@ import {
   ChevronRight,
   Trophy,
   RotateCcw,
+  BookOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -29,6 +30,7 @@ import {
 } from "@/lib/spaced-repetition";
 import { useHaptics } from "@/hooks/use-haptics";
 import { useSound } from "@/hooks/use-sound";
+import { LearnMoreSheet } from "@/components/learn-more-sheet";
 
 interface QuizEngineProps {
   questions: Question[];
@@ -57,6 +59,7 @@ export function QuizEngine({
     correctCount: number;
     totalTime: number;
   } | null>(null);
+  const [learnMoreOpen, setLearnMoreOpen] = useState(false);
   const haptics = useHaptics();
   const sound = useSound();
   const answeredRef = useRef(false);
@@ -125,6 +128,7 @@ export function QuizEngine({
 
   function advanceToNext() {
     clearTimers();
+    setLearnMoreOpen(false);
     setShowResult(false);
     setSelectedAnswer(null);
 
@@ -374,6 +378,18 @@ export function QuizEngine({
                   {currentQuestion.explanation}
                 </p>
               )}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="mt-3 gap-1.5 px-0 text-primary hover:text-primary/80"
+                onClick={() => {
+                  clearTimers();
+                  setLearnMoreOpen(true);
+                }}
+              >
+                <BookOpen className="h-4 w-4" />
+                Learn More
+              </Button>
             </CardContent>
           </Card>
 
@@ -401,6 +417,17 @@ export function QuizEngine({
             )}
           </Button>
         </div>
+      )}
+
+      {/* Learn More bottom sheet */}
+      {currentQuestion && selectedAnswer && (
+        <LearnMoreSheet
+          open={learnMoreOpen}
+          onOpenChange={setLearnMoreOpen}
+          question={currentQuestion}
+          selectedAnswer={selectedAnswer}
+          wasCorrect={isCorrectAnswer}
+        />
       )}
     </div>
   );
