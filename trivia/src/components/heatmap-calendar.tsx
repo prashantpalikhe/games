@@ -47,14 +47,14 @@ export function HeatmapCalendar({ playedDates, className }: HeatmapCalendarProps
   }, [playedDates]);
 
   return (
-    <div className={cn("flex gap-1", className)}>
+    <div className={cn("flex gap-[3px] w-full", className)}>
       {weeks.map((week, wi) => (
-        <div key={wi} className="flex flex-col gap-1">
+        <div key={wi} className="flex flex-1 flex-col gap-[3px]">
           {week.map(({ date, played }) => (
             <Tooltip key={date}>
               <TooltipTrigger
                 className={cn(
-                  "h-3 w-3 rounded-sm",
+                  "aspect-square w-full rounded-sm",
                   played
                     ? "bg-emerald-500"
                     : "bg-muted"
