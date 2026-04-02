@@ -74,7 +74,7 @@ export function LearnMoreSheet({
           </DrawerTitle>
         </DrawerHeader>
 
-        <div className="max-h-[60vh] overflow-y-auto px-4 pb-6">
+        <div className="h-[70vh] overflow-y-auto px-4 pb-6">
           {/* Loading skeleton — before first token arrives */}
           {isStreaming && content.length === 0 && !error && (
             <div className="space-y-3">
