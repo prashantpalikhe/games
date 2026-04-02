@@ -9,6 +9,8 @@ import geographyData from "@/data/geography.json";
 import entertainmentData from "@/data/entertainment.json";
 import technologyData from "@/data/technology.json";
 import sportsData from "@/data/sports.json";
+import frenchData from "@/data/french.json";
+import webdevData from "@/data/webdev.json";
 
 const questionFiles: QuestionFile[] = [
   scienceData as QuestionFile,
@@ -17,6 +19,8 @@ const questionFiles: QuestionFile[] = [
   entertainmentData as QuestionFile,
   technologyData as QuestionFile,
   sportsData as QuestionFile,
+  frenchData as QuestionFile,
+  webdevData as QuestionFile,
 ];
 
 export function getAllCategories(): {

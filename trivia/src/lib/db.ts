@@ -7,7 +7,7 @@ import type {
 } from "./types";
 
 const DB_NAME = "trivia-master";
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 export interface TriviaDB {
   cardStates: {
@@ -35,26 +35,34 @@ let dbPromise: Promise<IDBPDatabase<TriviaDB>> | null = null;
 export function getDB() {
   if (!dbPromise) {
     dbPromise = openDB<TriviaDB>(DB_NAME, DB_VERSION, {
-      upgrade(db) {
-        // Card states for spaced repetition
-        const cardStore = db.createObjectStore("cardStates", {
-          keyPath: "questionId",
-        });
-        cardStore.createIndex("by-next-review", "nextReview");
-        cardStore.createIndex("by-question", "questionId");
+      upgrade(db, oldVersion) {
+        if (oldVersion < 1) {
+          // Card states for spaced repetition
+          const cardStore = db.createObjectStore("cardStates", {
+            keyPath: "questionId",
+          });
+          cardStore.createIndex("by-next-review", "nextReview");
+          cardStore.createIndex("by-question", "questionId");
 
-        // Quiz sessions
-        const sessionStore = db.createObjectStore("sessions", {
-          keyPath: "id",
-        });
-        sessionStore.createIndex("by-date", "date");
-        sessionStore.createIndex("by-category", "category");
+          // Quiz sessions
+          const sessionStore = db.createObjectStore("sessions", {
+            keyPath: "id",
+          });
+          sessionStore.createIndex("by-date", "date");
+          sessionStore.createIndex("by-category", "category");
 
-        // Streak data (single record)
-        db.createObjectStore("streak", { keyPath: "currentStreak" });
+          // User settings (single record)
+          db.createObjectStore("settings");
+        }
 
-        // User settings (single record)
-        db.createObjectStore("settings");
+        if (oldVersion < 2) {
+          // Fix: streak store had keyPath:"currentStreak" which broke put()
+          // and created duplicate records. Recreate with out-of-line keys.
+          if (db.objectStoreNames.contains("streak")) {
+            db.deleteObjectStore("streak");
+          }
+          db.createObjectStore("streak");
+        }
       },
     });
   }
@@ -116,11 +124,11 @@ export async function getRecentSessions(limit: number): Promise<QuizSession[]> {
 
 // --- Streak Operations ---
 
-const STREAK_KEY = 1;
+const STREAK_KEY = "singleton";
 
 export async function getStreak(): Promise<StreakData> {
   const db = await getDB();
-  const data = await db.get("streak", STREAK_KEY as never);
+  const data = await db.get("streak", STREAK_KEY);
   return (
     data ?? {
       currentStreak: 0,
@@ -161,7 +169,7 @@ export async function updateStreak(): Promise<StreakData> {
     }
   }
 
-  await db.put("streak", streak, STREAK_KEY as never);
+  await db.put("streak", streak, STREAK_KEY);
   return streak;
 }
 
