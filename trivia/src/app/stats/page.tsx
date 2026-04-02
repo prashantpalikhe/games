@@ -13,6 +13,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
+import { TrendsTab } from "@/components/trends-tab";
 import { Badge } from "@/components/ui/badge";
 import { StreakDisplay } from "@/components/streak-display";
 import { HeatmapCalendar } from "@/components/heatmap-calendar";
@@ -97,6 +98,9 @@ export default function StatsPage() {
           </TabsTrigger>
           <TabsTrigger value="mastery" className="flex-1">
             Mastery
+          </TabsTrigger>
+          <TabsTrigger value="trends" className="flex-1">
+            Trends
           </TabsTrigger>
         </TabsList>
 
@@ -295,6 +299,10 @@ export default function StatsPage() {
               )}
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="trends" className="mt-4">
+          <TrendsTab sessions={sessions} />
         </TabsContent>
       </Tabs>
     </div>
