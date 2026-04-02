@@ -55,7 +55,11 @@ export function getSpeedOverTime(
     .map((s) => ({
       date: s.date,
       label: formatDateLabel(s.date),
-      avgSeconds: +(s.timeSpentMs / s.totalQuestions / 1000).toFixed(1),
+      avgSeconds: +(
+        (s.answerTimeMs ?? s.questions.reduce((sum, q) => sum + q.timeSpentMs, 0)) /
+        s.totalQuestions /
+        1000
+      ).toFixed(1),
     }));
 }
 

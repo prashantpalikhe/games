@@ -51,7 +51,10 @@ export interface QuizSession {
   difficulty: "easy" | "medium" | "hard" | "mixed";
   totalQuestions: number;
   correctAnswers: number;
+  /** Total wall-clock time for the session (includes reading explanations) */
   timeSpentMs: number;
+  /** Sum of per-question answer times only (excludes reading time) */
+  answerTimeMs?: number;
   questions: SessionQuestion[];
 }
 

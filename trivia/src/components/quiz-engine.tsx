@@ -58,6 +58,7 @@ export function QuizEngine({
   const [completionStats, setCompletionStats] = useState<{
     correctCount: number;
     totalTime: number;
+    avgAnswerTime: number;
   } | null>(null);
   const [learnMoreOpen, setLearnMoreOpen] = useState(false);
   const haptics = useHaptics();
@@ -106,6 +107,7 @@ export function QuizEngine({
   async function finishSession() {
     const allQuestions = sessionQuestionsRef.current;
     const correctCount = allQuestions.filter((q) => q.correct).length;
+    const answerTimeMs = allQuestions.reduce((sum, q) => sum + q.timeSpentMs, 0);
     await saveSession({
       id: crypto.randomUUID(),
       date: new Date().toISOString(),
@@ -114,12 +116,14 @@ export function QuizEngine({
       totalQuestions: questions.length,
       correctAnswers: correctCount,
       timeSpentMs: Date.now() - sessionStartTime,
+      answerTimeMs,
       questions: allQuestions,
     });
     await updateStreak();
     setCompletionStats({
       correctCount,
       totalTime: Math.round((Date.now() - sessionStartTime) / 1000),
+      avgAnswerTime: Math.round(answerTimeMs / allQuestions.length / 100) / 10,
     });
     setIsComplete(true);
     sound.celebration();
@@ -198,7 +202,7 @@ export function QuizEngine({
   );
 
   if (isComplete && completionStats) {
-    const { correctCount, totalTime } = completionStats;
+    const { correctCount, totalTime, avgAnswerTime } = completionStats;
     const percentage = Math.round((correctCount / questions.length) * 100);
 
     return (
@@ -213,7 +217,7 @@ export function QuizEngine({
           </p>
         </div>
 
-        <div className="grid w-full max-w-sm grid-cols-3 gap-4">
+        <div className="grid w-full max-w-sm grid-cols-2 gap-4">
           <Card>
             <CardContent className="flex flex-col items-center p-4">
               <span className="text-2xl font-bold font-mono text-emerald-500">
@@ -232,8 +236,14 @@ export function QuizEngine({
           </Card>
           <Card>
             <CardContent className="flex flex-col items-center p-4">
-              <span className="text-2xl font-bold font-mono">{totalTime}s</span>
-              <span className="text-xs text-muted-foreground">Time</span>
+              <span className="text-2xl font-bold font-mono text-amber-500">{avgAnswerTime}s</span>
+              <span className="text-xs text-muted-foreground">Avg Answer</span>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="flex flex-col items-center p-4">
+              <span className="text-2xl font-bold font-mono text-muted-foreground">{totalTime}s</span>
+              <span className="text-xs text-muted-foreground">Total Time</span>
             </CardContent>
           </Card>
         </div>

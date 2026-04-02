@@ -63,9 +63,14 @@ export default function StatsPage() {
   );
   const overallAccuracy =
     totalAnswered > 0 ? Math.round((totalCorrect / totalAnswered) * 100) : 0;
-  const totalTime = sessions.reduce((sum, s) => sum + s.timeSpentMs, 0);
+  const totalAnswerTime = sessions.reduce(
+    (sum, s) => sum + (s.answerTimeMs ?? s.questions.reduce((qs, q) => qs + q.timeSpentMs, 0)),
+    0
+  );
   const avgTimePerQuestion =
-    totalAnswered > 0 ? Math.round(totalTime / totalAnswered / 1000) : 0;
+    totalAnswered > 0
+      ? Math.round(totalAnswerTime / totalAnswered / 100) / 10
+      : 0;
 
   const masteryBreakdown = {
     new: cards.filter((c) => getMasteryLevel(c) === "new").length,
