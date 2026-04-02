@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "trivia",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["--dir", "trivia", "dev"],
+      "runtimeExecutable": "/bin/bash",
+      "runtimeArgs": ["-c", "export NVM_DIR=$HOME/.nvm && . $NVM_DIR/nvm.sh && pnpm --dir trivia dev"],
       "port": 3000
     }
   ]
