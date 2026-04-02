@@ -12,7 +12,7 @@ The app has a "Learn More" button that appears after answering a trivia question
 
 1. **Ollama** must be running on the MacBook (default: `localhost:11434`)
    - Download from https://ollama.com
-   - Model used: `qwen3.5` (configured in `src/hooks/use-ollama-stream.ts`)
+   - Model used: `gemma3:4b` (configured in `src/hooks/use-ollama-stream.ts`)
    - CORS must be enabled: `launchctl setenv OLLAMA_ORIGINS "*"` then restart Ollama
 
 2. **Tailscale** must be active on both the MacBook and the phone

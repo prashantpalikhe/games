@@ -3,7 +3,7 @@
 import { useState, useRef, useCallback } from "react";
 
 const OLLAMA_URL = "https://prashants-macbook-pro-2.tail5b59b0.ts.net/api/generate";
-const OLLAMA_MODEL = "qwen3.5";
+const OLLAMA_MODEL = "gemma3:4b";
 
 export function useOllamaStream() {
   const [content, setContent] = useState("");
