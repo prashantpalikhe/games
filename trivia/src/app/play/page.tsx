@@ -2,19 +2,18 @@
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { ArrowLeft, Shuffle, Brain, Zap, Timer } from "lucide-react";
+import { ArrowLeft, Shuffle, Brain, Zap, Timer, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { QuizEngine } from "@/components/quiz-engine";
+import { shuffle, getAllCategories } from "@/lib/questions";
 import {
+  loadCategoryQuestions,
   getAllQuestions,
-  getQuestionsByCategory,
-  shuffle,
-  getAllCategories,
-} from "@/lib/questions";
+  getQuestionById,
+} from "@/lib/question-loader";
 import { getDueCards, getSettings } from "@/lib/db";
-import { getQuestionById } from "@/lib/questions";
 import type { Question } from "@/lib/types";
 
 function PlayContent() {
@@ -25,7 +24,7 @@ function PlayContent() {
   const [category, setCategory] = useState<string>("All");
   const [showSetup, setShowSetup] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [categorySheetOpen, setCategorySheetOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const categories = getAllCategories();
 
@@ -50,23 +49,27 @@ function PlayContent() {
   }, [searchParams]);
 
   async function startReviewMode() {
+    setLoading(true);
     const due = await getDueCards();
     if (due.length === 0) {
       setQuestions([]);
       setShowSetup(true);
+      setLoading(false);
       return;
     }
-    const reviewQuestions = due
-      .map((c) => getQuestionById(c.questionId))
-      .filter(Boolean) as Question[];
+    const reviewQuestions = (
+      await Promise.all(due.map((c) => getQuestionById(c.questionId)))
+    ).filter(Boolean) as Question[];
     setQuestions(shuffle(reviewQuestions).slice(0, 10));
     setMode("review");
     setShowSetup(false);
+    setLoading(false);
   }
 
   async function startCategoryMode(cat: string) {
+    setLoading(true);
     const settings = await getSettings();
-    const catQuestions = getQuestionsByCategory(cat);
+    const catQuestions = await loadCategoryQuestions(cat);
     const difficulty = settings.preferredDifficulty;
     let filtered = catQuestions;
     if (difficulty !== "mixed") {
@@ -76,13 +79,15 @@ function PlayContent() {
     setQuestions(shuffle(filtered).slice(0, settings.questionsPerSession));
     setCategory(cat);
     setShowSetup(false);
+    setLoading(false);
   }
 
   async function startQuickPlay() {
+    setLoading(true);
     const settings = await getSettings();
     let pool = selectedCategory
-      ? getQuestionsByCategory(selectedCategory)
-      : getAllQuestions();
+      ? await loadCategoryQuestions(selectedCategory)
+      : await getAllQuestions();
     if (settings.preferredDifficulty !== "mixed") {
       const filtered = pool.filter(
         (q) => q.difficulty === settings.preferredDifficulty
@@ -92,6 +97,15 @@ function PlayContent() {
     setQuestions(shuffle(pool).slice(0, settings.questionsPerSession));
     setCategory(selectedCategory ?? "All");
     setShowSetup(false);
+    setLoading(false);
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center pt-32">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    );
   }
 
   if (!showSetup && questions && questions.length > 0) {

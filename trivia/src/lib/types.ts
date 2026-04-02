@@ -16,6 +16,15 @@ export interface QuestionFile {
   questions: Question[];
 }
 
+export interface CategoryMeta {
+  name: string;
+  icon: string;
+  color: string;
+  questionCount: number;
+  idPrefix: string;
+  dataModule: string;
+}
+
 /** SM-2 spaced repetition card state */
 export interface CardState {
   questionId: string;

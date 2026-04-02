@@ -4,6 +4,7 @@ import { ThemeProvider } from "next-themes";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { BottomNav } from "@/components/bottom-nav";
 import { ServiceWorkerRegister } from "@/components/sw-register";
+import { QuestionPreloader } from "@/components/question-preloader";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -58,6 +59,7 @@ export default function RootLayout({
             <main className="flex-1 pb-20">{children}</main>
             <BottomNav />
             <ServiceWorkerRegister />
+            <QuestionPreloader />
           </TooltipProvider>
         </ThemeProvider>
       </body>

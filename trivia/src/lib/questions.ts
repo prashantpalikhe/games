@@ -1,62 +1,17 @@
-import type { Question, QuestionFile, CategoryStats } from "./types";
+import type { Question, CategoryStats } from "./types";
 import { getAllCardStates } from "./db";
 import { getMasteryLevel } from "./spaced-repetition";
+import { categories, getAllCategories } from "./category-registry";
 
-// Import all question files statically so they're bundled
-import scienceData from "@/data/science.json";
-import historyData from "@/data/history.json";
-import geographyData from "@/data/geography.json";
-import entertainmentData from "@/data/entertainment.json";
-import technologyData from "@/data/technology.json";
-import sportsData from "@/data/sports.json";
-import frenchData from "@/data/french.json";
-import webdevData from "@/data/webdev.json";
+// Re-export for consumers that only need metadata
+export { getAllCategories } from "./category-registry";
 
-const questionFiles: QuestionFile[] = [
-  scienceData as QuestionFile,
-  historyData as QuestionFile,
-  geographyData as QuestionFile,
-  entertainmentData as QuestionFile,
-  technologyData as QuestionFile,
-  sportsData as QuestionFile,
-  frenchData as QuestionFile,
-  webdevData as QuestionFile,
-];
-
-export function getAllCategories(): {
-  name: string;
-  icon: string;
-  color: string;
-  questionCount: number;
-}[] {
-  return questionFiles.map((f) => ({
-    name: f.category,
-    icon: f.icon,
-    color: f.color,
-    questionCount: f.questions.length,
-  }));
-}
-
-export function getAllQuestions(): Question[] {
-  return questionFiles.flatMap((f) => f.questions);
-}
-
-export function getQuestionsByCategory(category: string): Question[] {
-  const file = questionFiles.find(
-    (f) => f.category.toLowerCase() === category.toLowerCase()
-  );
-  return file?.questions ?? [];
-}
-
-export function getQuestionById(id: string): Question | undefined {
-  return getAllQuestions().find((q) => q.id === id);
-}
-
-export function getQuestionsByDifficulty(
-  difficulty: "easy" | "medium" | "hard"
-): Question[] {
-  return getAllQuestions().filter((q) => q.difficulty === difficulty);
-}
+// Re-export async loaders for consumers that need question data
+export {
+  loadCategoryQuestions,
+  getAllQuestions,
+  getQuestionById,
+} from "./question-loader";
 
 /** Shuffle array using Fisher-Yates */
 export function shuffle<T>(array: T[]): T[] {
@@ -73,13 +28,17 @@ export function getShuffledAnswers(question: Question): string[] {
   return shuffle([question.correctAnswer, ...question.incorrectAnswers]);
 }
 
-/** Build category stats from card states and sessions */
+/**
+ * Build category stats from card states.
+ * Uses ID-prefix generation to avoid loading question data —
+ * only the category registry (in the main bundle) is needed.
+ */
 export async function getCategoryStats(): Promise<CategoryStats[]> {
   const cards = await getAllCardStates();
   const cardMap = new Map(cards.map((c) => [c.questionId, c]));
 
   return getAllCategories().map(({ name }) => {
-    const questions = getQuestionsByCategory(name);
+    const meta = categories.find((c) => c.name === name)!;
     let totalAnswered = 0;
     let correctAnswers = 0;
     let totalTimeMs = 0;
@@ -87,8 +46,10 @@ export async function getCategoryStats(): Promise<CategoryStats[]> {
     let learningCount = 0;
     let newCount = 0;
 
-    for (const q of questions) {
-      const card = cardMap.get(q.id);
+    // Generate question IDs from the known prefix pattern
+    for (let i = 1; i <= meta.questionCount; i++) {
+      const id = `${meta.idPrefix}-${String(i).padStart(3, "0")}`;
+      const card = cardMap.get(id);
       if (!card) {
         newCount++;
         continue;
