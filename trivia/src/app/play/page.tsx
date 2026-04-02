@@ -2,7 +2,6 @@
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Sheet } from "@silk-hq/components";
 import { ArrowLeft, Shuffle, Brain, Zap, Timer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";

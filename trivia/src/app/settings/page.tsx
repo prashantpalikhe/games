@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { Sheet } from "@silk-hq/components";
 import {
   Bell,
   FastForward,
@@ -23,6 +22,13 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerFooter,
+} from "@/components/ui/drawer";
 import { getSettings, saveSettings, getDB } from "@/lib/db";
 import { requestNotificationPermission, scheduleStreakReminder } from "@/lib/notifications";
 import type { UserSettings } from "@/lib/types";
@@ -293,45 +299,35 @@ export default function SettingsPage() {
         </CardContent>
       </Card>
 
-      {/* Reset Confirmation Sheet */}
-      <Sheet.Root
-        presented={resetSheetOpen}
-        onPresentedChange={setResetSheetOpen}
-        license="non-commercial"
-      >
-        <Sheet.Portal>
-          <Sheet.View>
-            <Sheet.Backdrop className="bg-black/60" />
-            <Sheet.Content className="rounded-t-2xl bg-card p-6 pb-10">
-              <Sheet.Handle className="bg-muted-foreground/30" />
-              <div className="mt-4 text-center">
-                <Trash2 className="mx-auto h-10 w-10 text-destructive" />
-                <h3 className="mt-3 text-lg font-bold">Reset All Data?</h3>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  This will delete all your progress, streaks, and session
-                  history. This action cannot be undone.
-                </p>
-                <div className="mt-6 flex gap-3">
-                  <Button
-                    variant="outline"
-                    className="flex-1"
-                    onClick={() => setResetSheetOpen(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    className="flex-1"
-                    onClick={handleResetData}
-                  >
-                    Reset
-                  </Button>
-                </div>
-              </div>
-            </Sheet.Content>
-          </Sheet.View>
-        </Sheet.Portal>
-      </Sheet.Root>
+      {/* Reset Confirmation Drawer */}
+      <Drawer open={resetSheetOpen} onOpenChange={setResetSheetOpen}>
+        <DrawerContent>
+          <DrawerHeader className="text-center">
+            <Trash2 className="mx-auto h-10 w-10 text-destructive" />
+            <DrawerTitle className="mt-3">Reset All Data?</DrawerTitle>
+            <p className="mt-2 text-sm text-muted-foreground">
+              This will delete all your progress, streaks, and session
+              history. This action cannot be undone.
+            </p>
+          </DrawerHeader>
+          <DrawerFooter className="flex-row gap-3">
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => setResetSheetOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              className="flex-1"
+              onClick={handleResetData}
+            >
+              Reset
+            </Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback } from "react";
 
-const OLLAMA_URL = "http://100.72.4.120:11434/api/generate";
+const OLLAMA_URL = "https://prashants-macbook-pro-2.tail5b59b0.ts.net/api/generate";
 const OLLAMA_MODEL = "llama3.2";
 
 export function useOllamaStream() {

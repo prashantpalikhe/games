@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",
-    "@silk-hq/components": "^0.10.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "idb": "^8.0.3",

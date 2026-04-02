@@ -5,7 +5,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { BottomNav } from "@/components/bottom-nav";
 import { ServiceWorkerRegister } from "@/components/sw-register";
 import "./globals.css";
-import "@silk-hq/components/layered-styles";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

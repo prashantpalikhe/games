@@ -11,9 +11,6 @@ importers:
       '@base-ui/react':
         specifier: ^1.3.0
         version: 1.3.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
-      '@silk-hq/components':
-        specifier: ^0.10.1
-        version: 0.10.1(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -872,12 +869,6 @@ packages:
 
   '@sec-ant/readable-stream@0.4.1':
     resolution: {integrity: sha512-831qok9r2t8AlxLko40y2ebgSDhenenCatLVeW/uBtnHPyhHOvG0C7TvfgecV+wHzIm5KUICgzmVpWS+IMEAeg==}
-
-  '@silk-hq/components@0.10.1':
-    resolution: {integrity: sha512-Xtn3Vhn6mSOmM8haegor0g2W3Cm5QcKbPWsfk5kJzyXSTTpyRphmapmFz70mKtbe9VIalpbpkBZ84MDvGNoYfg==}
-    peerDependencies:
-      react: ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
 
   '@sindresorhus/merge-streams@4.0.0':
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
@@ -4885,11 +4876,6 @@ snapshots:
   '@rtsao/scc@1.1.0': {}
 
   '@sec-ant/readable-stream@0.4.1': {}
-
-  '@silk-hq/components@0.10.1(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
-    dependencies:
-      react: 19.2.4
-      react-dom: 19.2.4(react@19.2.4)
 
   '@sindresorhus/merge-streams@4.0.0': {}
 
