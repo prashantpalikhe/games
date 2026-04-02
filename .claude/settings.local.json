@@ -5,7 +5,18 @@
       "Bash(pnpm build:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(vercel --yes --prod --scope prashantpalikhes-projects)"
+      "Bash(vercel --yes --prod --scope prashantpalikhes-projects)",
+      "Bash(npx next:*)",
+      "Bash(git push:*)",
+      "mcp__plugin_vercel-plugin_vercel__deploy_to_vercel",
+      "Bash(vercel --prod)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(xargs kill:*)",
+      "Bash(vercel --version)",
+      "Bash(git -C /Users/prashantpalikhe/Projects/Games/games status --porcelain)",
+      "Bash(export NVM_DIR=\"$HOME/.nvm\")",
+      "Bash(. \"$NVM_DIR/nvm.sh\")",
+      "Bash(npm i:*)"
     ]
   }
 }
