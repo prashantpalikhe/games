@@ -1,0 +1,1914 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+
+    <!-- iOS / PWA Setup -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Butterfly" />
+    <meta name="theme-color" content="#fff1f2" />
+
+    <title>Butterfly — Opera Prep</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Nunito", "system-ui", "sans-serif"],
+              serif: ["Cormorant Garamond", "Georgia", "serif"],
+            },
+            animation: {
+              "bounce-in": "bounce-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards",
+              "fade-in": "fade-in 0.3s ease-out forwards",
+              "slide-up": "slide-up 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2) forwards",
+            },
+            keyframes: {
+              "bounce-in": {
+                "0%": { transform: "scale(0.9)", opacity: 0 },
+                "100%": { transform: "scale(1)", opacity: 1 },
+              },
+              "fade-in": {
+                "0%": { opacity: 0 },
+                "100%": { opacity: 1 },
+              },
+              "slide-up": {
+                "0%": { transform: "translateY(20px)", opacity: 0 },
+                "100%": { transform: "translateY(0)", opacity: 1 },
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Web Haptics -->
+    <script type="module">
+      import { WebHaptics } from "https://esm.sh/web-haptics@0.0.6";
+      window.__haptics = new WebHaptics();
+    </script>
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+
+    <style>
+      :root {
+        --safe-top: env(safe-area-inset-top, 20px);
+        --safe-bottom: env(safe-area-inset-bottom, 20px);
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        touch-action: manipulation;
+        overscroll-behavior: none;
+      }
+
+      body {
+        position: fixed;
+        inset: 0;
+      }
+
+      [v-cloak] {
+        display: none !important;
+      }
+
+      .no-select {
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+      }
+
+      .safe-top {
+        padding-top: var(--safe-top);
+      }
+
+      .safe-bottom {
+        padding-bottom: var(--safe-bottom);
+      }
+
+      /* Soft warm gradient background — rose / peach / amber */
+      @keyframes gradient-bg {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+      .animate-gradient {
+        background: linear-gradient(-45deg, #fecdd3, #fed7aa, #fde68a, #fbcfe8);
+        background-size: 400% 400%;
+        animation: gradient-bg 20s ease infinite;
+      }
+
+      /* Subtle shake for wrong answers */
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        20%, 60% { transform: translateX(-6px); }
+        40%, 80% { transform: translateX(6px); }
+      }
+      .animate-shake { animation: shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
+
+      /* Pulse glow for locked chapters */
+      @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.35); }
+        50% { box-shadow: 0 0 0 8px rgba(225, 29, 72, 0); }
+      }
+      .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+
+      /* Floating points */
+      @keyframes float-up {
+        0% { transform: translateY(0) scale(1); opacity: 1; }
+        100% { transform: translateY(-70px) scale(1.3); opacity: 0; }
+      }
+      .float-points {
+        position: absolute;
+        font-weight: 900;
+        color: #f59e0b;
+        -webkit-text-stroke: 1px #78350f;
+        text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+        pointer-events: none;
+        animation: float-up 1s ease-out forwards;
+        z-index: 100;
+        font-size: 2.5rem;
+      }
+
+      /* Custom scrollbar */
+      .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+      .custom-scrollbar::-webkit-scrollbar-track { background: #fff1f2; border-radius: 3px; }
+      .custom-scrollbar::-webkit-scrollbar-thumb { background: #fda4af; border-radius: 3px; }
+
+      /* Screen fade */
+      .fade-enter-active, .fade-leave-active { transition: opacity 0.25s ease; }
+      .fade-enter-from, .fade-leave-to { opacity: 0; }
+
+      /* Progress dots */
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 9999px;
+        background: #fecdd3;
+        transition: all 0.25s;
+      }
+      .dot.active {
+        background: #e11d48;
+        width: 24px;
+      }
+      .dot.done {
+        background: #fb7185;
+      }
+
+      /* Chapter card lock icon overlay */
+      .locked-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(255,255,255,0.55);
+        backdrop-filter: blur(1px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: inherit;
+      }
+
+      /* Accent serif for opera titles */
+      .font-opera {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-style: italic;
+      }
+
+      /* Card swipe stack */
+      .learn-card {
+        background: white;
+        border-radius: 24px;
+        padding: 28px 24px;
+        box-shadow: 0 20px 40px -12px rgba(190, 18, 60, 0.18), 0 4px 12px -4px rgba(0,0,0,0.08);
+        border: 1px solid rgba(253, 164, 175, 0.35);
+      }
+
+      /* Hide scrollbars for carousels */
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { scrollbar-width: none; }
+    </style>
+  </head>
+  <body class="font-sans text-gray-800 animate-gradient overflow-hidden flex justify-center items-center">
+    <div
+      id="app"
+      v-cloak
+      :class="{ 'animate-shake': shakeActive }"
+      class="w-full max-w-md h-full max-h-[900px] bg-white/95 backdrop-blur-sm shadow-2xl relative overflow-hidden flex flex-col md:rounded-3xl md:h-[92vh] transition-transform"
+    >
+      <!-- Floating points container -->
+      <div class="absolute inset-0 pointer-events-none overflow-hidden z-50">
+        <div v-for="point in floatingPoints" :key="point.id" class="float-points" :style="{ left: point.x + 'px', top: point.y + 'px' }">
+          +{{ point.amount }}
+        </div>
+      </div>
+
+      <!-- ========================= HOME SCREEN ========================= -->
+      <div v-if="screen === 'home'" class="flex flex-col h-full animate-fade-in">
+        <!-- Header -->
+        <div class="px-6 pb-4 safe-top">
+          <div class="flex items-center justify-between mt-4">
+            <div>
+              <div class="text-xs font-bold uppercase tracking-[0.2em] text-rose-500">Opera Prep</div>
+              <h1 class="text-3xl font-black text-gray-900 leading-tight">Madama <span class="font-opera text-rose-600">Butterfly</span></h1>
+            </div>
+            <button
+              @click="showSettings = true"
+              class="p-2.5 bg-white border border-rose-100 hover:bg-rose-50 rounded-full text-rose-500 transition-colors shadow-sm no-select"
+              aria-label="Settings"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+            </button>
+          </div>
+          <p class="text-sm text-gray-500 mt-1">Hamburg Staatsoper — your crash course before the curtain rises.</p>
+        </div>
+
+        <!-- Overall progress bar -->
+        <div class="px-6 mb-4">
+          <div class="bg-white rounded-2xl p-4 shadow-sm border border-rose-100">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-gray-500">Overall progress</span>
+              <span class="text-sm font-black text-rose-600">{{ overallPercent }}%</span>
+            </div>
+            <div class="h-2.5 bg-rose-50 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-rose-400 via-rose-500 to-amber-400 transition-all duration-500" :style="{ width: overallPercent + '%' }"></div>
+            </div>
+            <div class="flex items-center justify-between mt-3 text-xs text-gray-500 font-semibold">
+              <span>📚 {{ completedChapters }} / {{ CHAPTERS.length }} chapters</span>
+              <span v-if="finalExamBest !== null">🏆 Final: {{ finalExamBest }}%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chapter list -->
+        <div class="flex-1 overflow-y-auto px-6 pb-6 custom-scrollbar">
+          <div class="space-y-3">
+            <div
+              v-for="(chapter, idx) in CHAPTERS"
+              :key="chapter.id"
+              @click="openChapter(chapter.id, idx)"
+              class="relative rounded-2xl p-4 border-2 transition-all no-select cursor-pointer active:scale-[0.98]"
+              :class="isLocked(idx)
+                ? 'bg-gray-50 border-gray-200 opacity-75 cursor-not-allowed'
+                : 'bg-white border-rose-100 hover:border-rose-300 hover:shadow-md shadow-sm'"
+            >
+              <div class="flex items-start space-x-3">
+                <div
+                  class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 shadow-inner"
+                  :class="isLocked(idx) ? 'bg-gray-200' : chapter.bgClass"
+                >
+                  {{ chapter.emoji }}
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-black text-rose-400 uppercase tracking-widest">Chapter {{ idx + 1 }}</span>
+                    <span
+                      v-if="progress[chapter.id]?.quizPassed"
+                      class="text-[10px] font-black px-1.5 py-0.5 rounded-full bg-green-100 text-green-700"
+                    >✓ DONE</span>
+                    <span
+                      v-else-if="progress[chapter.id]?.learned"
+                      class="text-[10px] font-black px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700"
+                    >READY TO QUIZ</span>
+                  </div>
+                  <h3 class="font-black text-gray-900 leading-tight">{{ chapter.title }}</h3>
+                  <p class="text-xs text-gray-500 mt-0.5 leading-snug">{{ chapter.subtitle }}</p>
+                  <!-- Tiny progress bar -->
+                  <div v-if="!isLocked(idx)" class="flex items-center gap-2 mt-2">
+                    <div class="flex-1 h-1 bg-rose-50 rounded-full overflow-hidden">
+                      <div class="h-full bg-rose-400" :style="{ width: chapterProgress(chapter.id) + '%' }"></div>
+                    </div>
+                    <span class="text-[10px] text-gray-400 font-bold">{{ chapter.cards.length }} cards · {{ chapter.quiz.length }} Q</span>
+                  </div>
+                </div>
+              </div>
+              <div v-if="isLocked(idx)" class="locked-overlay">
+                <div class="flex items-center gap-2 px-3 py-1.5 bg-white rounded-full shadow-sm border border-gray-200">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Complete previous</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Final Exam Card -->
+            <div
+              @click="startFinalExam"
+              class="relative rounded-2xl p-5 border-2 transition-all no-select cursor-pointer active:scale-[0.98] mt-4"
+              :class="canTakeFinal
+                ? 'bg-gradient-to-br from-rose-500 to-amber-500 border-rose-600 text-white shadow-lg pulse-glow'
+                : 'bg-gray-50 border-gray-200 opacity-60 cursor-not-allowed'"
+            >
+              <div class="flex items-center gap-3">
+                <div class="text-3xl">🎭</div>
+                <div class="flex-1">
+                  <div class="text-[10px] font-black uppercase tracking-widest" :class="canTakeFinal ? 'text-white/80' : 'text-gray-400'">Final</div>
+                  <h3 class="font-black text-lg" :class="canTakeFinal ? 'text-white' : 'text-gray-500'">Curtain Up — Full Exam</h3>
+                  <p class="text-xs mt-0.5" :class="canTakeFinal ? 'text-white/90' : 'text-gray-400'">
+                    {{ canTakeFinal ? '15 mixed questions. Prove you\'re ready.' : 'Finish every chapter to unlock.' }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================= LEARN SCREEN ========================= -->
+      <div v-else-if="screen === 'learn' && activeChapter" class="flex flex-col h-full animate-fade-in">
+        <!-- Header -->
+        <div class="px-4 safe-top">
+          <div class="flex items-center justify-between mt-4 mb-3">
+            <button @click="goHome" class="p-2 bg-rose-50 hover:bg-rose-100 rounded-full text-rose-600 transition-colors no-select" aria-label="Back">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+            </button>
+            <div class="text-center">
+              <div class="text-[10px] font-black uppercase tracking-widest text-rose-400">Chapter {{ activeChapterIdx + 1 }}</div>
+              <h2 class="text-sm font-black text-gray-800 leading-tight">{{ activeChapter.title }}</h2>
+            </div>
+            <div class="w-9"></div>
+          </div>
+
+          <!-- Progress dots -->
+          <div class="flex items-center justify-center gap-1.5 mb-3">
+            <div
+              v-for="(_, i) in activeChapter.cards"
+              :key="i"
+              class="dot"
+              :class="{ active: i === cardIdx, done: i < cardIdx }"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Card content -->
+        <div class="flex-1 overflow-y-auto px-6 pb-4 custom-scrollbar">
+          <div class="learn-card animate-slide-up" :key="cardIdx">
+            <div v-if="activeCard.number" class="text-[10px] font-black uppercase tracking-[0.2em] text-rose-400 mb-2">
+              {{ activeCard.number }}
+            </div>
+            <h3 class="text-2xl font-black text-gray-900 leading-tight mb-3" :class="{ 'font-opera': activeCard.italic }">
+              {{ activeCard.title }}
+            </h3>
+            <div class="text-gray-700 text-base leading-relaxed space-y-3" v-html="formatBody(activeCard.body)"></div>
+
+            <!-- Audio listen button (for aria chapter) -->
+            <a
+              v-if="activeCard.listen"
+              :href="'https://www.youtube.com/results?search_query=' + encodeURIComponent(activeCard.listen)"
+              target="_blank"
+              rel="noopener"
+              class="mt-5 inline-flex items-center gap-2 px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-full shadow-md transition-colors no-select"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="white" stroke="none"><path d="M8 5v14l11-7z"/></svg>
+              Listen on YouTube
+            </a>
+
+            <!-- Italian phrase callout -->
+            <div v-if="activeCard.italian" class="mt-4 p-3 bg-amber-50 border-l-4 border-amber-400 rounded-r-lg">
+              <div class="text-[10px] font-black uppercase tracking-widest text-amber-700 mb-0.5">Italian</div>
+              <div class="font-opera text-lg text-amber-900 italic">"{{ activeCard.italian }}"</div>
+              <div class="text-xs text-amber-800 mt-0.5">{{ activeCard.italianTrans }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer nav -->
+        <div class="px-4 pb-4 safe-bottom border-t border-rose-100 bg-white pt-3">
+          <div class="flex items-center gap-3">
+            <button
+              @click="prevCard"
+              :disabled="cardIdx === 0"
+              class="p-3 rounded-xl font-bold transition-all no-select disabled:opacity-30"
+              :class="cardIdx === 0 ? 'bg-gray-100 text-gray-400' : 'bg-rose-50 text-rose-700 hover:bg-rose-100 active:scale-95'"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+            </button>
+            <button
+              @click="nextCard"
+              class="flex-1 py-3 rounded-xl font-black text-white text-base uppercase tracking-wider border-b-4 active:border-b-0 active:translate-y-1 transition-all shadow-md no-select bg-rose-500 hover:bg-rose-600 border-rose-700"
+            >
+              {{ cardIdx === activeChapter.cards.length - 1 ? 'Start Quiz →' : 'Next' }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================= QUIZ SCREEN ========================= -->
+      <div v-else-if="screen === 'quiz' && activeChapter" class="flex flex-col h-full animate-fade-in">
+        <!-- Header -->
+        <div class="px-4 pb-3 safe-top bg-white">
+          <div class="flex items-center justify-between mt-4">
+            <button @click="confirmQuitQuiz" class="p-2 bg-rose-50 hover:bg-rose-100 rounded-full text-rose-600 transition-colors no-select" aria-label="Close">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+            <div class="flex-1 mx-4">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-[10px] font-black uppercase tracking-widest text-rose-400">{{ isFinalExam ? 'Final Exam' : activeChapter.title }}</span>
+                <span class="text-xs font-black text-rose-600">{{ quizIdx + 1 }} / {{ quizQuestions.length }}</span>
+              </div>
+              <div class="h-2 bg-rose-100 rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-rose-500 to-amber-500 transition-all duration-300" :style="{ width: ((quizIdx) / quizQuestions.length * 100) + '%' }"></div>
+              </div>
+            </div>
+            <div class="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded-full">
+              <span class="text-sm">⭐</span>
+              <span class="text-sm font-black text-amber-700">{{ quizScore }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Question -->
+        <div class="flex-1 overflow-y-auto px-5 py-5 custom-scrollbar">
+          <h3 class="text-xl font-black text-gray-900 leading-snug mb-5 animate-slide-up" :key="'q' + quizIdx">
+            {{ currentQuizQ.q }}
+          </h3>
+
+          <!-- Options -->
+          <div class="space-y-3">
+            <button
+              v-for="(opt, idx) in currentQuizQ.options"
+              :key="idx"
+              @click="answerQuiz(idx, $event)"
+              :disabled="quizFeedback !== null"
+              class="w-full rounded-2xl border-2 border-b-4 p-4 text-left font-bold transition-all flex items-start gap-3 no-select disabled:cursor-not-allowed"
+              :class="getQuizOptionClass(idx)"
+            >
+              <span class="flex items-center justify-center w-8 h-8 rounded-lg text-sm border-2 flex-shrink-0 font-black" :class="getQuizNumberClass(idx)">
+                {{ String.fromCharCode(65 + idx) }}
+              </span>
+              <span class="flex-1 leading-snug pt-0.5">{{ opt }}</span>
+            </button>
+          </div>
+
+          <!-- Inline feedback -->
+          <div v-if="quizFeedback" class="mt-5 animate-slide-up">
+            <div
+              class="rounded-2xl p-4 border-2"
+              :class="quizFeedback === 'correct' ? 'bg-green-50 border-green-300' : 'bg-red-50 border-red-300'"
+            >
+              <div class="flex items-start gap-3">
+                <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" :class="quizFeedback === 'correct' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'">
+                  <svg v-if="quizFeedback === 'correct'" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  <svg v-else width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </div>
+                <div class="flex-1">
+                  <div class="font-black text-base" :class="quizFeedback === 'correct' ? 'text-green-700' : 'text-red-700'">
+                    {{ quizFeedback === 'correct' ? 'Bravissimo!' : 'Not quite' }}
+                  </div>
+                  <p v-if="quizFeedback === 'incorrect'" class="text-sm text-red-700 font-semibold mt-1">
+                    Correct answer: <strong>{{ currentQuizQ.options[currentQuizQ.correct] }}</strong>
+                  </p>
+                  <p v-if="currentQuizQ.explain" class="text-sm mt-2 leading-relaxed" :class="quizFeedback === 'correct' ? 'text-green-800' : 'text-red-800'">
+                    {{ currentQuizQ.explain }}
+                  </p>
+                </div>
+              </div>
+              <button
+                v-if="quizFeedback === 'incorrect'"
+                @click="advanceQuiz"
+                class="mt-4 w-full py-3 rounded-xl font-black text-white text-sm uppercase tracking-wider bg-red-500 hover:bg-red-600 border-b-4 border-red-700 active:border-b-0 active:translate-y-0.5 transition-all no-select"
+              >
+                Continue
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================= CHAPTER DONE SCREEN ========================= -->
+      <div v-else-if="screen === 'chapter-done' && activeChapter" class="flex flex-col h-full items-center justify-center p-6 text-center animate-fade-in">
+        <div class="text-6xl mb-4 animate-bounce-in">{{ chapterDonePerfect ? '🌟' : activeChapter.emoji }}</div>
+        <div class="text-[10px] font-black uppercase tracking-[0.3em] text-rose-400 mb-1">Chapter complete</div>
+        <h2 class="text-3xl font-black text-gray-900 mb-2 font-opera italic">{{ activeChapter.title }}</h2>
+
+        <div class="w-full max-w-xs bg-rose-50 rounded-2xl p-5 my-6 border border-rose-100">
+          <div class="text-xs font-bold uppercase tracking-wider text-rose-500 mb-1">Your score</div>
+          <div class="text-5xl font-black text-rose-600">{{ quizScore }} / {{ quizQuestions.length }}</div>
+          <div class="text-sm text-rose-500 font-semibold mt-1">{{ chapterDonePct }}%</div>
+          <div v-if="chapterDonePerfect" class="text-xs text-amber-700 font-black mt-2 uppercase tracking-widest">⭐ Perfect Run</div>
+        </div>
+
+        <p class="text-gray-600 max-w-xs mb-6 text-sm">
+          {{ chapterDonePerfect
+            ? "You nailed every answer. Worthy of a bravissimo!"
+            : chapterDonePct >= 70
+              ? "Solid work. Review any misses and move on."
+              : "Give the cards another read — repetition is how it sticks." }}
+        </p>
+
+        <div class="w-full max-w-xs space-y-3">
+          <button
+            v-if="nextChapterAvailable"
+            @click="openNextChapter"
+            class="w-full py-4 rounded-2xl font-black text-white text-base uppercase tracking-wider border-b-4 active:border-b-0 active:translate-y-1 transition-all shadow-lg no-select bg-rose-500 hover:bg-rose-600 border-rose-700"
+          >
+            Next Chapter →
+          </button>
+          <button
+            v-else-if="canTakeFinal"
+            @click="startFinalExam"
+            class="w-full py-4 rounded-2xl font-black text-white text-base uppercase tracking-wider border-b-4 active:border-b-0 active:translate-y-1 transition-all shadow-lg no-select bg-gradient-to-r from-rose-500 to-amber-500 border-rose-700"
+          >
+            🎭 Take the Final Exam
+          </button>
+          <button
+            @click="reviewChapter"
+            class="w-full py-3 rounded-2xl font-black text-rose-600 text-sm uppercase tracking-wider bg-white border-2 border-rose-200 hover:bg-rose-50 no-select"
+          >
+            Review Cards
+          </button>
+          <button @click="goHome" class="w-full py-2 text-sm font-bold text-gray-500 hover:text-gray-700 no-select">
+            Back to Home
+          </button>
+        </div>
+      </div>
+
+      <!-- ========================= FINAL EXAM DONE SCREEN ========================= -->
+      <div v-else-if="screen === 'final-done'" class="flex flex-col h-full items-center justify-center p-6 text-center animate-fade-in overflow-y-auto custom-scrollbar">
+        <div class="text-6xl mb-4 animate-bounce-in">{{ finalPct >= 90 ? '🏆' : finalPct >= 70 ? '🎭' : '🌸' }}</div>
+        <div class="text-[10px] font-black uppercase tracking-[0.3em] text-rose-400 mb-1">Final Exam</div>
+        <h2 class="text-3xl font-black text-gray-900 mb-2 font-opera italic">
+          {{ finalPct >= 90 ? 'Bravissima!' : finalPct >= 70 ? 'Well Done' : 'Keep Learning' }}
+        </h2>
+
+        <div class="w-full max-w-xs bg-gradient-to-br from-rose-50 to-amber-50 rounded-2xl p-5 my-6 border border-rose-100">
+          <div class="text-xs font-bold uppercase tracking-wider text-rose-500 mb-1">Final score</div>
+          <div class="text-5xl font-black text-rose-600">{{ quizScore }} / {{ quizQuestions.length }}</div>
+          <div class="text-sm text-rose-500 font-semibold mt-1">{{ finalPct }}%</div>
+          <div v-if="finalExamBest !== null && finalPct >= finalExamBest" class="text-xs text-amber-700 font-black mt-2 uppercase tracking-widest">🌟 New Best!</div>
+        </div>
+
+        <p class="text-gray-600 max-w-xs mb-6 text-sm">
+          {{ finalPct >= 90
+            ? "You're ready. Enjoy the opera — the music will land."
+            : finalPct >= 70
+              ? "You know enough to follow every scene. Go enjoy it."
+              : "Review the chapters once more. It'll all click." }}
+        </p>
+
+        <!-- Wrong answers review -->
+        <div v-if="wrongAnswers.length > 0" class="w-full max-w-sm mb-6">
+          <div class="text-xs font-black uppercase tracking-wider text-gray-500 mb-2 text-left">Review your misses</div>
+          <div class="space-y-2">
+            <div v-for="(wa, i) in wrongAnswers" :key="i" class="bg-white border border-red-100 rounded-xl p-3 text-left">
+              <div class="text-sm font-bold text-gray-800 mb-1">{{ wa.q }}</div>
+              <div class="text-xs text-green-700 font-semibold">✓ {{ wa.correct }}</div>
+              <div v-if="wa.explain" class="text-xs text-gray-500 mt-1">{{ wa.explain }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full max-w-xs space-y-3">
+          <button
+            @click="startFinalExam"
+            class="w-full py-4 rounded-2xl font-black text-white text-base uppercase tracking-wider border-b-4 active:border-b-0 active:translate-y-1 transition-all shadow-lg no-select bg-rose-500 hover:bg-rose-600 border-rose-700"
+          >
+            Try Again
+          </button>
+          <button @click="goHome" class="w-full py-2 text-sm font-bold text-gray-500 hover:text-gray-700 no-select">
+            Back to Home
+          </button>
+        </div>
+      </div>
+
+      <!-- ========================= SETTINGS SHEET ========================= -->
+      <div
+        v-if="showSettings"
+        @click.self="showSettings = false"
+        class="absolute inset-0 bg-black/40 z-[60] flex items-end animate-fade-in"
+      >
+        <div class="w-full bg-white rounded-t-3xl p-6 pb-8 animate-slide-up">
+          <div class="flex justify-center mb-4">
+            <div class="w-12 h-1.5 bg-gray-300 rounded-full"></div>
+          </div>
+          <div class="flex items-center justify-between mb-5">
+            <h3 class="text-2xl font-black text-gray-900">Settings</h3>
+            <button @click="showSettings = false" class="p-1.5 bg-gray-100 rounded-full text-gray-500 hover:bg-gray-200">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <div class="space-y-3">
+            <button
+              @click="hapticEnabled = !hapticEnabled; saveSettings()"
+              class="w-full p-4 rounded-xl font-bold text-left flex items-center justify-between border-2 transition-colors"
+              :class="hapticEnabled ? 'bg-rose-50 border-rose-400 text-rose-700' : 'bg-white border-gray-200 text-gray-600'"
+            >
+              <span>Haptic feedback</span>
+              <div class="w-12 h-6 rounded-full relative transition-colors" :class="hapticEnabled ? 'bg-rose-500' : 'bg-gray-300'">
+                <div class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform" :class="hapticEnabled ? 'translate-x-6' : ''"></div>
+              </div>
+            </button>
+            <button
+              @click="autoProgress = !autoProgress; saveSettings()"
+              class="w-full p-4 rounded-xl font-bold text-left flex items-center justify-between border-2 transition-colors"
+              :class="autoProgress ? 'bg-rose-50 border-rose-400 text-rose-700' : 'bg-white border-gray-200 text-gray-600'"
+            >
+              <span>Auto-advance on correct</span>
+              <div class="w-12 h-6 rounded-full relative transition-colors" :class="autoProgress ? 'bg-rose-500' : 'bg-gray-300'">
+                <div class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform" :class="autoProgress ? 'translate-x-6' : ''"></div>
+              </div>
+            </button>
+            <button
+              @click="resetProgress"
+              class="w-full p-4 rounded-xl font-bold text-red-600 bg-red-50 border-2 border-red-200 hover:bg-red-100 transition-colors"
+            >
+              Reset all progress
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const { createApp, ref, computed, onMounted, onUnmounted, nextTick, watch } = Vue;
+
+      // ============================================================
+      //                       CONTENT — CHAPTERS
+      // ============================================================
+      // Every card is written for a total opera beginner.
+      // Quizzes pause on wrong answers (per user preference).
+      // Aria cards use YouTube search links (no fragile video IDs).
+
+      const CHAPTERS = [
+        // ------------------------------------------------ 1
+        {
+          id: "opera-basics",
+          title: "What Even Is Opera?",
+          subtitle: "The absolute basics, etiquette, and how not to feel lost",
+          emoji: "🎭",
+          bgClass: "bg-rose-100",
+          cards: [
+            {
+              title: "Opera is sung drama",
+              body: "Imagine a play, except every word is sung, and an orchestra sits between you and the stage. That's opera. It has been the blockbuster art form of Europe for over 400 years.\n\nYou're not expected to understand Italian — translations (surtitles) are projected above the stage. Your job is to let the music carry the story. The plot is usually simple; the feeling is everything.",
+            },
+            {
+              title: "The libretto is the script",
+              body: "The sung text is called the **libretto** (Italian for 'little book'). Madama Butterfly's libretto was written by Luigi Illica and Giuseppe Giacosa, the same duo who wrote La Bohème and Tosca for Puccini.\n\nLibrettists were often under-credited. Puccini was a perfectionist who would send pages back demanding rewrites for weeks.",
+            },
+            {
+              title: "The orchestra pit",
+              body: "The orchestra sits in a sunken **pit** between you and the stage. The conductor stands facing the singers, with their back to you. In Hamburg, the pit holds around 80 musicians.\n\nYou won't really see them, but you'll feel them. When the brass hits a climax, the floor vibrates.",
+            },
+            {
+              title: "Acts and intermissions",
+              body: "Operas are split into **acts**, separated by intermissions of 20–30 minutes. Madama Butterfly is performed in two or three acts depending on the production. Total runtime: roughly 3 hours.\n\nUse intermissions to stretch, use the loo (queues!), grab a glass of sparkling wine, and skim the next act's synopsis in the programme.",
+            },
+            {
+              title: "When to clap (and when NOT to)",
+              body: "Safe to clap:\n• After a big aria ends\n• At the end of an act\n• At curtain calls at the very end\n\n**Never** clap during the music, during quiet transitions, or while someone is still singing. If you're unsure, wait half a second and follow the crowd. Germans are more reserved than Italians — don't be the first to shout.",
+            },
+            {
+              title: "\"Bravo\", \"Brava\", \"Bravi\"",
+              body: "If a singer blows you away, you can shout:\n\n• **\"Bravo!\"** — for a man\n• **\"Brava!\"** — for a woman\n• **\"Bravi!\"** — for a group\n\nIt's pronounced with a rolled R if you can manage it, but nobody will fight you over it. Save it for the really spectacular moments — usually after a famous aria.",
+              italian: "Brava!",
+              italianTrans: "Well done! (to a woman)",
+            },
+            {
+              title: "Surtitles — your safety net",
+              body: "Above the stage, a screen shows the libretto translated into German and usually English. These are called **surtitles** (or supertitles). Glance at them to follow the plot, but don't read them the whole time — you'll miss the acting.\n\nPro tip: read the synopsis beforehand (you already are!) so you barely need the surtitles. Then the music hits harder.",
+            },
+            {
+              title: "Dress code — Hamburg edition",
+              body: "Hamburg Staatsoper is **smart casual to semi-formal**. You'll see everything from dark jeans + a blazer to full gowns.\n\nSafe bet for men: dark trousers, nice shirt, jacket optional. For women: a dress or smart separates. Nobody wears sneakers and t-shirts, but nobody wears a tuxedo either. Dress up if it's a special night — it's your first opera!",
+            },
+            {
+              title: "Curtain calls",
+              body: "After the final note, the curtain drops, then rises again for the **curtain call**. Principal singers come out one by one to bow. The lead soprano (Butterfly) gets the loudest applause last — that's tradition.\n\nDon't rush for the exit. Stick around at least for the lead's bow. If you loved it, stand. The cast can see you.",
+            },
+            {
+              title: "Survival tips for your first opera",
+              body: "• Eat a light dinner — you'll be sitting 3 hours\n• Arrive 30+ minutes early for cloakroom, programme, seat\n• Turn your phone **fully off** (airplane mode isn't enough; screens glow)\n• No photos or recording — ever\n• Unwrap any cough sweets **before** the music starts, not during\n• Breathe. You will survive. Most people love their first opera.",
+            },
+          ],
+          quiz: [
+            {
+              q: "What is a libretto?",
+              options: ["The sung text of an opera", "A small orchestra", "A type of high voice", "The conductor's baton"],
+              correct: 0,
+              explain: "The libretto is the text/script — literally 'little book' in Italian.",
+            },
+            {
+              q: "Where does the orchestra sit during an opera?",
+              options: ["On the balcony", "On stage with the singers", "In a sunken pit between audience and stage", "In a separate room offstage"],
+              correct: 2,
+              explain: "The orchestra sits in the pit, with the conductor facing the stage.",
+            },
+            {
+              q: "When is it safe to applaud?",
+              options: ["Any time the music swells", "After a big aria or at the end of an act", "Only at the very end of the opera", "When the conductor raises their hand"],
+              correct: 1,
+              explain: "After arias and at act breaks. Never during the music.",
+            },
+            {
+              q: "What are surtitles?",
+              options: ["Fancy hats worn by the audience", "Translations projected above the stage", "The names of the singers", "The titles of each act"],
+              correct: 1,
+              explain: "Surtitles translate the sung text into German and English at Hamburg Staatsoper.",
+            },
+            {
+              q: "How do you cheer a female singer in Italian?",
+              options: ["Bravo!", "Brava!", "Bravissimo!", "Bello!"],
+              correct: 1,
+              explain: "Brava for a woman, bravo for a man, bravi for a group.",
+            },
+            {
+              q: "Roughly how long is Madama Butterfly?",
+              options: ["About 90 minutes", "About 2 hours", "About 3 hours with intermission", "Over 4 hours"],
+              correct: 2,
+              explain: "Budget ~3 hours including at least one 20–30 min intermission.",
+            },
+            {
+              q: "What should you wear to Hamburg Staatsoper?",
+              options: ["Black tie required", "Smart casual to semi-formal", "Jeans and t-shirt are fine", "Traditional German dirndl"],
+              correct: 1,
+              explain: "Smart casual is the norm. No jeans and sneakers, but no tux required.",
+            },
+            {
+              q: "Who wrote the music of Madama Butterfly?",
+              options: ["Verdi", "Wagner", "Puccini", "Mozart"],
+              correct: 2,
+              explain: "Giacomo Puccini — Italian composer, 1858–1924.",
+            },
+          ],
+        },
+        // ------------------------------------------------ 2
+        {
+          id: "voices-vocab",
+          title: "Voices & Vocabulary",
+          subtitle: "Soprano, tenor, aria, recitative — the words you'll hear",
+          emoji: "🎼",
+          bgClass: "bg-amber-100",
+          cards: [
+            {
+              title: "Opera singers are classified by range",
+              body: "From highest to lowest:\n\n**Women:** soprano → mezzo-soprano → contralto\n**Men:** tenor → baritone → bass\n\nThese aren't just notes — each voice type has a whole personality. Sopranos are usually heroines, tenors are usually love interests, baritones are usually the conscience, basses are usually fathers or villains. It's opera shorthand.",
+            },
+            {
+              title: "Soprano — the heroine",
+              body: "Highest female voice. Usually the **leading lady**, the one we fall in love with and watch suffer.\n\n**Butterfly (Cio-Cio-San) is a soprano** — arguably one of the hardest soprano roles in the repertoire. She's on stage almost the entire opera and ends on extreme emotional highs. Famous Butterflies include Maria Callas, Renata Tebaldi, and Anna Netrebko.",
+            },
+            {
+              title: "Mezzo-soprano — the sidekick",
+              body: "One step lower than soprano. Warm, darker tone. Often plays the **maid, mother, confidante, or sometimes the villain**.\n\n**Suzuki, Butterfly's faithful servant, is a mezzo.** She's the practical one who sees the tragedy coming long before Butterfly does. She also gets the 'Flower Duet' with Butterfly in Act 2, which is gorgeous.",
+            },
+            {
+              title: "Tenor — the love interest",
+              body: "Highest male voice. Almost always the **hero or the romantic lead**. The tenor high note is what makes the audience gasp.\n\n**Pinkerton, the American naval officer, is a tenor.** Here's the twist: he's not really the hero. Puccini uses the conventional tenor voice for someone who turns out to be shallow and destructive. That's part of the opera's punch.",
+            },
+            {
+              title: "Baritone — the authority",
+              body: "Middle male voice. Rich and grave. Often the **father figure, rival, or the voice of reason**.\n\n**Sharpless, the American consul in Nagasaki, is a baritone.** He's the audience's conscience — he warns Pinkerton not to do this, tries to tell Butterfly the truth, and can't quite bring himself to. Every time he sings, you'll feel the weight of someone who knows better.",
+            },
+            {
+              title: "Bass — the gravity",
+              body: "Lowest male voice. Dark, booming. Often the **priest, king, or villain**.\n\nIn Butterfly, **the Bonze** — Butterfly's uncle, a Buddhist priest — is a bass. He shows up at the wedding to curse her for converting to Christianity. His single scene is one of the most chilling moments of Act 1.",
+            },
+            {
+              title: "Aria — the solo spotlight",
+              body: "An **aria** is a solo song where one singer stops and pours out their heart. The plot pauses; emotion takes over. These are the 'greatest hits' of opera — the bits you might recognise even if you've never seen an opera.\n\nButterfly's most famous aria is **\"Un bel dì vedremo\"** ('One fine day, we'll see…'). You'll learn more about it in Chapter 6.",
+              italian: "Un bel dì vedremo",
+              italianTrans: "One fine day, we'll see…",
+            },
+            {
+              title: "Recitative — sung dialogue",
+              body: "Between arias, characters need to actually talk to each other. **Recitative** is the in-between stuff — sung, but in a conversational, speech-like rhythm. Less melody, more plot.\n\nPuccini mostly avoids strict recitative. His 'talky' sections are still melodic — the line between recitative and aria blurs. That's why Puccini operas feel like they flow as continuous music.",
+            },
+            {
+              title: "Duets, trios, ensembles",
+              body: "When two or more singers sing together:\n\n• **Duet** — two singers (often a love duet)\n• **Trio** — three\n• **Quartet** — four\n• **Ensemble** — a bigger group, often everyone at once\n\nMadama Butterfly's Act 1 ends with a **10-minute love duet** between Butterfly and Pinkerton. It's one of the most intoxicating duets Puccini ever wrote.",
+            },
+            {
+              title: "The chorus",
+              body: "The **chorus** is the opera choir — a big group of singers playing crowds, soldiers, villagers. They fill out the sound and the stage.\n\nButterfly has one legendary chorus moment: the **\"Humming Chorus\"** at the end of Act 2. They hum (yes, hum) a wordless melody while Butterfly keeps vigil through the night. It's haunting. Goosebumps guaranteed.",
+            },
+            {
+              title: "Leitmotif — musical labels",
+              body: "A **leitmotif** is a short musical theme attached to a character, place, or idea. Whenever that thing shows up, the theme sneaks in.\n\nPuccini loads Butterfly with leitmotifs. Listen for:\n\n• **Japanese-flavoured melodies** — Butterfly's world\n• **\"The Star-Spangled Banner\"** — literally the US anthem, used for Pinkerton (subtle, Puccini)\n• **A 'curse' motif** — returns whenever betrayal looms",
+            },
+            {
+              title: "Verismo — real people, real pain",
+              body: "**Verismo** (Italian for 'realism') was a movement in late-1800s Italian opera. Instead of gods, kings, and myths, composers wrote about ordinary people: peasants, clowns, seamstresses, geishas.\n\nPuccini is the most famous verismo composer. Butterfly fits perfectly — it's a tragedy about a teenage girl in a colonial situation, with no magic, no royalty, just raw human cruelty and grief. Very modern for 1904.",
+            },
+          ],
+          quiz: [
+            {
+              q: "What voice type is Madama Butterfly?",
+              options: ["Mezzo-soprano", "Soprano", "Contralto", "Tenor"],
+              correct: 1,
+              explain: "Butterfly is a soprano — one of the hardest roles in the repertoire.",
+            },
+            {
+              q: "What voice type is Pinkerton?",
+              options: ["Baritone", "Bass", "Tenor", "Countertenor"],
+              correct: 2,
+              explain: "Pinkerton is a tenor — the traditional romantic lead voice.",
+            },
+            {
+              q: "What is an aria?",
+              options: ["A solo song for one singer", "A scene change", "A group chorus", "An orchestral interlude"],
+              correct: 0,
+              explain: "A solo moment where one singer expresses an emotion, often the highlight of the opera.",
+            },
+            {
+              q: "What is a leitmotif?",
+              options: ["A type of instrument", "A recurring musical theme tied to a character or idea", "An Italian dance rhythm", "The opening overture"],
+              correct: 1,
+              explain: "A musical 'label' that returns whenever a particular character or theme appears.",
+            },
+            {
+              q: "What does 'verismo' mean?",
+              options: ["'Very high notes'", "'Realism' — focus on ordinary people and real emotions", "'Victory'", "'Veiled', meaning hidden meaning"],
+              correct: 1,
+              explain: "Verismo = realism. Butterfly is a classic verismo opera.",
+            },
+            {
+              q: "Which voice type is LOWER?",
+              options: ["Soprano", "Mezzo-soprano", "They're the same", "Depends on the language"],
+              correct: 1,
+              explain: "Mezzo is lower than soprano. Sopranos fly highest; mezzos are warmer and darker.",
+            },
+            {
+              q: "What is the 'Humming Chorus' in Butterfly?",
+              options: ["A comedy scene", "A wordless chorus that hums while Butterfly waits overnight", "An opening prayer", "A drinking song"],
+              correct: 1,
+              explain: "End of Act 2 — the chorus hums a haunting, wordless melody as Butterfly keeps vigil.",
+            },
+            {
+              q: "What is recitative?",
+              options: ["A musical recipe", "Sung dialogue that advances the plot", "A type of aria", "The final song of an act"],
+              correct: 1,
+              explain: "Recitative is the 'talky' sung part between the big musical numbers.",
+            },
+            {
+              q: "What voice type is Suzuki?",
+              options: ["Soprano", "Mezzo-soprano", "Tenor", "Bass"],
+              correct: 1,
+              explain: "Suzuki, Butterfly's maid, is a mezzo — the warm, lower female voice.",
+            },
+            {
+              q: "What voice type is Sharpless, the American consul?",
+              options: ["Tenor", "Baritone", "Bass", "Countertenor"],
+              correct: 1,
+              explain: "Sharpless is a baritone — the voice of authority and conscience.",
+            },
+          ],
+        },
+        // ------------------------------------------------ 3
+        {
+          id: "puccini",
+          title: "Puccini in 60 Seconds",
+          subtitle: "The composer: who he was and why he matters",
+          emoji: "🎹",
+          bgClass: "bg-pink-100",
+          cards: [
+            {
+              title: "Giacomo Puccini (1858–1924)",
+              body: "Italian composer from **Lucca**, a small walled city in Tuscany. Born into a family of church musicians going back five generations — his father, grandfather, great-grandfather and further back were all organists and choirmasters.\n\nYoung Giacomo was supposed to continue the family tradition. Then he walked 20 miles to see Verdi's *Aida* as a teenager, and decided: no, I want to write operas. The rest is history.",
+            },
+            {
+              title: "His style — Puccini sound",
+              body: "Puccini writes **tunes that wreck you**. Sweeping, aching, melodic lines that feel inevitable the first time you hear them. He's a master of building from a hush to a climax.\n\nHe's technically part of the **verismo** movement (real people, real suffering), but he's more melodic and lush than strict verismo composers. He borrows from Wagner (leitmotifs), Debussy (colour), and folk music (Japanese tunes in Butterfly) whenever it serves the drama.",
+            },
+            {
+              title: "The big three",
+              body: "Puccini's three most-loved operas — all tragedies, all masterpieces, all still in the top 10 most-performed worldwide:\n\n• **La Bohème** (1896) — poor artists in Paris; doomed love\n• **Tosca** (1900) — political thriller; jealousy and murder\n• **Madama Butterfly** (1904) — Nagasaki; betrayal and suicide\n\nIf you liked Butterfly, these two are next.",
+            },
+            {
+              title: "Other hits you might know",
+              body: "• **Turandot** (1924, unfinished) — contains **\"Nessun dorma\"**, the tenor aria Pavarotti made famous. You've heard it in football ads.\n\n• **Manon Lescaut** (1893) — his first big success\n\n• **Gianni Schicchi** (1918) — a rare comedy, contains the aria 'O mio babbino caro' (also a famous tune)\n\nPuccini died of throat cancer before finishing Turandot. A student completed the ending.",
+              italian: "Nessun dorma",
+              italianTrans: "None shall sleep",
+            },
+            {
+              title: "Puccini's trademark: the dying heroine",
+              body: "Puccini kills off his leading lady in **every single one** of his most famous operas:\n\n• Mimì (La Bohème) — tuberculosis\n• Tosca — leaps from a castle\n• Butterfly — commits seppuku\n• Manon — dies of exhaustion\n• Liù (Turandot) — stabs herself\n\nCritics call them 'Puccini's suffering women'. He genuinely felt these stories — he called Butterfly 'the woman who waits'.",
+            },
+            {
+              title: "Butterfly's DISASTER premiere",
+              body: "**La Scala, Milan. February 17, 1904.** Puccini was already famous from La Bohème and Tosca. Expectations were enormous. Rival composers showed up hoping to see him flop.\n\nThey got their wish. The audience **booed**, hissed, made animal noises, and laughed at the costumes. The second act felt way too long. It was one of the most catastrophic opera premieres in history.",
+            },
+            {
+              title: "The rewrite that saved it",
+              body: "Puccini was devastated. He withdrew the opera **after a single performance**.\n\nHe spent three months rewriting:\n• Split Act 2 into two acts (what became Act 2 and Act 3)\n• Shortened several scenes\n• Added Pinkerton's guilt aria in Act 3 ('Addio fiorito asil')\n• Softened Pinkerton slightly\n\n**New premiere: Brescia, May 1904.** Triumph. This is roughly the version you'll see in Hamburg.",
+            },
+            {
+              title: "Why Butterfly matters to Puccini",
+              body: "Puccini said Butterfly was the opera he felt most deeply. He worked on it for over two years, obsessing over Japanese music, furniture, names, and even getting recordings of Japanese melodies to study.\n\nHe was also in a car accident during its composition — he nearly died, was in a wheelchair for months, and wrote much of Act 2 while recovering. Some of that pain is in the score.",
+            },
+          ],
+          quiz: [
+            {
+              q: "Where was Puccini from?",
+              options: ["Milan", "Lucca, in Tuscany (Italy)", "Rome", "Venice"],
+              correct: 1,
+              explain: "Lucca — a walled Tuscan town where his family had been church musicians for generations.",
+            },
+            {
+              q: "Which famous aria is from Puccini's Turandot?",
+              options: ["Un bel dì vedremo", "Nessun dorma", "La donna è mobile", "Habanera"],
+              correct: 1,
+              explain: "'Nessun dorma' — 'None shall sleep'. The one Pavarotti made into a pop hit.",
+            },
+            {
+              q: "What happened at Madama Butterfly's premiere in 1904?",
+              options: ["A triumph from the first minute", "A disaster — the audience booed and jeered", "It was cancelled after Act 1", "The theatre caught fire"],
+              correct: 1,
+              explain: "Milan, La Scala, 17 Feb 1904. Catastrophic flop. Puccini withdrew it after one night.",
+            },
+            {
+              q: "Which of these is ALSO a Puccini opera?",
+              options: ["Carmen", "La Bohème", "The Magic Flute", "Aida"],
+              correct: 1,
+              explain: "La Bohème, Tosca and Madama Butterfly are Puccini's 'big three'.",
+            },
+            {
+              q: "What musical style is Puccini part of?",
+              options: ["Baroque", "Verismo (realism)", "Serialism", "Bel canto"],
+              correct: 1,
+              explain: "Verismo — opera about ordinary people and real emotions, not gods or royalty.",
+            },
+            {
+              q: "After the disastrous premiere, what did Puccini do?",
+              options: ["Gave up on the opera entirely", "Rewrote it, splitting Act 2 — success came weeks later in Brescia", "Sued the audience", "Blamed the conductor"],
+              correct: 1,
+              explain: "Three months later in Brescia, the rewritten version was a triumph. That's the version you'll see.",
+            },
+            {
+              q: "What's a recurring pattern in Puccini's famous operas?",
+              options: ["Happy endings with weddings", "The leading lady dies at the end", "Comedy with dancing", "They're all about gods and myths"],
+              correct: 1,
+              explain: "His 'suffering women' — Mimì, Tosca, Butterfly, Liù. They all die.",
+            },
+          ],
+        },
+        // ------------------------------------------------ 4
+        {
+          id: "butterfly-setup",
+          title: "Butterfly — The Setup",
+          subtitle: "Who's who, where, and why it all goes wrong",
+          emoji: "🌸",
+          bgClass: "bg-rose-100",
+          cards: [
+            {
+              title: "Nagasaki, around 1900",
+              body: "The entire opera takes place on a **hilltop overlooking Nagasaki harbour**, at a little Japanese house Pinkerton has leased.\n\nThis matters: Japan had only been open to the West since the 1850s. In 1900, Nagasaki was full of foreign sailors — American, British, Russian — and the cultural collision was fresh, raw, and exploitative. The opera is built on that power imbalance.",
+            },
+            {
+              title: "The 'marriage' is a legal scam",
+              body: "In late-1800s Japan, there was a practice of **contract marriages** between foreigners and Japanese women. They were technically marriages — on a 999-year lease that **either party could cancel with a month's notice**.\n\nFor foreign men, it was a socially acceptable fling. For Japanese women (often poor, often ex-geishas), it was survival. Butterfly believes hers is real. Pinkerton knows it isn't. That's the engine of the tragedy.",
+            },
+            {
+              title: "Cio-Cio-San (Butterfly) — the heroine",
+              body: "**Fifteen years old** at the start of the opera. A former **geisha** from a once-noble samurai family that fell on hard times — her father was ordered to commit seppuku (ritual suicide) by the Emperor, which destroyed her family's status.\n\nTo survive, she was trained as a geisha. Now she's marrying Pinkerton to escape that life. She genuinely believes this is her forever. She's naïve, brave, and utterly doomed.\n\n**Voice:** Soprano.",
+            },
+            {
+              title: "B. F. Pinkerton — the villain (sort of)",
+              body: "A **lieutenant in the US Navy**. Stationed in Nagasaki. Young, confident, superficial.\n\nHe sees the 'marriage' as a fun Japanese adventure. He openly toasts 'to the day I marry a real American bride' in Act 1 — **in front of Sharpless, who tries to warn him**. He's not a monster. He's worse: a charming man who doesn't think his actions have weight for the people beneath him.\n\n**Voice:** Tenor.",
+            },
+            {
+              title: "Suzuki — Butterfly's maid",
+              body: "Butterfly's devoted servant. A practical, Buddhist woman who manages the house, worries about money, and prays to Japanese gods (while Butterfly has converted to Christianity for her husband).\n\nSuzuki sees the disaster coming long before Butterfly will accept it. In Act 2 she weeps behind Butterfly's back, not wanting to shatter her hope. One of opera's most tender supporting roles.\n\n**Voice:** Mezzo-soprano.",
+            },
+            {
+              title: "Sharpless — the American consul",
+              body: "The **US consul** in Nagasaki. An older, decent man who tries to warn Pinkerton against the marriage in Act 1, tries to break the news gently to Butterfly in Act 2, and fails at both.\n\nHe's the audience stand-in: he can see exactly what's happening, and he's powerless to stop it. His scenes are some of the most morally painful in the opera.\n\n**Voice:** Baritone.",
+            },
+            {
+              title: "Goro — the marriage broker",
+              body: "A local **Japanese marriage broker**. He arranges the contract marriage, profits from it, and in Act 2 keeps trying to marry Butterfly off to a rich Japanese nobleman (Prince Yamadori) because her American 'husband' is never coming back. She refuses.\n\nGoro is the oily middleman who enables the whole tragedy. Butterfly despises him.\n\n**Voice:** Tenor (comic/character tenor).",
+            },
+            {
+              title: "The Bonze — her uncle, the priest",
+              body: "A **Buddhist priest** and Butterfly's uncle. He crashes the wedding in Act 1 to curse her for abandoning her ancestors' religion to marry an American Christian.\n\nHis single scene — a thunderous denunciation — is terrifying. After he curses her, her **entire family disowns her and walks out**. From that moment, Butterfly has only Pinkerton, and Pinkerton is about to sail away.\n\n**Voice:** Bass.",
+            },
+            {
+              title: "Kate Pinkerton",
+              body: "Pinkerton's **American wife**. She appears only in Act 3. She has very few lines.\n\nShe's not a villain — she doesn't know the full story when she arrives in Japan. She's come with her husband to take Butterfly's child back to America, where the boy will have a 'proper' life. Her small, awkward presence is devastating: she's kind, she means well, and she's the final blow.\n\n**Voice:** Mezzo-soprano.",
+            },
+            {
+              title: "The child — 'Sorrow' / 'Joy'",
+              body: "**Butterfly has Pinkerton's son**, born after he left. He is three years old in Act 2. He doesn't sing — it's a silent role, usually a small child actor.\n\nButterfly has named him **Dolore** (Italian: 'Sorrow'), but says his name will become **Gioia** ('Joy') when his father returns. He's one of the most heartbreaking silent presences in all opera. At the end, he's given an American flag to wave while his mother dies.",
+            },
+          ],
+          quiz: [
+            {
+              q: "Where and when is Madama Butterfly set?",
+              options: ["Tokyo, 1950s", "Nagasaki, around 1900", "Kyoto, medieval times", "Yokohama, 1850s"],
+              correct: 1,
+              explain: "Nagasaki harbour around 1900 — just after Japan opened to Western powers.",
+            },
+            {
+              q: "What is Pinkerton's profession?",
+              options: ["A merchant", "A US Navy lieutenant", "A diplomat", "A Christian missionary"],
+              correct: 1,
+              explain: "B. F. Pinkerton — American naval officer stationed in Nagasaki.",
+            },
+            {
+              q: "How old is Butterfly when the opera begins?",
+              options: ["15", "19", "25", "28"],
+              correct: 0,
+              explain: "Cio-Cio-San is 15 years old at the start. This age gap with Pinkerton is crucial to the story.",
+            },
+            {
+              q: "What was Butterfly's life before the wedding?",
+              options: ["A schoolteacher", "A former geisha from a fallen samurai family", "A princess", "A Buddhist nun"],
+              correct: 1,
+              explain: "Her samurai father was forced to commit seppuku; the family lost everything, so she was trained as a geisha.",
+            },
+            {
+              q: "Who is Suzuki?",
+              options: ["Butterfly's sister", "Butterfly's faithful maid", "A rival for Pinkerton", "Butterfly's mother"],
+              correct: 1,
+              explain: "Suzuki — mezzo — Butterfly's loyal servant and one of the most sympathetic roles in the opera.",
+            },
+            {
+              q: "What does Sharpless try to do in Act 1?",
+              options: ["Marry Butterfly himself", "Warn Pinkerton that Butterfly is serious about the marriage", "Report Pinkerton to the navy", "Teach Butterfly English"],
+              correct: 1,
+              explain: "The US consul tries to warn Pinkerton — who laughs it off.",
+            },
+            {
+              q: "Who is 'the Bonze'?",
+              options: ["Butterfly's brother", "A Buddhist priest, Butterfly's uncle, who curses her", "Pinkerton's servant", "Another naval officer"],
+              correct: 1,
+              explain: "The Bonze is her uncle, a Buddhist priest. He curses her at the wedding for converting to Christianity.",
+            },
+            {
+              q: "What does the 'marriage' contract actually allow?",
+              options: ["A lifelong commitment under Japanese law", "A 999-year lease cancellable by either party with one month's notice", "Only a religious ceremony, no legal effect", "A Western Christian marriage recognised in the US"],
+              correct: 1,
+              explain: "A contract 'marriage' — legally cancellable. Butterfly thinks it's real. Pinkerton knows it isn't.",
+            },
+            {
+              q: "What is the name Butterfly gives her son?",
+              options: ["Giacomo", "'Dolore' (Sorrow), to become 'Gioia' (Joy) when Pinkerton returns", "Takeshi", "Benjamin"],
+              correct: 1,
+              explain: "Sorrow, because her husband is away — to become Joy when he comes back. He never does.",
+            },
+            {
+              q: "Who is Kate Pinkerton?",
+              options: ["Butterfly's friend", "Pinkerton's American wife", "The marriage broker's wife", "Sharpless's daughter"],
+              correct: 1,
+              explain: "Pinkerton's actual American wife — she appears in Act 3 to take the child.",
+            },
+          ],
+        },
+        // ------------------------------------------------ 5
+        {
+          id: "the-story",
+          title: "The Story — Act by Act",
+          subtitle: "Every beat. Spoiler-full. Surtitles move fast.",
+          emoji: "📖",
+          bgClass: "bg-purple-100",
+          cards: [
+            {
+              number: "Act 1 — scene 1",
+              title: "Pinkerton inspects his new house",
+              body: "**Act 1** opens on the hilltop house Pinkerton has just leased. Goro, the marriage broker, shows him around — paper walls, sliding doors, the tiny garden. Pinkerton is amused and dismissive. He's about to 'marry' a girl he's never really met.\n\nSharpless, the American consul, arrives. They drink whisky. Pinkerton enthuses about his 'butterfly' — how fragile, how exotic, how charming.",
+            },
+            {
+              number: "Act 1 — scene 2",
+              title: "Sharpless tries to warn him",
+              body: "Sharpless tells Pinkerton he's met Butterfly, heard her talk about the wedding. **She's taking it seriously.** She thinks this is forever.\n\nPinkerton laughs it off. He raises his glass and toasts: **\"America forever!\"** — and then, 'To the day I marry a real American bride!'\n\nSharpless looks at him with horror. The audience has been warned. Pinkerton hasn't listened.",
+            },
+            {
+              number: "Act 1 — scene 3",
+              title: "Butterfly's unforgettable entrance",
+              body: "From offstage, we hear a soprano voice floating in the distance. It's Butterfly, climbing the hill with her relatives and friends — a whole procession.\n\nShe sings a soaring line over the orchestra **before we even see her**. It's one of the most magical entrances in all of opera. Puccini said he wanted her voice to arrive 'like a perfume'.\n\nShe appears, radiant, in bridal white. She is fifteen. She is completely in love.",
+            },
+            {
+              number: "Act 1 — scene 4",
+              title: "A quick wedding, a dark secret",
+              body: "The wedding ceremony is brief and strange — a few officials, Pinkerton signs the contract, done.\n\nDuring the preparations, Butterfly quietly reveals to Pinkerton that **she has secretly gone to the Christian mission and converted to his religion**. She's abandoned the Buddhism of her family, her ancestors. For him.\n\nIt's a moment of devastating vulnerability. Pinkerton doesn't fully grasp what she's just sacrificed.",
+            },
+            {
+              number: "Act 1 — scene 5",
+              title: "The Bonze curses her",
+              body: "Suddenly — a thunderous voice offstage. **The Bonze**, Butterfly's uncle and a Buddhist priest, bursts in. He has learned of her conversion.\n\nHe publicly curses her, calls her a traitor to her ancestors, and demands the whole family disown her. **Everyone turns away. Her relatives walk out.** She is alone in the world except for Pinkerton, Suzuki, and the marriage broker she despises.",
+            },
+            {
+              number: "Act 1 — finale",
+              title: "The Love Duet",
+              body: "Night falls. The guests are gone. Butterfly and Pinkerton are alone.\n\nWhat follows is **one of the longest and most beautiful love duets in opera** — roughly 12 minutes of uninterrupted rapture. Butterfly slowly changes out of her bridal robes, Pinkerton lights paper lanterns, the orchestra swells, and they sing of love, the night, the stars.\n\nShe admits she's afraid — she'd heard that Americans sometimes pin butterflies to a board with a needle. He laughs and holds her close. Curtain.",
+              italian: "Vogliatemi bene, un bene piccolino…",
+              italianTrans: "Love me, even just a little…",
+            },
+            {
+              number: "Act 2 — scene 1",
+              title: "Three years later",
+              body: "**Three years have passed.** Pinkerton's ship left Nagasaki long ago. He sent a letter, promised to return, and then nothing.\n\nButterfly and Suzuki are alone in the house, nearly out of money. Suzuki prays to Japanese gods for help. Butterfly scolds her — **'lazy, those Japanese gods. The American god will answer faster, if only he knew where we live.'** Her faith is almost frightening.",
+            },
+            {
+              number: "Act 2 — scene 2",
+              title: "\"Un bel dì vedremo\"",
+              body: "Butterfly delivers **the most famous aria in the opera**. It's a fantasy: 'One fine day, we'll see a thread of smoke rise on the horizon. A white ship will enter the harbour. Who do you think it will be? It will be him. I know it.'\n\nShe describes, in minute detail, how Pinkerton will walk up the hill, how he'll call 'Butterfly!', how she'll hide at first just to tease him. It's denial turned into defiance. It's unbearable.",
+              italian: "Un bel dì vedremo, levarsi un fil di fumo…",
+              italianTrans: "One fine day we'll see a thread of smoke rise…",
+            },
+            {
+              number: "Act 2 — scene 3",
+              title: "Sharpless visits with a letter",
+              body: "Sharpless arrives with a letter from Pinkerton. Pinkerton has asked him to break the news gently: he's married an American woman, Kate. He's not coming back for Butterfly — but he'll come back for the child.\n\nSharpless tries to read the letter. Butterfly keeps interrupting — 'Does he say when?' 'Does he mention me?' — each interruption more hopeful than the last. **He can't get through it.** He finally asks: 'What would you do if he never returned?' She says she would go back to being a geisha… or die.",
+            },
+            {
+              number: "Act 2 — scene 4",
+              title: "The child",
+              body: "Sharpless asks if Butterfly would give up the child for a better life in America. She's horrified.\n\n**She reveals Pinkerton's son** — blonde hair, blue eyes — and says: 'Tell him to come and see who this is. And tell him his name is Sorrow now. But on the day his father returns, his name will be Joy.'\n\nSharpless is crushed. He cannot bring himself to tell her the truth. He leaves.",
+            },
+            {
+              number: "Act 2 — scene 5",
+              title: "The cannon — a ship!",
+              body: "A **cannon sounds** in the harbour — a ship has arrived. Butterfly grabs a telescope and reads the name: **Abraham Lincoln**. Pinkerton's ship.\n\nShe is ecstatic, vindicated, delirious. Every doubt vanishes. She orders Suzuki to help her gather every flower in the garden — they'll decorate the house to welcome him.",
+            },
+            {
+              number: "Act 2 — finale",
+              title: "The Flower Duet and the Humming Chorus",
+              body: "Butterfly and Suzuki sing the **Flower Duet** — scattering cherry blossoms, violets, roses everywhere. Butterfly dresses in her wedding kimono again.\n\nNight falls. Butterfly posts herself at the paper door, watching the path. Suzuki and the child fall asleep. **The orchestra begins the Humming Chorus** — the offstage chorus hums a wordless melody as the lights slowly dim and slowly rise. **A whole night passes** in about five minutes of music. Butterfly never moves from her vigil.",
+            },
+            {
+              number: "Act 3 — scene 1",
+              title: "Dawn. He hasn't come.",
+              body: "Morning. Butterfly is still at the door, exhausted but defiant. Suzuki finally convinces her to rest. She carries the child inside.\n\nThe moment she leaves, **Pinkerton and Sharpless arrive** — with Kate, Pinkerton's American wife, waiting outside. Suzuki sees Kate and understands instantly. She nearly collapses.",
+            },
+            {
+              number: "Act 3 — scene 2",
+              title: "Pinkerton flees like a coward",
+              body: "Pinkerton looks around the house — the flowers everywhere, his portrait on the wall, his uniform hanging where he left it. He realises what Butterfly has done, what she's been doing for three years.\n\nHe sings **\"Addio fiorito asil\"** — 'Farewell, flowered refuge' — a short, miserable aria of guilt. And then **he runs away.** He literally cannot face her. Sharpless and Kate are left to handle it.",
+              italian: "Addio, fiorito asil, di letizia e d'amor…",
+              italianTrans: "Farewell, flowered refuge of joy and love…",
+            },
+            {
+              number: "Act 3 — scene 3",
+              title: "Butterfly understands",
+              body: "Butterfly comes out, expecting Pinkerton. She sees Suzuki weeping, she sees Kate, she sees the strange woman's hand on her garden wall. **She understands everything in a single moment.**\n\nShe doesn't scream. She is ice-calm. She agrees to give up the child — on one condition: **Pinkerton must come himself in half an hour** to take him. Kate nods. They leave.",
+            },
+            {
+              number: "Act 3 — finale",
+              title: "\"Tu? tu? piccolo Iddio\" — the end",
+              body: "Butterfly is alone with her son. She fetches her **father's dagger** — the one he used for seppuku — inscribed with the words: **'He who cannot live with honour must die with honour.'**\n\nShe blindfolds her little boy, puts an **American flag** in his hand to wave, and tells him to play. She goes behind a screen. We hear the knife fall.\n\nShe staggers back into view and crawls toward the child, dying. Offstage, we hear Pinkerton's voice running up the hill: **'Butterfly! Butterfly! Butterfly!'** She dies as he reaches the door.\n\n**Curtain.**",
+              italian: "Tu? tu? piccolo Iddio! Amore, amore mio…",
+              italianTrans: "You? You? Little god! My love, my love…",
+            },
+          ],
+          quiz: [
+            {
+              q: "In Act 1, what toast does Pinkerton make in front of Sharpless?",
+              options: ["'To my beautiful Butterfly, forever!'", "'To the day I marry a real American bride!'", "'To peace between Japan and America!'", "'To the Emperor!'"],
+              correct: 1,
+              explain: "He openly toasts his future American marriage — in front of the consul, who tries to warn him.",
+            },
+            {
+              q: "How does Butterfly first appear in Act 1?",
+              options: ["She walks on stage in silence", "Her voice is heard offstage first, soaring above a procession", "She enters in a rickshaw", "She climbs out of the pit"],
+              correct: 1,
+              explain: "One of opera's great entrances — her voice 'arrives' before she does.",
+            },
+            {
+              q: "What does Butterfly secretly do before the wedding?",
+              options: ["Convert to Christianity for Pinkerton", "Hide her father's dagger", "Write a letter to the Emperor", "Steal Pinkerton's whisky"],
+              correct: 0,
+              explain: "She converts to Christianity for him — which is why her uncle the Bonze curses her.",
+            },
+            {
+              q: "How does Act 1 end?",
+              options: ["With the Bonze's curse", "With a 10+ minute love duet between Butterfly and Pinkerton", "With Pinkerton leaving for America", "With a chorus of sailors"],
+              correct: 1,
+              explain: "The long love duet under the lanterns closes Act 1. It's the emotional peak before everything falls apart.",
+            },
+            {
+              q: "How much time passes between Act 1 and Act 2?",
+              options: ["One night", "Three months", "Three years", "Ten years"],
+              correct: 2,
+              explain: "Three years. Pinkerton has been gone the whole time.",
+            },
+            {
+              q: "What is 'Un bel dì vedremo' about?",
+              options: ["Butterfly's wedding day", "Butterfly's fantasy of Pinkerton's return on a distant white ship", "A prayer to Buddhist gods", "A lullaby to the child"],
+              correct: 1,
+              explain: "It's her vivid imagining of the day Pinkerton's ship returns — denial turned defiant.",
+            },
+            {
+              q: "What secret does Butterfly reveal to Sharpless in Act 2?",
+              options: ["That she has Pinkerton's child", "That she has remarried", "That she is dying", "That she is going back to being a geisha"],
+              correct: 0,
+              explain: "Pinkerton's son, three years old — blonde and blue-eyed. Sharpless didn't know.",
+            },
+            {
+              q: "What is the child's current name, and what will it be when Pinkerton returns?",
+              options: ["Takeshi → Ben", "Dolore (Sorrow) → Gioia (Joy)", "Giacomo → Sebastian", "Americo → Nipponico"],
+              correct: 1,
+              explain: "'Sorrow' now, 'Joy' on the day his father comes back. He doesn't.",
+            },
+            {
+              q: "What happens during the Humming Chorus?",
+              options: ["Butterfly sings to her baby", "The wedding ceremony", "Butterfly keeps a silent night-long vigil as the chorus hums wordlessly", "A battle between navy ships"],
+              correct: 2,
+              explain: "End of Act 2 — an entire night passes in wordless music as Butterfly watches the path.",
+            },
+            {
+              q: "Why does Pinkerton flee after seeing the flowers in Act 3?",
+              options: ["The child attacks him", "He's overcome with guilt and can't face Butterfly", "Kate tells him to leave", "He hears gunfire"],
+              correct: 1,
+              explain: "He sings 'Addio fiorito asil' and runs away. Sharpless and Kate are left to deliver the news.",
+            },
+            {
+              q: "Who comes with Pinkerton in Act 3?",
+              options: ["His mother", "Kate, his American wife", "A Japanese translator", "Another naval officer"],
+              correct: 1,
+              explain: "Kate — his American wife — has come to take Butterfly's child to America.",
+            },
+            {
+              q: "How does the opera end?",
+              options: ["Butterfly and Pinkerton reconcile", "Butterfly kills herself with her father's dagger as Pinkerton runs up the hill", "Butterfly moves to America", "Butterfly becomes a nun"],
+              correct: 1,
+              explain: "She commits seppuku with her father's dagger. Pinkerton arrives too late, shouting her name.",
+            },
+            {
+              q: "What does Butterfly give her son in the final scene?",
+              options: ["A Japanese fan", "A blindfold and an American flag to wave", "Her wedding ring", "A letter to read when he's older"],
+              correct: 1,
+              explain: "She blindfolds him and puts an American flag in his hand so he won't see her die.",
+            },
+          ],
+        },
+        // ------------------------------------------------ 6
+        {
+          id: "arias",
+          title: "Arias You'll Recognise",
+          subtitle: "Listen once — it'll land ten times harder live",
+          emoji: "🎵",
+          bgClass: "bg-amber-100",
+          cards: [
+            {
+              title: "\"Un bel dì vedremo\"",
+              body: "**The** Butterfly aria. Act 2. Butterfly imagines Pinkerton's return in vivid detail: the thread of smoke on the horizon, the white ship entering the harbour, his footsteps up the hill, her hiding behind a screen to tease him.\n\nIt **starts quietly**, almost whispered, and builds to a soaring high B-flat at the climax. It's four minutes long and will wreck you.\n\nListen to Maria Callas's version — it's the definitive one.",
+              italian: "Un bel dì, vedremo levarsi un fil di fumo…",
+              italianTrans: "One fine day, we'll see a thread of smoke rise…",
+              listen: "Un bel dì vedremo Maria Callas Madama Butterfly",
+            },
+            {
+              title: "\"Humming Chorus\" (Coro a bocca chiusa)",
+              body: "End of Act 2. No words. The offstage chorus hums a hushed, winding melody while Butterfly stands vigil at the door through the night.\n\nThere is no action. No singing in the normal sense. Just **an entire night passing in five minutes of hypnotic music**. Most people's favourite moment in the whole opera — goosebumps guaranteed.\n\nThe Italian title literally means 'chorus with closed mouth'.",
+              italian: "Coro a bocca chiusa",
+              italianTrans: "Chorus with closed mouth (Humming Chorus)",
+              listen: "Humming Chorus Madama Butterfly Coro a bocca chiusa",
+            },
+            {
+              title: "Love Duet — \"Vogliatemi bene\"",
+              body: "End of Act 1. Runs for **over ten minutes**. Butterfly and Pinkerton, alone for the first time under the stars. She asks him, quietly, to love her 'even just a little, like a child would'.\n\nIt builds and builds — key changes, crescendos, soaring unisons — until it feels like the whole world is made of this one melody. Then: curtain.\n\nIt is the happiest moment in the opera. You'll remember it in Act 3.",
+              italian: "Vogliatemi bene, un bene piccolino…",
+              italianTrans: "Love me, even just a little…",
+              listen: "Vogliatemi bene Love Duet Madama Butterfly Puccini",
+            },
+            {
+              title: "\"Addio, fiorito asil\"",
+              body: "**Pinkerton's guilt aria** in Act 3. Short — under three minutes. He sees the flowers, Butterfly's kimono, his portrait, and realises what he's done.\n\nHe sings of his 'flowered refuge of love', admits he is a coward, and **runs off stage**. He never speaks to Butterfly again. This is the only moment in the opera where Pinkerton is genuinely sympathetic — and then he flees.\n\nShort, cowardly, devastating.",
+              italian: "Addio, fiorito asil…",
+              italianTrans: "Farewell, flowered refuge…",
+              listen: "Addio fiorito asil Madama Butterfly Puccini",
+            },
+            {
+              title: "\"Tu? tu? piccolo Iddio\"",
+              body: "**Butterfly's final aria**, minutes before the end. Alone with her son, she sings to him: 'You? You? Little god! My love, my love, flower of lilies and roses…'\n\nShe tells him to look at his mother's face one last time, to remember it. Then she blindfolds him and goes behind the screen.\n\nIt's the last big vocal moment of the opera. If you make it through without crying, you're made of stone.",
+              italian: "Tu? tu? piccolo Iddio! Amore, amore mio…",
+              italianTrans: "You? You? Little god! My love, my love…",
+              listen: "Tu tu piccolo Iddio Madama Butterfly final aria",
+            },
+            {
+              title: "Flower Duet — \"Scuoti quella fronda\"",
+              body: "Act 2, right after the cannon sounds. Butterfly and Suzuki rush around the garden, scattering every flower they can find to decorate the house for Pinkerton's return.\n\n**Two female voices weaving together over a joyful, running orchestra.** It should feel happy. It does feel happy. It's also unbearable because we, the audience, know what's actually coming.\n\nOne of the most beautiful female duets in all of opera.",
+              italian: "Scuoti quella fronda di ciliegio…",
+              italianTrans: "Shake that cherry branch…",
+              listen: "Flower Duet Madama Butterfly Scuoti quella fronda",
+            },
+          ],
+          quiz: [
+            {
+              q: "Which aria is Butterfly's most famous?",
+              options: ["'Addio fiorito asil'", "'Un bel dì vedremo'", "'Nessun dorma'", "'O mio babbino caro'"],
+              correct: 1,
+              explain: "'One fine day we'll see…' — Butterfly's Act 2 fantasy aria, and the signature of the opera.",
+            },
+            {
+              q: "What is unusual about the 'Humming Chorus'?",
+              options: ["It's sung entirely in English", "It has no words — the chorus hums", "It's sung backwards", "It lasts 20 minutes"],
+              correct: 1,
+              explain: "Coro a bocca chiusa — literally 'chorus with closed mouth'. Wordless humming as night falls.",
+            },
+            {
+              q: "Who sings 'Addio fiorito asil'?",
+              options: ["Butterfly", "Pinkerton", "Sharpless", "Suzuki"],
+              correct: 1,
+              explain: "Pinkerton's brief, cowardly guilt aria — right before he runs away in Act 3.",
+            },
+            {
+              q: "What happens during the Flower Duet?",
+              options: ["Butterfly and Suzuki decorate the house for Pinkerton's return", "Pinkerton proposes to Kate", "The Bonze curses Butterfly", "Butterfly sings to her baby"],
+              correct: 0,
+              explain: "Butterfly and Suzuki scatter petals joyfully, unaware of what's actually coming.",
+            },
+            {
+              q: "What does Butterfly do during 'Tu? tu? piccolo Iddio'?",
+              options: ["Scolds her maid", "Says goodbye to her son before she dies", "Welcomes Pinkerton home", "Curses America"],
+              correct: 1,
+              explain: "Her farewell to her child, seconds before she commits seppuku.",
+            },
+          ],
+        },
+        // ------------------------------------------------ 7
+        {
+          id: "hamburg",
+          title: "Hamburg & the Staatsoper",
+          subtitle: "The venue, the city, and survival tips",
+          emoji: "🏛️",
+          bgClass: "bg-sky-100",
+          cards: [
+            {
+              title: "Hamburgische Staatsoper",
+              body: "The **Hamburg State Opera** is one of the **oldest opera houses in Europe**, founded in **1678** — nearly 350 years ago. Only Venice and a handful of Italian houses are older.\n\nIt's on **Dammtorstraße** in central Hamburg, close to the main shopping streets. From outside, the current building is a plain white modernist box — don't judge. Inside it's warm, wood-panelled, and intimate, with around 1,700 seats.",
+            },
+            {
+              title: "The building itself has a dark history",
+              body: "The original baroque opera house was bombed to rubble during **WWII in 1943**. For years after the war, performances were held in other venues while Hamburg rebuilt.\n\nThe current building opened in **1955** — deliberately modernist and understated, a symbol of Germany rebuilding. That's why the exterior looks so surprisingly plain compared to, say, the Vienna Staatsoper. The restraint is the point.",
+            },
+            {
+              title: "Getting there",
+              body: "**Public transport is the easy option:**\n\n• **U-Bahn U1 or U2 → Stephansplatz** (5-minute walk)\n• **S-Bahn → Dammtor** (5-minute walk)\n\nDammtor is the prettier walk if you want to see the Binnenalster lake on the way. The area around the opera has several nice restaurants for a pre-show dinner — book ahead on a Saturday.",
+            },
+            {
+              title: "When to arrive",
+              body: "**Doors open roughly one hour before curtain.** Target arriving **30–40 minutes early** to:\n\n• Queue for the cloakroom (mandatory for jackets/coats)\n• Find your seat without stress\n• Buy a **programme booklet** — 5–10 € — it has the full synopsis and cast. Worth it.\n• Grab a glass of Sekt (sparkling wine) at the bar\n\nGerman audiences start arriving early. Latecomers are locked out until intermission.",
+            },
+            {
+              title: "Cloakroom etiquette",
+              body: "**Coats and bulky bags must go to the cloakroom.** It's usually 1–2 € per item, sometimes free. Keep the little paper ticket safe — you'll need it to get your coat back.\n\nAt the end, **don't run to the cloakroom during curtain calls** — stay for the bows, then queue. Everyone is trying to leave at the same time. Just accept it'll take 10 minutes.",
+            },
+            {
+              title: "Intermission survival",
+              body: "Intermissions are **20–30 minutes**, just long enough to:\n\n• Pee (huge queues — go immediately)\n• Buy a drink (Sekt, wine, or beer — bars are fast)\n• Stretch\n\nYou can **pre-order an intermission drink** at the bar before the show starts — hand them your money, they'll put it aside, no queue. Lifesaver. Say 'Ich möchte etwas für die Pause bestellen' ('I'd like to order something for the intermission').",
+            },
+            {
+              title: "German phrases for the night",
+              body: "A few that might help:\n\n• **\"Ein Glas Sekt, bitte\"** — A glass of sparkling wine, please\n• **\"Wo ist die Toilette?\"** — Where is the toilet?\n• **\"Pause\"** — Intermission\n• **\"Entschuldigung\"** — Excuse me (for squeezing past people)\n• **\"Danke schön\"** — Thank you\n• **\"Guten Abend\"** — Good evening\n\nEveryone at the opera speaks English, but effort is appreciated.",
+            },
+            {
+              title: "Hamburg in a nutshell",
+              body: "**Germany's second-largest city** and its largest port. Built around the **Elbe river** and a network of canals — Hamburg has more bridges than Venice, Amsterdam and London combined.\n\nKey districts to know:\n\n• **Altstadt / Neustadt** — old centre, shopping, Rathaus\n• **HafenCity** — modern waterfront, Elbphilharmonie\n• **Speicherstadt** — historic red-brick warehouses\n• **St. Pauli / Reeperbahn** — nightlife, history, Beatles\n• **Sternschanze** — bars, street art, younger crowd",
+            },
+            {
+              title: "Elbphilharmonie — do NOT miss this",
+              body: "The **Elbphilharmonie** is Hamburg's iconic glass-topped concert hall, opened 2017. Built on top of an old brick warehouse in the harbour. You'll see it on every postcard.\n\n**The Plaza** — a public viewing level about a third of the way up — is **free**. You book a timed ticket online or grab a free one at the door. Take the long curved escalator up for stunning 360° views of the harbour and city.\n\nEven if you don't attend a concert, go for the Plaza. 45 minutes well spent.",
+            },
+            {
+              title: "Speicherstadt & the harbour",
+              body: "The **Speicherstadt** ('warehouse city') is the world's largest historic warehouse complex — endless red-brick Gothic-revival warehouses lined along canals. Built 1883–1927. **UNESCO World Heritage** since 2015.\n\nWalk across the bridges, peek into the Miniatur Wunderland (biggest model railway in the world, genuinely fun), or just wander. Especially photogenic at dusk.\n\nRight next door: the harbour (Landungsbrücken) and the ferries. Hop on a river ferry — it's part of the public transport system, so your U-Bahn ticket covers it.",
+            },
+            {
+              title: "Reeperbahn & St. Pauli",
+              body: "The **Reeperbahn** is Hamburg's historic entertainment and red-light district — the 'sinful mile'. It's grittier than the tourist-friendly centre, but mostly safe and genuinely fascinating.\n\nFamous because **the Beatles played here 1960–62**, sleeping in a cinema and playing 8-hour sets at clubs like the Kaiserkeller and Star-Club. The plaque for them is at Beatles-Platz, a small square shaped like a vinyl record.\n\nGo for a walk at night — but maybe not late at night alone if you're not comfortable with the vibe.",
+            },
+            {
+              title: "What to eat",
+              body: "Hamburg local specialties worth trying:\n\n• **Fischbrötchen** — simple fish sandwich (herring, shrimp, or mackerel) from a harbour-front stand. Cheap, iconic.\n• **Labskaus** — a traditional sailor's dish: corned beef, beet, onion, herring, fried egg. Looks weird. Tastes amazing.\n• **Franzbrötchen** — cinnamon pastry, Hamburg's answer to the cinnamon roll\n• **Aalsuppe** — eel soup (if you're brave)\n• **Alsterwasser** — beer + lemonade, Hamburg's version of a shandy\n\nPost-opera, many brasseries in the Altstadt stay open late.",
+            },
+          ],
+          quiz: [
+            {
+              q: "What year was Hamburg Staatsoper founded?",
+              options: ["1555", "1678", "1812", "1955"],
+              correct: 1,
+              explain: "1678 — nearly 350 years old, one of the oldest opera houses in Europe.",
+            },
+            {
+              q: "What happened to the original Hamburg opera building?",
+              options: ["It burned down in the 1800s", "It was destroyed by bombing in WWII (1943)", "It was demolished to build a shopping mall", "It still stands today"],
+              correct: 1,
+              explain: "Bombed in 1943. The current modernist building opened in 1955.",
+            },
+            {
+              q: "Which U-Bahn station is closest to Hamburg Staatsoper?",
+              options: ["Hauptbahnhof", "Stephansplatz (U1/U2)", "Reeperbahn", "Landungsbrücken"],
+              correct: 1,
+              explain: "Stephansplatz on the U1 or U2, about a 5-minute walk.",
+            },
+            {
+              q: "What is the Elbphilharmonie?",
+              options: ["A famous restaurant", "Hamburg's modern glass-topped concert hall on the harbour", "An art museum", "A Beatles museum"],
+              correct: 1,
+              explain: "The iconic concert hall opened in 2017. The public Plaza level is free and worth visiting.",
+            },
+            {
+              q: "What is the Speicherstadt?",
+              options: ["A famous church", "The world's largest historic warehouse district (UNESCO)", "Hamburg's main shopping street", "The central train station"],
+              correct: 1,
+              explain: "Red-brick warehouse district from 1883–1927, UNESCO World Heritage since 2015.",
+            },
+            {
+              q: "What does 'Pause' mean in a German opera context?",
+              options: ["Intermission", "Silence", "Please be quiet", "The finale"],
+              correct: 0,
+              explain: "Pause = intermission. 20–30 minutes to pee, stretch, and grab a Sekt.",
+            },
+            {
+              q: "What river is Hamburg built around?",
+              options: ["The Rhine", "The Danube", "The Elbe", "The Spree"],
+              correct: 2,
+              explain: "The Elbe — the river connects Hamburg to the North Sea and made it a major port city.",
+            },
+            {
+              q: "Which famous band played in Hamburg's Reeperbahn in 1960–62?",
+              options: ["The Rolling Stones", "The Beatles", "Led Zeppelin", "ABBA"],
+              correct: 1,
+              explain: "The Beatles lived in Hamburg early in their career, playing marathon sets on the Reeperbahn.",
+            },
+          ],
+        },
+      ];
+
+      // ============================================================
+      //                          VUE APP
+      // ============================================================
+      const STORAGE_KEY = "butterfly-progress-v1";
+      const SETTINGS_KEY = "butterfly-settings-v1";
+
+      createApp({
+        setup() {
+          // --------- state ---------
+          const screen = ref("home");
+          const CHAPTERS_REF = CHAPTERS;
+
+          const activeChapterIdx = ref(0);
+          const cardIdx = ref(0);
+          const quizIdx = ref(0);
+          const quizScore = ref(0);
+          const quizFeedback = ref(null); // 'correct' | 'incorrect' | null
+          const quizAnswerIdx = ref(null);
+          const quizQuestions = ref([]);
+          const isFinalExam = ref(false);
+          const wrongAnswers = ref([]);
+
+          const showSettings = ref(false);
+          const hapticEnabled = ref(true);
+          const autoProgress = ref(true);
+          const shakeActive = ref(false);
+
+          const floatingPoints = ref([]);
+          let pointId = 0;
+
+          // progress: { [chapterId]: { learned: bool, quizPassed: bool, bestPct: number } }
+          const progress = ref({});
+          const finalExamBest = ref(null);
+
+          // --------- persistence ---------
+          function loadProgress() {
+            try {
+              const raw = localStorage.getItem(STORAGE_KEY);
+              if (raw) {
+                const data = JSON.parse(raw);
+                progress.value = data.progress || {};
+                finalExamBest.value = data.finalExamBest ?? null;
+              }
+            } catch (e) { /* ignore */ }
+          }
+          function saveProgress() {
+            try {
+              localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                progress: progress.value,
+                finalExamBest: finalExamBest.value,
+              }));
+            } catch (e) { /* ignore */ }
+          }
+          function loadSettings() {
+            try {
+              const raw = localStorage.getItem(SETTINGS_KEY);
+              if (raw) {
+                const s = JSON.parse(raw);
+                hapticEnabled.value = s.hapticEnabled ?? true;
+                autoProgress.value = s.autoProgress ?? true;
+              }
+            } catch (e) { /* ignore */ }
+          }
+          function saveSettings() {
+            try {
+              localStorage.setItem(SETTINGS_KEY, JSON.stringify({
+                hapticEnabled: hapticEnabled.value,
+                autoProgress: autoProgress.value,
+              }));
+            } catch (e) { /* ignore */ }
+          }
+
+          // --------- haptics helpers ---------
+          function haptic(type) {
+            if (!hapticEnabled.value || !window.__haptics) return;
+            try { window.__haptics.play(type); } catch (e) {}
+          }
+
+          // --------- computeds ---------
+          const activeChapter = computed(() => CHAPTERS_REF[activeChapterIdx.value] || null);
+          const activeCard = computed(() => activeChapter.value?.cards[cardIdx.value] || {});
+          const currentQuizQ = computed(() => quizQuestions.value[quizIdx.value] || { options: [] });
+
+          const completedChapters = computed(() =>
+            CHAPTERS_REF.filter(c => progress.value[c.id]?.quizPassed).length
+          );
+          const overallPercent = computed(() => {
+            const total = CHAPTERS_REF.length;
+            if (total === 0) return 0;
+            return Math.round((completedChapters.value / total) * 100);
+          });
+          const canTakeFinal = computed(() =>
+            CHAPTERS_REF.every(c => progress.value[c.id]?.quizPassed)
+          );
+          const chapterDonePct = computed(() =>
+            quizQuestions.value.length === 0 ? 0 : Math.round((quizScore.value / quizQuestions.value.length) * 100)
+          );
+          const chapterDonePerfect = computed(() =>
+            quizQuestions.value.length > 0 && quizScore.value === quizQuestions.value.length
+          );
+          const finalPct = computed(() =>
+            quizQuestions.value.length === 0 ? 0 : Math.round((quizScore.value / quizQuestions.value.length) * 100)
+          );
+          const nextChapterAvailable = computed(() =>
+            !isFinalExam.value && activeChapterIdx.value < CHAPTERS_REF.length - 1
+          );
+
+          // --------- chapter unlock logic ---------
+          function isLocked(idx) {
+            if (idx === 0) return false;
+            const prev = CHAPTERS_REF[idx - 1];
+            return !progress.value[prev.id]?.quizPassed;
+          }
+          function chapterProgress(chapterId) {
+            const p = progress.value[chapterId];
+            if (!p) return 0;
+            if (p.quizPassed) return 100;
+            if (p.learned) return 60;
+            return 0;
+          }
+
+          // --------- navigation ---------
+          function openChapter(chapterId, idx) {
+            if (isLocked(idx)) {
+              haptic("error");
+              shakeScreen();
+              return;
+            }
+            haptic("light");
+            activeChapterIdx.value = idx;
+            cardIdx.value = 0;
+            isFinalExam.value = false;
+            // if already learned, skip to quiz
+            if (progress.value[chapterId]?.learned && !progress.value[chapterId]?.quizPassed) {
+              startQuiz();
+            } else {
+              screen.value = "learn";
+            }
+          }
+          function openNextChapter() {
+            const next = activeChapterIdx.value + 1;
+            if (next < CHAPTERS_REF.length) {
+              activeChapterIdx.value = next;
+              cardIdx.value = 0;
+              isFinalExam.value = false;
+              screen.value = "learn";
+              haptic("light");
+            }
+          }
+          function goHome() {
+            screen.value = "home";
+            haptic("light");
+          }
+          function reviewChapter() {
+            cardIdx.value = 0;
+            screen.value = "learn";
+            haptic("light");
+          }
+
+          // --------- learn navigation ---------
+          function nextCard() {
+            haptic("light");
+            if (cardIdx.value < activeChapter.value.cards.length - 1) {
+              cardIdx.value += 1;
+            } else {
+              // mark chapter as learned
+              if (!progress.value[activeChapter.value.id]) {
+                progress.value[activeChapter.value.id] = {};
+              }
+              progress.value[activeChapter.value.id].learned = true;
+              saveProgress();
+              startQuiz();
+            }
+          }
+          function prevCard() {
+            if (cardIdx.value > 0) {
+              cardIdx.value -= 1;
+              haptic("light");
+            }
+          }
+
+          // --------- quiz ---------
+          function startQuiz() {
+            quizIdx.value = 0;
+            quizScore.value = 0;
+            quizFeedback.value = null;
+            quizAnswerIdx.value = null;
+            wrongAnswers.value = [];
+            quizQuestions.value = shuffle(activeChapter.value.quiz.map(q => ({ ...q })));
+            screen.value = "quiz";
+          }
+          function startFinalExam() {
+            if (!canTakeFinal.value) {
+              haptic("error");
+              shakeScreen();
+              return;
+            }
+            haptic("medium");
+            isFinalExam.value = true;
+            // pull a mix from every chapter
+            const allQs = [];
+            CHAPTERS_REF.forEach(c => {
+              c.quiz.forEach(q => allQs.push({ ...q, _chapter: c.title }));
+            });
+            quizQuestions.value = shuffle(allQs).slice(0, 15);
+            quizIdx.value = 0;
+            quizScore.value = 0;
+            quizFeedback.value = null;
+            quizAnswerIdx.value = null;
+            wrongAnswers.value = [];
+            // fake an "activeChapter" for header — use last one so template doesn't crash
+            activeChapterIdx.value = CHAPTERS_REF.length - 1;
+            screen.value = "quiz";
+          }
+
+          function answerQuiz(idx, event) {
+            if (quizFeedback.value !== null) return;
+            quizAnswerIdx.value = idx;
+            const correct = idx === currentQuizQ.value.correct;
+            if (correct) {
+              quizFeedback.value = "correct";
+              quizScore.value += 1;
+              haptic("success");
+              spawnPoints(event, 10);
+              if (autoProgress.value) {
+                setTimeout(advanceQuiz, 900);
+              } else {
+                setTimeout(advanceQuiz, 1500);
+              }
+            } else {
+              quizFeedback.value = "incorrect";
+              haptic("error");
+              shakeScreen();
+              wrongAnswers.value.push({
+                q: currentQuizQ.value.q,
+                correct: currentQuizQ.value.options[currentQuizQ.value.correct],
+                explain: currentQuizQ.value.explain,
+              });
+              // DO NOT auto-advance on wrong — pause for learning
+            }
+          }
+
+          function advanceQuiz() {
+            if (quizIdx.value < quizQuestions.value.length - 1) {
+              quizIdx.value += 1;
+              quizFeedback.value = null;
+              quizAnswerIdx.value = null;
+            } else {
+              finishQuiz();
+            }
+          }
+
+          function finishQuiz() {
+            const pct = Math.round((quizScore.value / quizQuestions.value.length) * 100);
+            if (isFinalExam.value) {
+              if (finalExamBest.value === null || pct > finalExamBest.value) {
+                finalExamBest.value = pct;
+              }
+              saveProgress();
+              if (pct >= 70) fireConfetti();
+              screen.value = "final-done";
+            } else {
+              const chId = activeChapter.value.id;
+              if (!progress.value[chId]) progress.value[chId] = {};
+              progress.value[chId].learned = true;
+              // need at least 70% to "pass" a chapter
+              const passed = pct >= 70;
+              progress.value[chId].quizPassed = passed || progress.value[chId].quizPassed;
+              progress.value[chId].bestPct = Math.max(progress.value[chId].bestPct || 0, pct);
+              saveProgress();
+              if (passed) fireConfetti();
+              screen.value = "chapter-done";
+            }
+          }
+
+          function confirmQuitQuiz() {
+            if (confirm("Quit the quiz? Your progress in this quiz will be lost.")) {
+              goHome();
+            }
+          }
+
+          // --------- UI helpers ---------
+          function getQuizOptionClass(idx) {
+            if (quizFeedback.value === null) {
+              return "bg-white border-rose-200 text-gray-800 hover:border-rose-400 active:translate-y-0.5 active:border-b-2 border-rose-300";
+            }
+            const correct = currentQuizQ.value.correct;
+            if (idx === correct) {
+              return "bg-green-50 border-green-500 text-green-800 border-b-green-600";
+            }
+            if (idx === quizAnswerIdx.value) {
+              return "bg-red-50 border-red-500 text-red-800 border-b-red-600";
+            }
+            return "bg-gray-50 border-gray-200 text-gray-400 border-b-gray-300";
+          }
+          function getQuizNumberClass(idx) {
+            if (quizFeedback.value === null) {
+              return "bg-rose-50 border-rose-200 text-rose-700";
+            }
+            const correct = currentQuizQ.value.correct;
+            if (idx === correct) return "bg-green-500 border-green-600 text-white";
+            if (idx === quizAnswerIdx.value) return "bg-red-500 border-red-600 text-white";
+            return "bg-gray-100 border-gray-200 text-gray-400";
+          }
+
+          function formatBody(body) {
+            if (!body) return "";
+            // Bold: **text**
+            // Split into paragraphs by blank line, convert single \n to <br>
+            const escaped = body
+              .replace(/&/g, "&amp;")
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;");
+            const bolded = escaped.replace(/\*\*(.+?)\*\*/g, '<strong class="text-rose-700">$1</strong>');
+            const paragraphs = bolded.split(/\n\n+/).map(p => `<p>${p.replace(/\n/g, "<br>")}</p>`).join("");
+            return paragraphs;
+          }
+
+          function shuffle(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+          }
+
+          function shakeScreen() {
+            shakeActive.value = true;
+            setTimeout(() => { shakeActive.value = false; }, 450);
+          }
+
+          function spawnPoints(event, amount) {
+            let x = 180, y = 300;
+            if (event && event.currentTarget) {
+              const rect = event.currentTarget.getBoundingClientRect();
+              const appRect = document.getElementById("app").getBoundingClientRect();
+              x = rect.left - appRect.left + rect.width / 2 - 20;
+              y = rect.top - appRect.top + rect.height / 2;
+            }
+            const id = pointId++;
+            floatingPoints.value.push({ id, x, y, amount });
+            setTimeout(() => {
+              floatingPoints.value = floatingPoints.value.filter(p => p.id !== id);
+            }, 1000);
+          }
+
+          function fireConfetti() {
+            if (typeof confetti !== "function") return;
+            const colors = ["#e11d48", "#f59e0b", "#fb7185", "#fde047", "#fda4af"];
+            confetti({
+              particleCount: 80,
+              spread: 70,
+              origin: { y: 0.6 },
+              colors,
+            });
+            setTimeout(() => {
+              confetti({
+                particleCount: 50,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0, y: 0.7 },
+                colors,
+              });
+              confetti({
+                particleCount: 50,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1, y: 0.7 },
+                colors,
+              });
+            }, 250);
+          }
+
+          function resetProgress() {
+            if (confirm("Reset ALL progress? This can't be undone.")) {
+              progress.value = {};
+              finalExamBest.value = null;
+              saveProgress();
+              showSettings.value = false;
+              goHome();
+            }
+          }
+
+          // --------- keyboard shortcuts (desktop) ---------
+          function onKey(e) {
+            if (screen.value === "learn") {
+              if (e.key === "ArrowRight" || e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                nextCard();
+              } else if (e.key === "ArrowLeft") {
+                e.preventDefault();
+                prevCard();
+              }
+            } else if (screen.value === "quiz") {
+              if (quizFeedback.value === null) {
+                const n = parseInt(e.key, 10);
+                if (n >= 1 && n <= 4 && currentQuizQ.value.options[n - 1]) {
+                  e.preventDefault();
+                  answerQuiz(n - 1, null);
+                }
+                const letter = e.key.toUpperCase();
+                if (["A", "B", "C", "D"].includes(letter)) {
+                  const idx = letter.charCodeAt(0) - 65;
+                  if (currentQuizQ.value.options[idx]) {
+                    e.preventDefault();
+                    answerQuiz(idx, null);
+                  }
+                }
+              } else if (quizFeedback.value === "incorrect" && (e.key === "Enter" || e.key === " ")) {
+                e.preventDefault();
+                advanceQuiz();
+              }
+            }
+          }
+
+          // --------- lifecycle ---------
+          onMounted(() => {
+            loadProgress();
+            loadSettings();
+            window.addEventListener("keydown", onKey);
+          });
+          onUnmounted(() => {
+            window.removeEventListener("keydown", onKey);
+          });
+
+          return {
+            CHAPTERS: CHAPTERS_REF,
+            screen,
+            activeChapter,
+            activeChapterIdx,
+            activeCard,
+            cardIdx,
+            quizIdx,
+            quizScore,
+            quizFeedback,
+            quizQuestions,
+            currentQuizQ,
+            isFinalExam,
+            wrongAnswers,
+            progress,
+            completedChapters,
+            overallPercent,
+            canTakeFinal,
+            chapterDonePct,
+            chapterDonePerfect,
+            finalPct,
+            finalExamBest,
+            nextChapterAvailable,
+            showSettings,
+            hapticEnabled,
+            autoProgress,
+            shakeActive,
+            floatingPoints,
+            isLocked,
+            chapterProgress,
+            openChapter,
+            openNextChapter,
+            goHome,
+            reviewChapter,
+            nextCard,
+            prevCard,
+            answerQuiz,
+            advanceQuiz,
+            confirmQuitQuiz,
+            startFinalExam,
+            getQuizOptionClass,
+            getQuizNumberClass,
+            formatBody,
+            saveSettings,
+            resetProgress,
+          };
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>
